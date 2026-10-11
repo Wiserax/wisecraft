@@ -2,8 +2,21 @@
 
 A small, honest test of whether the plugin changes what an agent delivers.
 
-**Status: not run yet.** The harness is here; no numbers are published until it has run. When it has,
-`benchmarks/results.json` holds every trial and the README chart is drawn from that file.
+**Status: run once, on 2026-10-11.** 18 headless sessions (claude-opus-5-5 (the CLI's default), 60 turns at most, about
+17 USD in total). Every trial is in [`results.json`](results.json); the README chart is drawn from it.
+
+| | with Wisecraft | without |
+|---|---:|---:|
+| Checks passed (mean ± sd, n = 9) | 100.0% ± 0.0 | 97.8% ± 6.7 |
+| Trials passing every check | 9 of 9 | 8 of 9 |
+| Minutes per task | 3.7 ± 1.3 | 3.6 ± 1.6 |
+| Tokens per task, cached reads included | 0.88 M ± 0.45 | 0.83 M ± 0.42 |
+
+**What it shows: nothing yet.** Both arms pass nearly every scripted check, so the checks hit their ceiling and
+cannot separate the arms. The one failure (without the plugin, first-stage task) was a stage that killed a
+passive player inside 30 s. Time and tokens are within each other's spread. To be useful this benchmark needs
+harder tasks and checks that look at quality: pressure shape over the waves, a boss the player sees coming, a
+build proven in a phone browser.
 
 ## What it does
 - **The game:** [`examples/horde-demo`](../examples/horde-demo), about 200 lines of Vite + three.js, unfinished on purpose.

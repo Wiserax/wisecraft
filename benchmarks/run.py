@@ -107,10 +107,22 @@ def main():
     ap.add_argument("--modules", help="a node_modules folder (vite + three) to link into every copy")
     ap.add_argument("--out", help="run folder (default: ~/.wisecraft/bench/<stamp>, outside the repo)")
     ap.add_argument("--report", help="re-score a finished run folder and print its summary")
+    ap.add_argument("--merge", nargs="+", help="run folders to merge into benchmarks/results.json (what the README chart reads)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     tasks = [t for t in SPEC["tasks"] if not a.tasks or t["id"] in a.tasks]
 
+    if a.merge:
+        trials = []
+        for d in a.merge:
+            for t in json.loads((Path(d) / "results.json").read_text())["trials"]:
+                trials.append({**t, "dir": str(Path(d).name + "/" + t["dir"])})
+        meta = {"agent": a.agent, "model": a.model or "the CLI's default", "max_turns": a.max_turns, "date": time.strftime("%Y-%m-%d"),
+                "trials_per_cell": max((t["trial"] for t in trials), default=0), "runs": len(trials)}
+        result = {"meta": meta, "summary": summarise(trials), "trials": trials}
+        (BENCH / "results.json").write_text(json.dumps(result, indent=2) + "\n")
+        print(json.dumps(result["summary"], indent=2))
+        return 0
     if a.report:
         run = Path(a.report)
         trials = json.loads((run / "results.json").read_text())["trials"]

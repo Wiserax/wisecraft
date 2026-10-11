@@ -217,6 +217,34 @@ def benchmark_soon(T):
     return "".join(out), W, H
 
 
+def benchmark(T, R):
+    """Three small panels from benchmarks/results.json: share of checks passed, minutes, tokens; mean and sd per arm."""
+    W, H, pad, gap = 1600, 300, 2, 24
+    pw = (W - 2 * pad - 2 * gap) / 3
+    S = R["summary"]
+    panels = [("Checks passed", "pass_rate", lambda v: f"{v * 100:.0f}%", lambda v: f"± {v * 100:.0f}"),
+              ("Minutes per task", "minutes", lambda v: f"{v:.1f}", lambda v: f"± {v:.1f}"),
+              ("Tokens per task", "tokens", lambda v: f"{v / 1e6:.2f} M" if v >= 1e6 else f"{v / 1e3:.0f} k", lambda v: f"± {v / 1e6:.2f} M" if v >= 1e6 else f"± {v / 1e3:.0f} k")]
+    out = []
+    for i, (title, key, fmt, fsd) in enumerate(panels):
+        x = pad + i * (pw + gap)
+        out.append(f'<rect x="{x:.1f}" y="{pad}" width="{pw:.1f}" height="{H - 2 * pad}" rx="20" fill="{T["card"]}" stroke="{T["line"]}" stroke-width="1.5"/>')
+        out.append(text(title, x + 28, 52, 20, T["ink"], 600, track=-0.3))
+        cells = [(arm, (S.get(arm) or {}).get(key)) for arm in ("without", "with")]
+        top = max((c["mean"] + c["sd"] for _, c in cells if c), default=1) or 1
+        for j, (arm, c) in enumerate(cells):
+            y = 96 + j * 86
+            out.append(text("with Wisecraft" if arm == "with" else "without", x + 28, y, 14.5, T["sub"], 500))
+            if not c:
+                out.append(text("not reported", x + 28, y + 40, 20, T["sub"], 500))
+                continue
+            bw = max(6, c["mean"] / top * (pw - 250))
+            out.append(f'<rect x="{x + 28:.1f}" y="{y + 16}" width="{bw:.1f}" height="22" rx="11" fill="{T["accent"] if arm == "with" else T["muted"]}"/>')
+            out.append(text(fmt(c["mean"]), x + 28 + bw + 14, y + 34, 22, T["ink"], 700, track=-0.4))
+            out.append(text(f'{fsd(c["sd"])}  ·  n = {c["n"]}', x + 28, y + 60, 13, T["sub"], 400))
+    return "".join(out), W, H
+
+
 # ----------------------------------------------------------------------------------------------- terminal
 def terminal(lines):
     """Real command output, drawn as a terminal window (one dark look for both themes)."""
@@ -247,14 +275,15 @@ def main():
     INTER = Path(a.inter)
     OUT.mkdir(parents=True, exist_ok=True)
     data = json.loads((ROOT / "scripts" / "art_data.json").read_text())
+    results = ROOT / "benchmarks" / "results.json"
+    data["benchmark"] = json.loads(results.read_text()) if results.exists() else None
     write("logo", 1200, 260, hero, "wisecraft")
     write("pipeline", 1600, 250, pipeline, "The loop: recon, slice, economy, UI kit, feel and audio, performance, browser QA, release, trailer, field note")
     for theme, T in THEMES.items():
         for name, fn, title in (("skills", lambda T: skills(T), "The twelve skills"),
                                 ("before-after", lambda T: before_after(T, data["before_after"]), "Before and after, measured on a real project"),
-                                ("benchmark", benchmark_soon, "With vs without Wisecraft: benchmark coming soon")):
-            if name == "benchmark" and data.get("benchmark"):
-                continue
+                                ("benchmark", (lambda T: benchmark(T, data["benchmark"])) if data.get("benchmark") else benchmark_soon,
+                                 "With vs without Wisecraft" + ("" if data.get("benchmark") else ": benchmark coming soon"))):
             body, w, h = fn(T)
             (OUT / f"{name}-{theme}.svg").write_text(svg(w, round(h), body, title))
     if a.terminal:

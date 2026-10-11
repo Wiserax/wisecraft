@@ -1,0 +1,582 @@
+{
+  "meta": {
+    "agent": "claude",
+    "model": "claude-opus-5-5 (the CLI's default)",
+    "max_turns": 60,
+    "date": "2026-10-11",
+    "trials_per_cell": 3,
+    "runs": 18,
+    "total_cost_usd": 17.43,
+    "note": "tokens include cached reads, as reported by the agent CLI"
+  },
+  "summary": {
+    "with": {
+      "pass_rate": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "n": 9
+      },
+      "minutes": {
+        "mean": 3.676,
+        "sd": 1.309,
+        "n": 9
+      },
+      "tokens": {
+        "mean": 883767.111,
+        "sd": 453629.819,
+        "n": 9
+      },
+      "by_task": {
+        "boring-first-stage": {
+          "mean": 1.0,
+          "sd": 0.0,
+          "n": 3
+        },
+        "boss-walks-in": {
+          "mean": 1.0,
+          "sd": 0.0,
+          "n": 3
+        },
+        "ready-to-release": {
+          "mean": 1.0,
+          "sd": 0.0,
+          "n": 3
+        }
+      }
+    },
+    "without": {
+      "pass_rate": {
+        "mean": 0.978,
+        "sd": 0.067,
+        "n": 9
+      },
+      "minutes": {
+        "mean": 3.601,
+        "sd": 1.629,
+        "n": 9
+      },
+      "tokens": {
+        "mean": 825400.222,
+        "sd": 420387.264,
+        "n": 9
+      },
+      "by_task": {
+        "boring-first-stage": {
+          "mean": 0.933,
+          "sd": 0.115,
+          "n": 3
+        },
+        "boss-walks-in": {
+          "mean": 1.0,
+          "sd": 0.0,
+          "n": 3
+        },
+        "ready-to-release": {
+          "mean": 1.0,
+          "sd": 0.0,
+          "n": 3
+        }
+      }
+    }
+  },
+  "trials": [
+    {
+      "task": "boring-first-stage",
+      "arm": "with",
+      "trial": 1,
+      "dir": "boring-first-stage-with/boring-first-stage-with-1",
+      "seconds": 265.0,
+      "usage": {
+        "tokens": 1292936,
+        "output_tokens": 24050,
+        "cost_usd": 1.1539907999999999,
+        "turns": 47,
+        "agent_ms": 261879
+      },
+      "score": {
+        "task": "boring-first-stage",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "wall_damage_before_60s": true,
+          "attentive_player_clears": true,
+          "passive_player_not_dead_before_30s": true
+        },
+        "passed": 5,
+        "total": 5
+      },
+      "error": null
+    },
+    {
+      "task": "boring-first-stage",
+      "arm": "with",
+      "trial": 2,
+      "dir": "boring-first-stage-with/boring-first-stage-with-2",
+      "seconds": 117.1,
+      "usage": {
+        "tokens": 425765,
+        "output_tokens": 12107,
+        "cost_usd": 0.5748592,
+        "turns": 29,
+        "agent_ms": 115629
+      },
+      "score": {
+        "task": "boring-first-stage",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "wall_damage_before_60s": true,
+          "attentive_player_clears": true,
+          "passive_player_not_dead_before_30s": true
+        },
+        "passed": 5,
+        "total": 5
+      },
+      "error": null
+    },
+    {
+      "task": "boring-first-stage",
+      "arm": "with",
+      "trial": 3,
+      "dir": "boring-first-stage-with/boring-first-stage-with-3",
+      "seconds": 370.2,
+      "usage": {
+        "tokens": 1534712,
+        "output_tokens": 28793,
+        "cost_usd": 1.3574326,
+        "turns": 57,
+        "agent_ms": 369234
+      },
+      "score": {
+        "task": "boring-first-stage",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "wall_damage_before_60s": true,
+          "attentive_player_clears": true,
+          "passive_player_not_dead_before_30s": true
+        },
+        "passed": 5,
+        "total": 5
+      },
+      "error": null
+    },
+    {
+      "task": "boring-first-stage",
+      "arm": "without",
+      "trial": 1,
+      "dir": "boring-first-stage-without/boring-first-stage-without-1",
+      "seconds": 204.8,
+      "usage": {
+        "tokens": 755408,
+        "output_tokens": 20556,
+        "cost_usd": 1.0254084,
+        "turns": 45,
+        "agent_ms": 203288
+      },
+      "score": {
+        "task": "boring-first-stage",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "wall_damage_before_60s": true,
+          "attentive_player_clears": true,
+          "passive_player_not_dead_before_30s": true
+        },
+        "passed": 5,
+        "total": 5
+      },
+      "error": null
+    },
+    {
+      "task": "boring-first-stage",
+      "arm": "without",
+      "trial": 2,
+      "dir": "boring-first-stage-without/boring-first-stage-without-2",
+      "seconds": 351.7,
+      "usage": {
+        "tokens": 1437780,
+        "output_tokens": 33670,
+        "cost_usd": 1.4706472,
+        "turns": 63,
+        "agent_ms": 350173
+      },
+      "score": {
+        "task": "boring-first-stage",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "wall_damage_before_60s": true,
+          "attentive_player_clears": true,
+          "passive_player_not_dead_before_30s": false
+        },
+        "passed": 4,
+        "total": 5
+      },
+      "error": null
+    },
+    {
+      "task": "boring-first-stage",
+      "arm": "without",
+      "trial": 3,
+      "dir": "boring-first-stage-without/boring-first-stage-without-3",
+      "seconds": 409.1,
+      "usage": {
+        "tokens": 1631344,
+        "output_tokens": 38911,
+        "cost_usd": 1.6597208,
+        "turns": 82,
+        "agent_ms": 408145
+      },
+      "score": {
+        "task": "boring-first-stage",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "wall_damage_before_60s": true,
+          "attentive_player_clears": true,
+          "passive_player_not_dead_before_30s": true
+        },
+        "passed": 5,
+        "total": 5
+      },
+      "error": null
+    },
+    {
+      "task": "boss-walks-in",
+      "arm": "with",
+      "trial": 1,
+      "dir": "boss-walks-in-with/boss-walks-in-with-1",
+      "seconds": 203.7,
+      "usage": {
+        "tokens": 812963,
+        "output_tokens": 21477,
+        "cost_usd": 0.9545664,
+        "turns": 43,
+        "agent_ms": 202168
+      },
+      "score": {
+        "task": "boss-walks-in",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "boss_exists": true,
+          "boss_spawns_at_the_rim": true,
+          "boss_damages_the_wall": true,
+          "boss_is_tough": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "boss-walks-in",
+      "arm": "with",
+      "trial": 2,
+      "dir": "boss-walks-in-with/boss-walks-in-with-2",
+      "seconds": 195.0,
+      "usage": {
+        "tokens": 851423,
+        "output_tokens": 21370,
+        "cost_usd": 0.9475189999999999,
+        "turns": 47,
+        "agent_ms": 194058
+      },
+      "score": {
+        "task": "boss-walks-in",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "boss_exists": true,
+          "boss_spawns_at_the_rim": true,
+          "boss_damages_the_wall": true,
+          "boss_is_tough": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "boss-walks-in",
+      "arm": "with",
+      "trial": 3,
+      "dir": "boss-walks-in-with/boss-walks-in-with-3",
+      "seconds": 271.8,
+      "usage": {
+        "tokens": 1199933,
+        "output_tokens": 30200,
+        "cost_usd": 1.2777996,
+        "turns": 54,
+        "agent_ms": 270291
+      },
+      "score": {
+        "task": "boss-walks-in",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "boss_exists": true,
+          "boss_spawns_at_the_rim": true,
+          "boss_damages_the_wall": true,
+          "boss_is_tough": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "boss-walks-in",
+      "arm": "without",
+      "trial": 1,
+      "dir": "boss-walks-in-without/boss-walks-in-without-1",
+      "seconds": 180.8,
+      "usage": {
+        "tokens": 586012,
+        "output_tokens": 18749,
+        "cost_usd": 0.9066736,
+        "turns": 38,
+        "agent_ms": 179304
+      },
+      "score": {
+        "task": "boss-walks-in",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "boss_exists": true,
+          "boss_spawns_at_the_rim": true,
+          "boss_damages_the_wall": true,
+          "boss_is_tough": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "boss-walks-in",
+      "arm": "without",
+      "trial": 2,
+      "dir": "boss-walks-in-without/boss-walks-in-without-2",
+      "seconds": 175.8,
+      "usage": {
+        "tokens": 445545,
+        "output_tokens": 19671,
+        "cost_usd": 0.7753358,
+        "turns": 33,
+        "agent_ms": 174833
+      },
+      "score": {
+        "task": "boss-walks-in",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "boss_exists": true,
+          "boss_spawns_at_the_rim": true,
+          "boss_damages_the_wall": true,
+          "boss_is_tough": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "boss-walks-in",
+      "arm": "without",
+      "trial": 3,
+      "dir": "boss-walks-in-without/boss-walks-in-without-3",
+      "seconds": 162.9,
+      "usage": {
+        "tokens": 502191,
+        "output_tokens": 18649,
+        "cost_usd": 0.7431228000000001,
+        "turns": 28,
+        "agent_ms": 161351
+      },
+      "score": {
+        "task": "boss-walks-in",
+        "checks": {
+          "tests_pass": true,
+          "test_added": true,
+          "boss_exists": true,
+          "boss_spawns_at_the_rim": true,
+          "boss_damages_the_wall": true,
+          "boss_is_tough": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "ready-to-release",
+      "arm": "with",
+      "trial": 1,
+      "dir": "ready-to-release-with/ready-to-release-with-1",
+      "seconds": 254.6,
+      "usage": {
+        "tokens": 52286,
+        "output_tokens": 104,
+        "cost_usd": 0.7548241999999998,
+        "turns": 1,
+        "agent_ms": 1678
+      },
+      "score": {
+        "task": "ready-to-release",
+        "checks": {
+          "tests_pass": true,
+          "version_bumped": true,
+          "version_matches_in_code": true,
+          "build_works": true,
+          "publish_check_clean": true,
+          "changelog_or_release_notes": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "ready-to-release",
+      "arm": "with",
+      "trial": 2,
+      "dir": "ready-to-release-with/ready-to-release-with-2",
+      "seconds": 135.7,
+      "usage": {
+        "tokens": 737329,
+        "output_tokens": 13756,
+        "cost_usd": 0.7507851999999999,
+        "turns": 43,
+        "agent_ms": 132863
+      },
+      "score": {
+        "task": "ready-to-release",
+        "checks": {
+          "tests_pass": true,
+          "version_bumped": true,
+          "version_matches_in_code": true,
+          "build_works": true,
+          "publish_check_clean": true,
+          "changelog_or_release_notes": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "ready-to-release",
+      "arm": "with",
+      "trial": 3,
+      "dir": "ready-to-release-with/ready-to-release-with-3",
+      "seconds": 172.2,
+      "usage": {
+        "tokens": 1046557,
+        "output_tokens": 17573,
+        "cost_usd": 0.9132598,
+        "turns": 54,
+        "agent_ms": 170658
+      },
+      "score": {
+        "task": "ready-to-release",
+        "checks": {
+          "tests_pass": true,
+          "version_bumped": true,
+          "version_matches_in_code": true,
+          "build_works": true,
+          "publish_check_clean": true,
+          "changelog_or_release_notes": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "ready-to-release",
+      "arm": "without",
+      "trial": 1,
+      "dir": "ready-to-release-without/ready-to-release-without-1",
+      "seconds": 142.0,
+      "usage": {
+        "tokens": 746388,
+        "output_tokens": 15100,
+        "cost_usd": 0.8462178000000001,
+        "turns": 40,
+        "agent_ms": 140477
+      },
+      "score": {
+        "task": "ready-to-release",
+        "checks": {
+          "tests_pass": true,
+          "version_bumped": true,
+          "version_matches_in_code": true,
+          "build_works": true,
+          "publish_check_clean": true,
+          "changelog_or_release_notes": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "ready-to-release",
+      "arm": "without",
+      "trial": 2,
+      "dir": "ready-to-release-without/ready-to-release-without-2",
+      "seconds": 196.5,
+      "usage": {
+        "tokens": 758470,
+        "output_tokens": 13926,
+        "cost_usd": 0.6820950000000001,
+        "turns": 48,
+        "agent_ms": 195404
+      },
+      "score": {
+        "task": "ready-to-release",
+        "checks": {
+          "tests_pass": true,
+          "version_bumped": true,
+          "version_matches_in_code": true,
+          "build_works": true,
+          "publish_check_clean": true,
+          "changelog_or_release_notes": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    },
+    {
+      "task": "ready-to-release",
+      "arm": "without",
+      "trial": 3,
+      "dir": "ready-to-release-without/ready-to-release-without-3",
+      "seconds": 120.7,
+      "usage": {
+        "tokens": 565464,
+        "output_tokens": 12562,
+        "cost_usd": 0.6328130000000002,
+        "turns": 43,
+        "agent_ms": 119723
+      },
+      "score": {
+        "task": "ready-to-release",
+        "checks": {
+          "tests_pass": true,
+          "version_bumped": true,
+          "version_matches_in_code": true,
+          "build_works": true,
+          "publish_check_clean": true,
+          "changelog_or_release_notes": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "error": null
+    }
+  ]
+}

@@ -139,9 +139,11 @@ One project, one machine. Each figure is a single measurement or a small set, as
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/media/benchmark-dark.svg">
-    <img src="docs/media/benchmark-light.svg" alt="With versus without Wisecraft: benchmark coming soon. The harness is in benchmarks; no numbers until it has run." width="100%">
+    <img src="docs/media/benchmark-light.svg" alt="With versus without Wisecraft, mean of 9 runs each. Checks passed: 100% with, 98% without. Minutes per task: 3.7 with, 3.6 without. Tokens per task: 0.88 million with, 0.83 million without." width="100%">
   </picture>
 </p>
+
+<p align="center"><sub>Three toy tasks on <a href="examples/horde-demo">a 200-line sample game</a>, 3 trials each, 18 headless sessions, scored by script. Checks passed: 100% with, 98% without. Minutes: 3.7 ± 1.3 and 3.6 ± 1.6. Tokens: 0.88 M and 0.83 M.<br><b>These tasks are too easy to tell the two apart:</b> both arms pass nearly everything, so this benchmark shows no difference yet. Harness, data and limits: <a href="benchmarks/">benchmarks/</a>.</sub></p>
 <!-- benchmark:end -->
 
 <br>
