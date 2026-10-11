@@ -1,6 +1,6 @@
 # Universal Modder loop (concept → shippable slice)
 
-The Universal Modder (UM) loop is how a new mode or feature goes from an idea to something playable inside the real game, without breaking the base game. Short Sieges (the mode that became Zombie Tower 2.x) was built this way. The method follows github.com/rehan-remade/universal-modder.
+The Universal Modder (UM) loop is how a new mode or feature goes from an idea to something playable inside the real game, without breaking the base game. The game mode behind our first shipped title was built this way. The method follows github.com/rehan-remade/universal-modder.
 
 ## Steps
 1. **Recon:** read the game's loop, save format, mod loader and event bus. Write down which hooks exist (`registerMod({event})`, run lifecycle, spawn, kill, reward).

@@ -18,7 +18,7 @@
 4. Log it: the commit, what changed for the player, and the gate results.
 
 ## Frozen versions
-To let the producer compare builds, deploy the older version to a **separate Vercel project** (e.g. `game-v2-2.vercel.app`). That gives it a separate origin, so separate saves. Tag it and keep its worktree.
+To let the producer compare builds, deploy the older version to a **separate Vercel project** (e.g. `mygame-v2.vercel.app`). That gives it a separate origin, so separate saves. Tag it and keep its worktree.
 
 ## Previews and SSO
 Vercel preview URLs may sit behind SSO (302). For producer review, deploy to production, or to a separate public project.

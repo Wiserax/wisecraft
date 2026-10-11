@@ -1,11 +1,11 @@
 ---
-name: game-engine
+name: wizerax
 description: End-to-end studio workflow for building, balancing, polishing and shipping a mobile-first web game (Vite + three.js or similar) with Claude Code agents. It covers the concept, vertical slices in the Universal Modder style, economy and difficulty tuned with simulated player bots, a clean mobile UI kit (hub, wordless tutorial, fonts, EN/ES), game feel and audio mix, performance budgets, real-browser QA, Vercel releases with frozen versions, lead/worker agent orchestration, the trailer pipeline, and design boards with mockups. Use this skill whenever the user is making or iterating a web or HTML5 game, especially a tower defense, idle, roguelite, horde or casual mobile game: designing chapters, stages, bosses or a monetization system; rebalancing ("too easy", "too hard", "boring first minutes"); fixing lag; polishing UI, FTUE, sound or VFX; preparing a release; or cutting a trailer, even if they never say "engine" or "skill".
 ---
 
-# Game Engine: how we build and ship web games
+# Wizerax: the game studio in a skill
 
-This is the playbook distilled from shipping *Zombie Tower: Short Sieges* (v1 → 2.3.x) with a producer, a lead Claude session and worker agents. It's opinionated because each rule here was paid for by a real mistake. Read this file, then open only the reference you need.
+A complete framework for making web games with AI agents: game design and economy, UX/UI, game feel and sound, performance, QA, release, multi-agent orchestration, and the trailer at the end. Battle-tested on two shipped mobile web games, built by a producer with a lead Claude session and worker agents. It's opinionated because each rule here was paid for by a real mistake. Read this file, then open only the reference you need.
 
 ## The producer contract (read first)
 The person you work with is a **producer**, not a reviewer of question sheets.

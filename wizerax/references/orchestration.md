@@ -6,7 +6,7 @@
 - **Workers:** each works in the worktree its spec names, on its own branch. Workers never merge, push or deploy.
 
 ## Messaging between sessions
-If workers run on another account or machine, use a mailbox, e.g. Orca orchestration:
+If workers run on another account or machine, use a shared mailbox (any agent-orchestration tool with dispatch, wait and acknowledge). With Orca, for example:
 - dispatch: `orca orchestration worker-start --terminal <handle> --worktree path:<dir> --task-title … --spec …`
 - wait: `orca orchestration check --wait --types "worker_done,escalation,question,status" --timeout-ms 900000 --json`
 - reply to questions with `reply --id`, acknowledge with `check --ack <deliveryId>`, and keep the worker's terminal (retain, don't release).
