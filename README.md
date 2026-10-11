@@ -182,17 +182,6 @@ One project, one machine. Each figure is a single measurement or a small set, as
 
 </details>
 
-With versus without the plugin, on three toy tasks:
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/media/benchmark-dark.png">
-    <img src="docs/media/benchmark-light.png" alt="With versus without wisecraft, 18 runs on three toy tasks, mean of 9 runs each. Checks passed: 98% without, 100% with. Minutes per task: 3.6 without, 3.7 with. Tokens per task: 825 thousand without, 884 thousand with." width="100%">
-  </picture>
-</p>
-
-<p align="center"><sub>Three toy tasks, 18 runs: 100% vs 98% of checks. <b>The tasks were too easy to separate the two</b>, so this shows no difference yet. Harder, real-game tasks are next. Harness and raw results: <a href="benchmarks/">benchmarks/</a>.</sub></p>
-
 Each lesson has a field note: [knowledge/INDEX.md](knowledge/INDEX.md). A small sample game to try the skills on is in
 [examples/horde-demo](examples/horde-demo).
 
