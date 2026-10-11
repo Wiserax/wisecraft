@@ -50,5 +50,16 @@ if (mediaPage) {
     }
   }
 }
+// five seconds of the hero in motion (webm; convert with ffmpeg), and what a frame of the animation costs
+const vctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: "dark", recordVideo: { dir: out("_preview/video/x").replace(/x$/, ""), size: { width: 1440, height: 900 } } });
+const vp = await vctx.newPage();
+vp.on("pageerror", (e) => errors.push(String(e)));
+await vp.goto(site); await vp.waitForTimeout(5600);
+const planet = await vp.evaluate(() => (window.__planet ? { ...window.__planet, ms: +window.__planet.ms.toFixed(2) } : null));
+const video = await vp.video().path();
+await vctx.close();
+const still = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
+const sp = await still.newPage(); await sp.goto(site); await sp.waitForTimeout(700);
+const reduced = await sp.evaluate(() => (window.__planet ? window.__planet.frames : null));
 await browser.close();
-console.log(JSON.stringify({ errors, mobileOverflowPx: overflow }));
+console.log(JSON.stringify({ errors, mobileOverflowPx: overflow, planet, framesWithReducedMotion: reduced, video }));
