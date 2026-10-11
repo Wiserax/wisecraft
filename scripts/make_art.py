@@ -222,7 +222,7 @@ def terminal(lines):
     """Real command output, drawn as a terminal window (one dark look for both themes)."""
     size, lh, padx, top = 15.5, 25, 34, 66
     cw = measure("M", size, "mono")
-    cols = max(60, max((len(l) for l in lines), default=60))
+    cols = max(60, max((len(l) for l in lines), default=60)) + 2
     W = min(1600, round(padx * 2 + cols * cw))
     H = top + len(lines) * lh + 30
     out = [f'<rect width="{W}" height="{H}" rx="18" fill="#0B0B0F" stroke="#2A2A33" stroke-width="1.5"/>',

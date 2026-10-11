@@ -1,0 +1,13 @@
+$ wise qa http://127.0.0.1:5890/ --ready "window.__game" --seconds 10 --out shots
+PASS  chromium 390x844  http://127.0.0.1:5890/  (system chrome)
+  ready:        yes after 201 ms  (window.__game)
+  game:         window.__game found, keys: sim, state, step, tap; other hooks: __THREE__
+  taps:         20 of 20 over 10 s in canvas, seed 1
+  blocked:      1 request(s) matching **/api/events
+  errors:       none
+  overflow:     none
+  failed requests: none
+  screenshots:  shots/1-start.png, shots/2-middle.png, shots/3-end.png
+
+$ wise publish check .
+PASS: 199 files, 0 failures, 0 warnings

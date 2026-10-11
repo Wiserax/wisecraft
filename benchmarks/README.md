@@ -24,7 +24,7 @@ A small, honest test of whether the plugin changes what an agent delivers.
 ```bash
 python3 benchmarks/run.py --dry-run          # the 18 commands, nothing run
 python3 benchmarks/run.py --trials 3         # spends real tokens: 18 agent sessions
-python3 benchmarks/run.py --report benchmarks/runs/<stamp>
+python3 benchmarks/run.py --report ~/.wisecraft/bench/<stamp>
 node benchmarks/score.mjs examples/horde-demo boss-walks-in      # score any folder by hand
 ```
 The untouched sample game scores 3 of 5, 1 of 6 and 2 of 5: that is the floor.

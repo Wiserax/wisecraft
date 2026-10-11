@@ -4,12 +4,12 @@
     python3 benchmarks/run.py --dry-run                      # print the commands, run nothing
     python3 benchmarks/run.py --trials 3                     # 3 tasks x 2 arms x 3 trials = 18 agent runs
     python3 benchmarks/run.py --tasks boss-walks-in --trials 1 --arms with
-    python3 benchmarks/run.py --report benchmarks/runs/<stamp>          # re-score and summarise a finished run
+    python3 benchmarks/run.py --report ~/.wisecraft/bench/<stamp>      # re-score and summarise a finished run
 
 Each trial gets a fresh copy of examples/horde-demo in its own git repo. The "with" arm loads this plugin
 (`--plugin-dir`); the "without" arm runs the same agent with skills disabled. Both get the same prompt, model and
 turn limit. Afterwards benchmarks/score.mjs checks the folder (it calls the sim and reads files; it never reads
-what the agent said). Results land in benchmarks/runs/<stamp>/results.json: per trial the checks, wall-clock
+what the agent said). Results land in ~/.wisecraft/bench/<stamp>/results.json: per trial the checks, wall-clock
 seconds, tokens and cost as reported by the agent CLI, and per arm the mean and standard deviation.
 
 This spends real tokens (18 agent sessions by default). Nothing is charted until it has run: the README shows
@@ -29,11 +29,14 @@ ROOT = Path(__file__).resolve().parents[1]
 BENCH = ROOT / "benchmarks"
 SPEC = json.loads((BENCH / "tasks.json").read_text())
 SKIP = {"node_modules", "dist", ".git"}
+# What a trial may do without asking: edit files, and run the project's own tools. Nothing else is approved, so a
+# headless run cannot wander outside its copy of the game.
+TOOLS = ["Read", "Edit", "Write", "Glob", "Grep", "Bash(npm test:*)", "Bash(npm run:*)", "Bash(node:*)", "Bash(wise:*)", "Bash(git:*)", "Bash(ls:*)"]
 
 
 def agent_cmd(prompt: str, arm: str, a) -> list:
     cmd = [a.agent, "-p", prompt, "--output-format", "json", "--permission-mode", "acceptEdits", "--max-turns", str(a.max_turns),
-           "--setting-sources", "project", "--no-session-persistence"]
+           "--setting-sources", "project", "--no-session-persistence", "--allowedTools", *TOOLS]
     if a.model:
         cmd += ["--model", a.model]
     if a.max_usd:
@@ -102,7 +105,7 @@ def main():
     ap.add_argument("--max-usd", type=float, default=4.0, help="spending cap per trial, passed to the agent CLI (0 = none)")
     ap.add_argument("--build", action="store_true", help="also run `npm run build` in the release task (needs --modules)")
     ap.add_argument("--modules", help="a node_modules folder (vite + three) to link into every copy")
-    ap.add_argument("--out", help="run folder (default: benchmarks/runs/<stamp>)")
+    ap.add_argument("--out", help="run folder (default: ~/.wisecraft/bench/<stamp>, outside the repo)")
     ap.add_argument("--report", help="re-score a finished run folder and print its summary")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
@@ -118,7 +121,8 @@ def main():
         print(json.dumps(result["summary"], indent=2))
         return 0
 
-    run = Path(a.out) if a.out else BENCH / "runs" / time.strftime("%Y%m%d-%H%M%S")
+    # Outside the repo on purpose: a copy inside it would inherit this repo's AGENTS.md and skills in both arms.
+    run = Path(a.out) if a.out else Path.home() / ".wisecraft" / "bench" / time.strftime("%Y%m%d-%H%M%S")
     plan = [(t, arm, n) for n in range(1, a.trials + 1) for t in tasks for arm in a.arms]
     print(f"{len(plan)} agent runs -> {run}")
     if a.dry_run:
