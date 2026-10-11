@@ -1,0 +1,72 @@
+{
+  "_about": "Real measurements from the project the skills were written on. Each row names its source; nothing here is estimated. Paths are relative to that (private) project.",
+  "before_after": [
+    {
+      "label": "Dead air in the first stage",
+      "note": "longest stretch with nothing new to watch, waves 2–3",
+      "before": 18.4,
+      "after": 9.5,
+      "before_text": "18.4 s",
+      "after_text": "9.5 s",
+      "change": "−48%",
+      "source": "outputs/coordination/log.md, stage-1 scout entry (real build, 390×844, one seed)",
+      "skill": "game-economy"
+    },
+    {
+      "label": "First sound after the first tap",
+      "note": "new player, Fast 4G profile, 4× slower CPU, median of 5",
+      "before": 7.6,
+      "after": 1.5,
+      "before_text": "7.6 s",
+      "after_text": "1.5 s",
+      "change": "5× sooner",
+      "source": "MODLOG.md, 2026-10-09 audio load order entry",
+      "skill": "game-performance"
+    },
+    {
+      "label": "Frame rate when the horde piles up",
+      "note": "slow phone (4× CPU throttle), about 5,000 enemies",
+      "before": 14,
+      "after": 37,
+      "before_text": "14 fps",
+      "after_text": "37 fps",
+      "change": "2.6×",
+      "source": "MODLOG.md, 2026-10-09 adaptive quality guard entry (lowest 20 s window)",
+      "skill": "game-performance"
+    },
+    {
+      "label": "Slow-motion frames that show new motion",
+      "note": "out of 24 slowed frames in a boss death",
+      "before": 9,
+      "after": 23,
+      "before_text": "9 of 24",
+      "after_text": "23 of 24",
+      "change": "2.6×",
+      "source": "MODLOG.md, 2026-10-11 VFX entry; trailer NOTES.md",
+      "skill": "trailer-video"
+    },
+    {
+      "label": "How long a boss survives a fast tapper",
+      "note": "stage boss, producer-like player model",
+      "before": 10,
+      "after": 27,
+      "before_text": "10 s",
+      "after_text": "27 s",
+      "change": "2.7×",
+      "source": "MODLOG.md, 2.3.1 open list (about 10 s); outputs/coordination/log.md, 2.3.2 release entry (27 s)",
+      "skill": "game-economy"
+    },
+    {
+      "label": "Boss-death boom over the music",
+      "note": "loudest 400 ms against the music bed",
+      "before": 11.5,
+      "after": 2.7,
+      "before_text": "+11.5 dB",
+      "after_text": "−2.7 dB",
+      "change": "−14 dB",
+      "source": "outputs/audio-235/loudness-table.md (muted captures, BS.1770)",
+      "skill": "game-feel-audio"
+    }
+  ],
+  "benchmark": null
+}

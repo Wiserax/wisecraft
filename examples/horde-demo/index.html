@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <title>Horde demo</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #14121c; overflow: hidden; touch-action: none; font: 600 15px/1.2 system-ui, sans-serif; color: #fff; }
+      canvas { display: block; width: 100vw; height: 100vh; }
+      #hud { position: fixed; inset: 12px 12px auto 12px; display: flex; gap: 10px; justify-content: space-between; pointer-events: none; }
+      #hud span { background: #0008; padding: 6px 10px; border-radius: 10px; }
+      #end { position: fixed; inset: 0; display: none; place-items: center; background: #000a; font-size: 28px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="field"></canvas>
+    <div id="hud"><span id="wave">Wave 1</span><span id="wall">Walls 100</span><span id="gold">Gold 0</span></div>
+    <div id="end"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
