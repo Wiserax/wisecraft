@@ -1,1 +1,145 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><title>wisecraft</title><meta http-equiv="refresh" content="0; url=./site/"><link rel="canonical" href="./site/"><a href="./site/">wisecraft</a></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wisecraft: the game studio with the agents wired in</title>
+<meta name="description" content="Skills, a CLI and a shared knowledge base that let any AI coding agent build, balance, polish and ship a mobile web game.">
+<meta name="theme-color" content="#050507">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050507'/%3E%3Cpolygon points='8,10 30,10 30,27 39,27 39,10 61,10 61,27 70,27 70,10 92,10 92,54 71,90 50,58 29,90 8,54' fill='%23F5F5F5'/%3E%3Crect x='39' y='10' width='22' height='17' fill='%2345E3E0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050507;--ink-1:#0a0a0c;--ink-5:oklch(50% .008 280);--ink-6:oklch(66% .006 280);--ink-7:oklch(82% .005 280);--ink-9:oklch(97% 0 0);
+--accent:oklch(92% .085 185);--accent-deep:oklch(50% .27 266);--rim:oklch(95% .05 190);--dim:oklch(62% .16 262);--line:oklch(100% 0 0/.08);--line-2:oklch(100% 0 0/.14);--before:oklch(100% 0 0/.16);
+--sans:"Geist",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink-7);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.9;mix-blend-mode:screen;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .065 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mono{font-family:var(--mono)}
+.label{font:500 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-6)}
+nav{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(20px,8vw,115px)}
+.brand{display:flex;align-items:center;gap:10px;font:600 15px/1 var(--sans);color:var(--ink-9)}
+.brand svg{width:20px;height:20px}
+nav .links{display:flex;gap:28px;font:500 11px/1 var(--mono);letter-spacing:.22em;color:var(--ink-7)}
+nav .links a:hover{color:var(--ink-9)}
+.hero{position:relative;min-height:100vh;padding:150px clamp(20px,16.6vw,240px) 120px;overflow:hidden}
+#planet{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.hero>*:not(canvas){position:relative;z-index:10;min-width:0}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+h1{margin-top:22px;font:500 clamp(40px,4.75vw,68px)/1.02 var(--sans);letter-spacing:-.035em;color:oklch(97% .006 220)}
+h1 span{display:block}h1 .l2{color:oklch(74% .024 245)}h1 .l3{color:var(--accent);text-shadow:0 0 28px oklch(80% .14 190/.35)}h1 .l3 i{font-style:normal;color:oklch(97% .006 220)}
+.sub{margin-top:30px;max-width:540px;font-size:17px;line-height:1.65;color:var(--ink-7)}.sub b{font-weight:400;color:var(--ink-9)}
+.install{margin-top:40px;max-width:640px;min-width:0}
+.tabs{display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid transparent}
+.tabs button{appearance:none;background:none;border:0;border-bottom:1px solid transparent;padding:8px 10px;font:500 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-6);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--ink-9);border-bottom-color:var(--accent)}
+.tabs button:hover{color:var(--ink-7)}.tabs .right{margin-left:auto;padding:8px 0;color:var(--ink-6)}
+.cmd{display:flex;margin-top:10px;border:1px solid var(--line);background:#08080bcc;min-height:50px}
+.cmd .p{display:grid;place-items:center;width:34px;border-right:1px solid var(--line);font:500 13px var(--mono);color:var(--accent)}
+.cmd code{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:10px 14px;font:400 13.5px/1.5 var(--mono);color:var(--ink-9);overflow-x:auto;white-space:nowrap}
+.cmd button{appearance:none;background:none;border:0;border-left:1px solid var(--line);padding:0 16px;font:500 11px/1 var(--mono);letter-spacing:.22em;color:var(--ink-7);cursor:pointer}
+.cmd button:hover{color:var(--ink-9);background:oklch(100% 0 0/.04)}
+.compat{margin-top:38px;max-width:560px}.compat ul{display:flex;flex-wrap:wrap;gap:14px 40px;margin-top:20px;list-style:none}
+.compat li{color:var(--ink-9);opacity:.5}.compat li:nth-child(3n+1){opacity:.28}.compat li:nth-child(3n){opacity:.85}
+.compat svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rail{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:30;border:1px solid var(--line);display:none}
+.rail a{position:relative;display:grid;place-items:center;width:56px;height:56px;background:var(--bg);color:var(--ink-5);border-bottom:1px solid var(--line)}
+.rail a:last-child{border-bottom:0}.rail a:hover,.rail a.on{color:var(--ink-9)}.rail a.on:before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--accent)}
+.rail svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.rail em{position:absolute;right:4px;bottom:4px;font:400 8px/1 var(--mono);letter-spacing:.1em;font-style:normal;opacity:.55}
+@media (min-width:1100px){.rail{display:block}}
+section{position:relative;z-index:10;padding:96px clamp(20px,16.6vw,240px);border-top:1px solid var(--line)}
+section .num{font:500 11px/1 var(--mono);letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+h2{margin-top:16px;font:500 clamp(30px,3vw,42px)/1.08 var(--sans);letter-spacing:-.03em;color:var(--ink-9)}h2 i{font-style:normal;color:var(--accent)}
+section>p.lead{margin-top:16px;max-width:620px;color:var(--ink-7)}
+.grid{margin-top:40px;display:grid;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.grid>*{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px;min-width:0}
+.g5{grid-template-columns:repeat(5,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.cell b{display:block;margin-top:14px;font:500 17px/1.2 var(--sans);color:var(--ink-9)}.cell small{display:block;margin-top:6px;font:400 12px/1.5 var(--mono);color:var(--ink-6)}
+.cell .n{font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--accent)}
+.cell code{font:500 13px/1.3 var(--mono);color:var(--ink-9)}.cell p{margin-top:8px;font-size:14px;line-height:1.5;color:var(--ink-7)}
+table{margin-top:40px;width:100%;border-collapse:collapse;border-top:1px solid var(--line)}
+td{padding:14px 16px 14px 0;border-bottom:1px solid var(--line);vertical-align:top;font-size:15px;color:var(--ink-7)}
+td:first-child{white-space:nowrap;font:500 13px/1.7 var(--mono);color:var(--ink-9);padding-right:28px}td:first-child:before{content:"$ ";color:var(--accent)}
+pre{margin-top:28px;border:1px solid var(--line);background:#08080bcc;padding:18px 20px;font:400 12.5px/1.75 var(--mono);color:var(--ink-6);overflow-x:auto}
+pre b{font-weight:500;color:var(--ink-9)}pre i{font-style:normal;color:var(--accent)}pre u{text-decoration:none;color:var(--rim)}
+.notes{margin-top:32px;list-style:none;border-top:1px solid var(--line)}
+.notes li{border-bottom:1px solid var(--line)}.notes a{display:flex;gap:16px;align-items:baseline;padding:14px 0;color:var(--ink-7)}
+.notes a:hover{color:var(--ink-9)}.notes a span{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--ink-6);min-width:92px;text-transform:uppercase}
+.chart{margin-top:40px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:38% minmax(0,1fr) 150px;gap:8px 28px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.row h3{font:500 16px/1.3 var(--sans);color:var(--ink-9)}.row h3+small{display:block;margin-top:4px;font:400 11.5px/1.5 var(--mono);color:var(--ink-6)}
+.bars{display:grid;gap:7px;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:25% 100%}
+.bar{display:flex;align-items:center;gap:10px;font:400 12px/1 var(--mono);color:var(--ink-6);white-space:nowrap}
+.bar i{display:block;height:10px;background:var(--before)}
+.bar.after{color:var(--ink-9)}.bar.after i{background-color:var(--accent);background-image:linear-gradient(90deg,transparent calc(100% - 18px),#0008 0),repeating-conic-gradient(#0000 0 25%,#0006 0 50%);background-size:auto,4px 4px;background-blend-mode:normal}
+.delta{font:500 22px/1 var(--sans);letter-spacing:-.02em;color:var(--ink-9);text-align:right;white-space:nowrap}
+.legend{display:flex;gap:22px;margin-top:28px;font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-6)}
+.legend i{display:inline-block;width:22px;height:8px;margin-right:8px;background:var(--before)}.legend .a i{background:var(--accent)}
+details{margin-top:24px;font-size:13.5px;color:var(--ink-6)}summary{cursor:pointer;font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-7)}
+details ul{margin-top:14px;list-style:none;display:grid;gap:8px}details li b{font-weight:500;color:var(--ink-7)}
+.panel h3{font:500 16px/1.3 var(--sans);color:var(--ink-9)}.panel .bar{margin-top:8px}.panel .who{margin-top:18px;font:500 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-6)}
+.panel .bar b{font:500 18px/1 var(--sans);color:var(--ink-9)}.panel .sd{margin-top:6px;font:400 11px/1 var(--mono);color:var(--ink-6)}
+.caption{margin-top:22px;max-width:680px;font-size:14.5px;color:var(--ink-7)}.caption b{font-weight:500;color:var(--ink-9)}
+.frames{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.frames figure{position:relative;background:var(--bg)}.frames img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.frames figcaption{position:absolute;left:8px;bottom:8px;padding:5px 8px;background:#050507e6;font:500 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-9)}
+ul.plain{margin-top:24px;display:grid;gap:10px;list-style:none;max-width:680px}ul.plain li{padding-left:18px;position:relative}ul.plain li:before{content:"";position:absolute;left:0;top:.7em;width:6px;height:1px;background:var(--accent)}
+footer{position:relative;z-index:10;display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between;padding:28px clamp(20px,16.6vw,240px) 40px;border-top:1px solid var(--line);font:500 11px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-6)}
+footer a{color:var(--ink-7)}footer a:hover{color:var(--ink-9)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:1px solid var(--rim);outline-offset:2px}
+@media (max-width:600px){.cmd code{white-space:normal;overflow-wrap:anywhere}}
+@media (max-width:900px){nav,.hero,section,footer{padding-left:22px;padding-right:22px}.tabs button{white-space:nowrap}.cmd code{font-size:12.5px}h1{font-size:clamp(38px,11vw,56px)}.g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}.row{grid-template-columns:1fr}.delta{text-align:left}.frames{grid-template-columns:repeat(2,1fr)}
+.hero{padding-top:104px;padding-bottom:0}nav .links a.hide{display:none}.tabs{overflow-x:auto}.tabs .right{display:none}td{display:block;border:0;padding:0 0 12px}td:first-child{padding-top:12px;border-top:1px solid var(--line);white-space:normal;word-break:break-word}table{border-top:0;border-bottom:1px solid var(--line)}section{padding-top:72px;padding-bottom:72px}}
+html,body{height:100%;overflow:hidden}.hero{height:100vh;height:100svh;min-height:0}
+.maker{position:fixed;left:32px;bottom:26px;z-index:20;display:flex;align-items:center;gap:10px;font:500 15px/1 var(--sans);letter-spacing:-.01em;color:var(--ink-9);text-decoration:none}.maker svg{width:18px;height:18px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round}.maker:hover{color:var(--accent)}
+.legal{position:fixed;right:28px;bottom:22px;z-index:20;padding:8px 12px;border:1px solid var(--line);background:#050507b3;font:500 10px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-6);text-decoration:none}.legal:hover{color:var(--ink-7)}
+@media (max-width:900px){.maker{left:22px;bottom:20px;font-size:14px}.legal{right:16px;bottom:16px;padding:6px 9px;font-size:9px}}
+@media (max-height:600px),(max-width:600px) and (max-height:700px){html,body{height:auto;overflow:auto}.hero{height:auto;min-height:100svh;padding-bottom:120px}}
+@media (min-width:901px) and (max-height:820px){.hero{padding-top:112px}h1{margin-top:16px;font-size:clamp(40px,4.3vw,60px)}.sub{margin-top:20px}.install{margin-top:26px}.compat{margin-top:24px}}
+html.banner .hero{min-height:640px;height:640px;padding:104px 140px 0}html.banner nav{padding:20px 60px}html.banner h1{font-size:58px;margin-top:18px}html.banner .sub{margin-top:20px;font-size:16px}
+html.banner .install{margin-top:26px;max-width:540px}html.banner .compat,html.banner .rail,html.banner .maker,html.banner .legal{display:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<nav aria-label="Site"><a class="brand" href="#top" aria-label="wisecraft, top of page"><svg viewBox="0 0 100 100" width="20" height="20" aria-hidden="true"><polygon points="8,10 30,10 30,27 39,27 39,10 61,10 61,27 70,27 70,10 92,10 92,54 71,90 50,58 29,90 8,54" fill="#F5F5F5"/><rect x="39" y="10" width="22" height="17" fill="#45E3E0"/></svg>wisecraft</a>
+<div class="links"><a href="https://github.com/Wiserax/wisecraft#readme">DOCS</a><a href="https://github.com/Wiserax/wisecraft">GITHUB <span aria-hidden="true">↗</span></a></div></nav>
+<aside class="rail" aria-label="Sections"><a href="https://github.com/Wiserax/wisecraft#try-it" title="The loop" aria-label="The loop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.7M20 12a8 8 0 0 1-13.7 5.7M17 3v4h-4M7 21v-4h4"/></svg><em>01</em></a><a href="https://github.com/Wiserax/wisecraft#whats-inside" title="Skills" aria-label="Skills"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><em>02</em></a><a href="https://github.com/Wiserax/wisecraft#whats-inside" title="The wise CLI" aria-label="The wise CLI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM7 10l3 2-3 2M12.5 14.5H17"/></svg><em>03</em></a><a href="https://github.com/Wiserax/wisecraft#a-knowledge-base-that-ais-write-for-ais" title="Knowledge base" aria-label="Knowledge base"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM9.5 12h6M9.5 16h6"/></svg><em>04</em></a><a href="https://github.com/Wiserax/wisecraft#built-with-it" title="Measured" aria-label="Measured"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><em>05</em></a><a href="https://github.com/Wiserax/wisecraft#rules-it-follows" title="Rules it follows" aria-label="Rules it follows"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V8h5v12M14 20V5h5v15M3 20h18"/></svg><em>06</em></a><a href="https://github.com/Wiserax/wisecraft#made-a-game-with-it" title="Built with it" aria-label="Built with it"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM10 9l5.5 3-5.5 3z"/></svg><em>07</em></a><a href="https://github.com/Wiserax/wisecraft#install" title="Install" aria-label="Install"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg><em>08</em></a></aside>
+<main id="top">
+<header class="hero">
+<canvas id="planet" aria-hidden="true"></canvas>
+<p class="eyebrow">wisecraft · for ai agents</p>
+<h1><span>The game studio</span><span class="l2">with the agents</span><span class="l3">wired in<i>.</i></span></h1>
+<p class="sub">Skills, a CLI and field notes that let any AI coding agent build, balance, polish and ship a mobile web game. <b>Measured in a real phone browser, not promised.</b></p>
+<div class="install"><div class="tabs" role="tablist" aria-label="Install for your agent"><button role="tab" aria-selected="false" data-cmd="/plugin marketplace add Wiserax/wisecraft|/plugin install wisecraft@wisecraft" data-note="in the agent">Claude Code</button><button role="tab" aria-selected="false" data-cmd="codex plugin marketplace add Wiserax/wisecraft|codex plugin add wisecraft@wisecraft" data-note="shell">Codex</button><button role="tab" aria-selected="false" data-cmd="gemini extensions install https://github.com/Wiserax/wisecraft" data-note="shell">Gemini</button><button role="tab" aria-selected="false" data-cmd="git clone https://github.com/Wiserax/wisecraft" data-note="then open the folder">Cursor</button><button role="tab" aria-selected="false" data-cmd="npx skills add https://github.com/Wiserax/wisecraft" data-note="any agent">Skills</button><span class="label right" aria-hidden="true"></span></div>
+<div class="cmd" id="cmd"><span class="p" aria-hidden="true">$</span><code aria-live="polite"></code><button type="button" data-copy-from="#cmd code">COPY</button></div></div>
+<div class="compat"><p class="label">Compatible</p><ul><li title="Claude Code"><svg viewBox="0 0 24 24" role="img" aria-label="Claude Code"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></li><li title="Codex"><svg viewBox="0 0 24 24" role="img" aria-label="Codex"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg></li><li title="Cursor"><svg viewBox="0 0 24 24" role="img" aria-label="Cursor"><path d="M5 3l14 9-6 1.5L10 20z"/></svg></li><li title="Gemini CLI"><svg viewBox="0 0 24 24" role="img" aria-label="Gemini CLI"><path d="M12 3c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9z"/></svg></li><li title="Copilot"><svg viewBox="0 0 24 24" role="img" aria-label="Copilot"><path d="M4 9h16v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3zM9 13v2M15 13v2"/></svg></li><li title="OpenCode"><svg viewBox="0 0 24 24" role="img" aria-label="OpenCode"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></li></ul></div>
+</header>
+
+</main>
+<a class="maker" href="https://github.com/Wiserax" aria-label="Wiserax on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>Wiserax</a>
+<a class="legal" href="https://github.com/Wiserax/wisecraft#credits">MIT · Wiserax © 2026</a>
+<script>
+(()=>{
+if(location.hash==='#banner')document.documentElement.classList.add('banner');
+// install tabs
+const tabs=[...document.querySelectorAll('.tabs button')],out=document.querySelector('#cmd code'),note=document.querySelector('.tabs .right');
+const show=b=>{tabs.forEach(x=>x.setAttribute('aria-selected',x===b));out.innerHTML=b.dataset.cmd.split('|').map(l=>'<span>'+l.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span>').join('');out.dataset.copy=b.dataset.cmd.split('|').join('\n');if(note)note.textContent=b.dataset.note||''};
+tabs.forEach(b=>b.addEventListener('click',()=>show(b)));if(tabs[0])show(tabs[0]);
+// copy buttons (clipboard API, with a fallback for pages opened from a file)
+document.querySelectorAll('[data-copy-from]').forEach(btn=>btn.addEventListener('click',async()=>{const src=document.querySelector(btn.dataset.copyFrom),text=src.dataset.copy||src.textContent;
+try{await navigator.clipboard.writeText(text)}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){}ta.remove()}
+const old=btn.textContent;btn.textContent='COPIED';setTimeout(()=>btn.textContent=old,1200)}));
+// the rail follows the section in view
+const links=[...document.querySelectorAll('.rail a')];if('IntersectionObserver'in window&&links.length){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>io.observe(s))}
+})();
+</script>
+<script src="sphere.js"></script>
+</body>
+</html>

@@ -12,7 +12,7 @@ const [pwRoot, mediaPage] = process.argv.slice(2);
 const require = createRequire(path.resolve(pwRoot) + "/");
 const { chromium } = require("playwright");
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const site = pathToFileURL(path.join(ROOT, "docs/site/index.html")).href;
+const site = pathToFileURL(path.join(ROOT, "docs/index.html")).href;
 const out = (p) => { const f = path.join(ROOT, p); fs.mkdirSync(path.dirname(f), { recursive: true }); return f; };
 
 const browser = await chromium.launch({ channel: "chrome", args: ["--mute-audio"] });
