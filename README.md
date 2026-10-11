@@ -18,7 +18,7 @@
   <img src="docs/media/teaser.gif" alt="Moments from a game shipped with wisecraft: a double-size boss looming over the fort, a horde of thousands, a titan slamming the walls, a blade sweeping through the crowd, the boss dying, then the wisecraft tile." width="560">
 </p>
 
-<p align="center"><b>Website:</b> <a href="https://wiserax.github.io/wisecraft/">wiserax.github.io/wisecraft</a></p>
+<p align="center"><b>Website:</b> <a href="https://wiserax.dev/wisecraft/">wiserax.dev/wisecraft</a></p>
 
 <p align="center"><b>Coming next: harder real-game benchmarks and more field notes.</b></p>
 
