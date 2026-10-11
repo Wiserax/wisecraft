@@ -14,10 +14,6 @@
   <a href="LICENSE"><img alt="license: MIT" src="docs/media/badges/license.png" height="26"></a>
 </p>
 
-<p align="center">
-  <img src="docs/media/teaser.gif" alt="Moments from a game shipped with wisecraft: a double-size boss looming over the fort, a horde of thousands, a titan slamming the walls, a blade sweeping through the crowd, the boss dying, then the wisecraft tile." width="560">
-</p>
-
 <p align="center"><b>Website:</b> <a href="https://wiserax.dev/wisecraft/">wiserax.dev/wisecraft</a></p>
 
 <p align="center"><b>Coming next: harder real-game benchmarks and more field notes.</b></p>
@@ -154,33 +150,6 @@ drives through node, muted, with analytics blocked.
   - Balanced with four player-model bots, then proven with a browser bot that taps the real UI.
   - A mix that was measured in a muted browser and never played aloud by an agent.
   - A producer, a lead agent and worker agents; every step written down.
-
-Measured before and after, on that game:
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/media/before-after-dark.png">
-    <img src="docs/media/before-after-light.png" alt="Before and after on the shipped game: dead air in the first stage 18.4 s to 9.5 s; first sound after the first tap 7.6 s to 1.5 s; frame rate when the horde piles up 14 fps to 37 fps; slow-motion frames that show new motion 9 of 24 to 23 of 24; how long a boss survives a fast tapper 10 s to 27 s; boss-death boom over the music +11.5 dB to −2.7 dB." width="100%">
-  </picture>
-</p>
-
-<details>
-<summary>Where each number comes from</summary>
-
-<br>
-
-| Measure | Before → after | Source in the project |
-|---|---|---|
-| Dead air in the first stage | 18.4 s → 9.5 s | outputs/coordination/log.md, stage-1 scout entry (real build, 390×844, one seed) |
-| First sound after the first tap | 7.6 s → 1.5 s | MODLOG.md, 2026-10-09 audio load order entry |
-| Frame rate when the horde piles up | 14 fps → 37 fps | MODLOG.md, 2026-10-09 adaptive quality guard entry (lowest 20 s window) |
-| Slow-motion frames that show new motion | 9 of 24 → 23 of 24 | MODLOG.md, 2026-10-11 VFX entry; trailer NOTES.md |
-| How long a boss survives a fast tapper | 10 s → 27 s | MODLOG.md, 2.3.1 open list (about 10 s); outputs/coordination/log.md, 2.3.2 release entry (27 s) |
-| Boss-death boom over the music | +11.5 dB → −2.7 dB | outputs/audio-235/loudness-table.md (muted captures, BS.1770) |
-
-One project, one machine. Each figure is a single measurement or a small set, as its source says; none is an average over many games.
-
-</details>
 
 Each lesson has a field note: [knowledge/INDEX.md](knowledge/INDEX.md). A small sample game to try the skills on is in
 [examples/horde-demo](examples/horde-demo).
