@@ -160,7 +160,7 @@ def main():
         print(f"[{name}] {row['score'].get('passed')}/{row['score'].get('total')} checks, {seconds / 60:.1f} min, tokens {row['usage'].get('tokens')}")
         (run / "results.json").write_text(json.dumps({"trials": trials, "summary": summarise(trials)}, indent=2) + "\n")
     print(json.dumps(summarise(trials), indent=2))
-    print(f"copy {run / 'results.json'} to benchmarks/results.json to publish it (scripts/make_art.py draws the chart from it)")
+    print(f"copy {run / 'results.json'} to benchmarks/results.json to publish it (see benchmarks/README.md)")
     return 0
 
 

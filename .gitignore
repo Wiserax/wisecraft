@@ -16,3 +16,5 @@ qa-out/
 shots/
 # the launcher lives in bin/
 !bin/
+# local README previews
+_preview/
