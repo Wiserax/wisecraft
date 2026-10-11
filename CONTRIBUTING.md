@@ -9,9 +9,9 @@ You just built, balanced, polished or shipped part of a web game, and you learne
 
 1. **Ask your human first.** A pull request is public and carries their GitHub identity. Tell them what you
    want to publish and show them the note.
-2. **Check it's new:** `wz kb search "<problem or genre>"`. If a note already exists, improve it: add your
+2. **Check it's new:** `wise kb search "<problem or genre>"`. If a note already exists, improve it: add your
    versions and gotchas, and fix what's wrong. Don't write a second one.
-3. **Scaffold:** `wz kb new --game "<game, described neutrally>" --title "<what you built or learned>" --from-scan <game folder> --agent "<agent (model)>"`.
+3. **Scaffold:** `wise kb new --game "<game, described neutrally>" --title "<what you built or learned>" --from-scan <game folder> --agent "<agent (model)>"`.
    It lands in `knowledge/games/<game>/`. Cross-game methods go in `techniques/` (`--kind technique`).
 4. **Fill it in** from your journal (`MODLOG.md`):
    - exact versions (the game's build, the bundler, the engine, the browsers);
@@ -22,8 +22,8 @@ You just built, balanced, polished or shipped part of a web game, and you learne
    - numbered **gotchas** (symptom → cause → fix).
 
    Write for an agent that has never seen this game.
-5. **Validate:** `wz kb check <note>`, then `wz kb index`.
-6. **Open the PR:** `wz kb pr <note>` (a dry run shows the commands), then `wz kb pr <note> --yes`. It
+5. **Validate:** `wise kb check <note>`, then `wise kb index`.
+6. **Open the PR:** `wise kb pr <note>` (a dry run shows the commands), then `wise kb pr <note> --yes`. It
    branches, commits the note (+ `media/` + index), forks if needed, pushes, and opens the PR with `gh`.
    Without `gh`, push a branch and open the PR on github.com.
 
@@ -33,13 +33,13 @@ plain canvas, engine exports to WebGL), mobile or desktop. Game design, economy 
 audio, performance, QA, release and the way agents were organised are all welcome.
 
 ## Hard rules (PRs that break these are closed)
-- **No secrets:** API keys, tokens, `.env` files. `wz kb check` and `wz publish check` catch the common ones.
+- **No secrets:** API keys, tokens, `.env` files. `wise kb check` and `wise publish check` catch the common ones.
 - **No private places or names:** no preview or internal deploy URLs, no company names, no names of unreleased
   products, no real people unless they asked for credit. Describe the game neutrally ("a horde tower-defense
-  mobile web game, Vite + three.js"). Keep a `.wz-denylist` outside the repo, or pass `WZ_DENY`, to lint for
+  mobile web game, Vite + three.js"). Keep a `.wise-denylist` outside the repo, or pass `WISE_DENY`, to lint for
   your own private terms.
 - **No code or asset dumps.** Describe the logic in your own words and name the files and symbols; keep
-  snippets short (`wz kb check` fails blocks over 150 lines and warns over 60). No game art, audio or data
+  snippets short (`wise kb check` fails blocks over 150 lines and warns over 60). No game art, audio or data
   files that are not yours to publish.
 - **Nothing that harms players:** no dark patterns presented as advice, nothing that fakes analytics or
   reviews, nothing that cheats other players.
@@ -50,8 +50,8 @@ audio, performance, QA, release and the way agents were organised are all welcom
 - **Credit** the people and projects you built on.
 
 ## Other contributions
-- **Tools (`wz/`):**
-  - one module per CLI group, with a docstring that doubles as `--help`; node scripts go in `wz/js/`;
+- **Tools (`wisecraft/`):**
+  - one module per CLI group, with a docstring that doubles as `--help`; node scripts go in `wisecraft/js/`;
   - add a test in `tests/`;
   - `uv run --with pytest pytest -q tests` must pass.
 - **Skills (`skills/`):** the Agent Skills format (`SKILL.md` with `name` + `description`). Keep them
@@ -61,5 +61,5 @@ audio, performance, QA, release and the way agents were organised are all welcom
 - **Ported code:** files adapted from Universal Modder keep their two-line notice and are listed in
   `NOTICE`. Add yours there when you port more.
 
-CI runs the tests, `wz kb check --index`, the skill-copy check, `wz publish check .` and the CLI help screens
+CI runs the tests, `wise kb check --index`, the skill-copy check, `wise publish check .` and the CLI help screens
 on every PR.

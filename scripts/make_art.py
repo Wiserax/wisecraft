@@ -29,7 +29,7 @@ THEMES = {
 }
 _fonts = {}
 INTER = None
-MONO = (ROOT / "wisecraft" if (ROOT / "wisecraft").exists() else ROOT / "wz") / "fonts" / "JetBrainsMono-Bold.ttf"
+MONO = (ROOT / "wisecraft" if (ROOT / "wisecraft").exists() else ROOT / "wisecraft") / "fonts" / "JetBrainsMono-Bold.ttf"
 
 
 def font(weight):

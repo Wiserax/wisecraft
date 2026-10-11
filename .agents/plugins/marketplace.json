@@ -1,14 +1,14 @@
 {
-  "name": "wizerax",
+  "name": "wisecraft",
   "interface": {
-    "displayName": "wizerax"
+    "displayName": "wisecraft"
   },
   "plugins": [
     {
-      "name": "wizerax",
+      "name": "wisecraft",
       "source": {
         "source": "url",
-        "url": "https://github.com/Wiserax/wizerax-gamedev.git"
+        "url": "https://github.com/Wiserax/wisecraft.git"
       },
       "policy": {
         "installation": "AVAILABLE",

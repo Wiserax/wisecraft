@@ -18,10 +18,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
       - run: uv run --with pytest pytest -q tests
-      - run: ./bin/wz --help && for g in scan qa board loudness dupframes video kb publish; do ./bin/wz $g --help > /dev/null; done
+      - run: ./bin/wise --help && for g in scan qa board loudness dupframes video kb publish; do ./bin/wise $g --help > /dev/null; done
       - name: skill copies
         run: python3 scripts/sync_skills.py --check
       - name: knowledge base
-        run: ./bin/wz kb check --index
+        run: ./bin/wise kb check --index
       - name: nothing that shouldn't ship
-        run: ./bin/wz publish check .
+        run: ./bin/wise publish check .

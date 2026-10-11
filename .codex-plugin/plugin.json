@@ -1,13 +1,13 @@
 {
-  "name": "wizerax",
+  "name": "wisecraft",
   "version": "0.2.0",
   "description": "Build, balance, polish and ship a mobile web game with an AI agent: stack recon, an economy tuned with player-model bots, a clean mobile UI kit, game feel and a measured audio mix, performance budgets, muted phone-browser QA, releases, lead/worker orchestration, trailers, and a shared knowledge base of what real web games learned.",
   "author": {
     "name": "Alex Wiserax",
     "url": "https://github.com/Wiserax"
   },
-  "homepage": "https://github.com/Wiserax/wizerax-gamedev",
-  "repository": "https://github.com/Wiserax/wizerax-gamedev",
+  "homepage": "https://github.com/Wiserax/wisecraft",
+  "repository": "https://github.com/Wiserax/wisecraft",
   "license": "MIT",
   "keywords": [
     "game-development",
@@ -25,7 +25,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "wizerax",
+    "displayName": "wisecraft",
     "shortDescription": "The game studio in a skill",
     "longDescription": "Build, balance, polish and ship a mobile web game with an AI agent: stack recon, an economy tuned with player-model bots, a clean mobile UI kit, game feel and a measured audio mix, performance budgets, muted phone-browser QA, releases, lead/worker orchestration, trailers, and a shared knowledge base of what real web games learned.",
     "developerName": "Alex Wiserax",
@@ -34,7 +34,7 @@
       "Interactive",
       "Write"
     ],
-    "websiteURL": "https://github.com/Wiserax/wizerax-gamedev",
+    "websiteURL": "https://github.com/Wiserax/wisecraft",
     "defaultPrompt": [
       "Scan this web game and tell me how to work on it",
       "Stage 1 is too easy: rebalance it with player-model bots",
