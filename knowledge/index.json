@@ -1,0 +1,608 @@
+[
+ {
+  "path": "games/horde-tower-defense-mobile-web/a-double-size-boss-stood-half-a-metre-out-of-reach-and-never.md",
+  "kind": "game",
+  "title": "A double-size boss stood half a metre out of reach and never hit the wall",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.5 (found on live 2.3.4, released in build 2.3.6), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "engine-code",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-11",
+  "links": [],
+  "tags": [
+   "boss",
+   "scale",
+   "attack-reach",
+   "wall-clamp",
+   "body-radius",
+   "collision",
+   "obstacles",
+   "node-test",
+   "bearings",
+   "slam"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/a-giant-wedged-between-two-graves-soft-locked-the-final-wave.md",
+  "kind": "game",
+  "title": "A giant wedged between two graves soft-locked the final wave",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.0-preview, Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "engine-code",
+  "tools": [
+   "Playwright",
+   "node --test",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-09",
+  "links": [],
+  "tags": [
+   "collision",
+   "obstacles",
+   "scenery",
+   "large-bodies",
+   "soft-lock",
+   "wave-end",
+   "crowd",
+   "giants",
+   "playtest-bot"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/a-quality-guard-that-asked-for-13-ms-frames-never-recovered.md",
+  "kind": "game",
+  "title": "A quality guard that asked for 13 ms frames never recovered on a 60 Hz screen",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.0 (guard added in 2.3.0-preview), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "performance",
+  "tools": [
+   "Playwright",
+   "node --test",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "adaptive-quality",
+   "frame-time",
+   "vsync",
+   "60 hz",
+   "recovery",
+   "pixel-ratio",
+   "shadows",
+   "fixed-timestep",
+   "crowd",
+   "late-game"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/a-reset-connection-on-one-code-chunk-left-the-boot-splash-up.md",
+  "kind": "game",
+  "title": "A reset connection on one code chunk left the boot splash up for good",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.0-preview, Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "engine-code",
+  "tools": [
+   "Playwright",
+   "node --test",
+   "Vite"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-09",
+  "links": [],
+  "tags": [
+   "boot",
+   "loading",
+   "chunk",
+   "retry",
+   "preload",
+   "connection-reset",
+   "splash",
+   "fault-injection",
+   "cold-boot",
+   "fonts"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/bosses-spawn-on-the-visible-arc-at-the-rim-and-walk-in-not-f.md",
+  "kind": "game",
+  "title": "Bosses spawn on the visible arc at the rim and walk in, not from under the HUD",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.5 (found on live 2.3.4, released in build 2.3.6), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "design",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-11",
+  "links": [],
+  "tags": [
+   "boss",
+   "spawn",
+   "bearing",
+   "hud",
+   "portrait",
+   "camera",
+   "entrance",
+   "stomp",
+   "pacing",
+   "determinism",
+   "spawn-stream"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/fixing-a-boss-that-never-attacked-changed-the-balance-measur.md",
+  "kind": "game",
+  "title": "Fixing a boss that never attacked changed the balance: measure player models before and after",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.5 (compared with live 2.3.4, released in build 2.3.6), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "data-tuning",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-11",
+  "links": [],
+  "tags": [
+   "balance",
+   "bug-fix",
+   "regression",
+   "player-models",
+   "boss",
+   "wall-damage",
+   "seeds",
+   "browser-bot",
+   "first-stage",
+   "slam"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/pay-rewards-the-instant-the-run-ends-the-celebration-only-pr.md",
+  "kind": "game",
+  "title": "Pay rewards the instant the run ends; the celebration only presents them",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.1, Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "ui",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "rewards",
+   "idempotency",
+   "reload",
+   "celebration",
+   "save",
+   "double-grant",
+   "result-screen",
+   "slow-motion",
+   "run-id"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/rescue-gifts-only-after-a-fall-and-never-over-a-win-screen.md",
+  "kind": "game",
+  "title": "Rescue gifts only after a fall, and never over a win screen",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.0 (threshold retuned in 2.3.2), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "design",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "rescue",
+   "gift",
+   "blessing",
+   "difficulty",
+   "onboarding",
+   "triggers",
+   "win-screen",
+   "stuck-players",
+   "state-machine"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/taps-deleted-bosses-a-tap-multiplier-against-bosses-and-an-a.md",
+  "kind": "game",
+  "title": "Taps deleted bosses: a tap multiplier against bosses and an armour phase at half health",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.2, Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "data-tuning",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "boss",
+   "tap-damage",
+   "armour-phase",
+   "player-models",
+   "time-to-kill",
+   "balance",
+   "heavy-tapper",
+   "focus-fire"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/the-audio-mix-measured-not-listened-to-music-at-34-lufs-made.md",
+  "kind": "game",
+  "title": "The audio mix measured, not listened to: music at -34 LUFS made every boom read 9 to 19 dB too loud",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.5 (measured against live 2.3.4, released in build 2.3.6), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "audio",
+  "tools": [
+   "Playwright",
+   "node --test",
+   "ffmpeg",
+   "wise loudness",
+   "Vite"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-11",
+  "links": [],
+  "tags": [
+   "audio",
+   "mix",
+   "lufs",
+   "bs.1770",
+   "webaudio",
+   "compressor",
+   "bus",
+   "ducking",
+   "impacts",
+   "loudness",
+   "music-bed"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/the-first-stage-as-a-rising-sine-odd-waves-push-even-waves-l.md",
+  "kind": "game",
+  "title": "The first stage as a rising sine: odd waves push, even waves let the player spend",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.2 (table as of 2.3.5), Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "design",
+  "tools": [
+   "node --test",
+   "Playwright",
+   "Vite",
+   "three.js"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "first-session",
+   "pacing",
+   "wave-design",
+   "sine",
+   "mini-boss",
+   "boss",
+   "scripted-waves",
+   "economy",
+   "player-models",
+   "onboarding"
+  ]
+ },
+ {
+  "path": "games/horde-tower-defense-mobile-web/the-top-level-of-a-crowd-answer-upgrade-needs-its-own-price.md",
+  "kind": "game",
+  "title": "The top level of a crowd-answer upgrade needs its own price (pierce L5)",
+  "game": "Horde tower defense (mobile web)",
+  "games_also": [],
+  "game_version": "2.3.0, Vite 7 + three.js 0.180",
+  "platform": "web-mobile",
+  "engine": "threejs-vite",
+  "route": "data-tuning",
+  "tools": [
+   "node --test",
+   "Vite"
+  ],
+  "status": "released",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "economy",
+   "pricing",
+   "pierce",
+   "upgrade-curve",
+   "crowd-control",
+   "ablation",
+   "player-models",
+   "battle-gold"
+  ]
+ },
+ {
+  "path": "techniques/a-difficulty-index-across-player-model-bots-and-how-to-read.md",
+  "kind": "technique",
+  "title": "A difficulty index across player-model bots, and how to read it",
+  "tags": [
+   "balance",
+   "difficulty",
+   "player-models",
+   "simulation",
+   "bots",
+   "index",
+   "seeds",
+   "tuning",
+   "tries",
+   "campaign"
+  ],
+  "date": "2026-10-10",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/a-laptop-in-low-power-mode-caps-the-browser-at-30-fps-and-si.md",
+  "kind": "technique",
+  "title": "A laptop in low-power mode caps the browser at 30 fps and silently fails fps gates",
+  "tags": [
+   "performance",
+   "fps-gate",
+   "low-power",
+   "battery",
+   "test-environment",
+   "false-red",
+   "headless",
+   "contrast-run",
+   "verification"
+  ],
+  "date": "2026-10-11",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/answer-the-analytics-endpoint-with-a-204-in-every-automated.md",
+  "kind": "technique",
+  "title": "Answer the analytics endpoint with a 204 in every automated browser run",
+  "tags": [
+   "analytics",
+   "qa",
+   "playwright",
+   "harness",
+   "network-stub",
+   "test-hygiene",
+   "live-checks",
+   "localstorage",
+   "bots"
+  ],
+  "date": "2026-10-09",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/lead-and-worker-agents-milestone-notes-only-explicit-file-ow.md",
+  "kind": "technique",
+  "title": "Lead and worker agents: milestone notes only, explicit file ownership, cherry-picked game commits",
+  "tags": [
+   "orchestration",
+   "multi-agent",
+   "lead-worker",
+   "mailbox",
+   "ownership",
+   "git",
+   "cherry-pick",
+   "worktree",
+   "heartbeat",
+   "process"
+  ],
+  "date": "2026-10-11",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/measuring-a-web-game-s-mix-without-playing-a-sound.md",
+  "kind": "technique",
+  "title": "Measuring a web game's mix without playing a sound",
+  "tags": [
+   "audio",
+   "webaudio",
+   "audioworklet",
+   "lufs",
+   "bs.1770",
+   "stems",
+   "measurement",
+   "playwright",
+   "headless",
+   "loudness",
+   "calibration"
+  ],
+  "date": "2026-10-11",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/preview-deploys-sit-behind-sso-frozen-versions-get-their-own.md",
+  "kind": "technique",
+  "title": "Preview deploys sit behind SSO, frozen versions get their own origin: what to check live after a deploy",
+  "tags": [
+   "release",
+   "deploy",
+   "preview",
+   "sso",
+   "origin",
+   "localstorage",
+   "saves",
+   "cache-headers",
+   "post-deploy",
+   "static-hosting"
+  ],
+  "date": "2026-10-09",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/sim-bots-and-a-real-browser-bot-disagree-about-the-first-ses.md",
+  "kind": "technique",
+  "title": "Sim bots and a real-browser bot disagree about the first session: prove the first minutes with real taps",
+  "tags": [
+   "verification",
+   "oracle",
+   "first-session",
+   "simulation",
+   "browser-bot",
+   "playwright",
+   "player-models",
+   "balance",
+   "determinism",
+   "frame-rate"
+  ],
+  "date": "2026-10-09",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ },
+ {
+  "path": "techniques/smooth-slow-motion-for-a-trailer-one-sim-step-per-captured-f.md",
+  "kind": "technique",
+  "title": "Smooth slow motion for a trailer: one sim step per captured frame and a duplicate-frame check",
+  "tags": [
+   "trailer",
+   "capture",
+   "slow-motion",
+   "fake-clock",
+   "playwright",
+   "determinism",
+   "ffmpeg",
+   "dupframes",
+   "frame-rate",
+   "showcase"
+  ],
+  "date": "2026-10-11",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "links": []
+ }
+]
