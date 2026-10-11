@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wisecraft: the game studio with the agents wired in</title>
+<meta name="description" content="Skills, a CLI and a shared knowledge base that let any AI coding agent build, balance, polish and ship a mobile web game.">
+<meta name="theme-color" content="#050507">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050507'/%3E%3Cpolygon points='8,10 30,10 30,27 39,27 39,10 61,10 61,27 70,27 70,10 92,10 92,54 71,90 50,58 29,90 8,54' fill='%23F5F5F5'/%3E%3Crect x='39' y='10' width='22' height='17' fill='%23F84FCC'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050507;--ink-1:#0a0a0c;--ink-5:oklch(50% .008 280);--ink-6:oklch(66% .006 280);--ink-7:oklch(82% .005 280);--ink-9:oklch(97% 0 0);
+--magenta:oklch(70% .24 340);--cyan:oklch(81% .14 200);--line:oklch(100% 0 0/.08);--line-2:oklch(100% 0 0/.14);--before:oklch(100% 0 0/.16);
+--sans:"Geist",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*,*:before,*:after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink-7);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.5;mix-blend-mode:screen;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mono{font-family:var(--mono)}
+.label{font:500 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-6)}
+nav{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(20px,8vw,115px)}
+.brand{display:flex;align-items:center;gap:10px;font:600 15px/1 var(--sans);color:var(--ink-9)}
+.brand svg{width:20px;height:20px}
+nav .links{display:flex;gap:28px;font:500 11px/1 var(--mono);letter-spacing:.22em;color:var(--ink-7)}
+nav .links a:hover{color:var(--ink-9)}
+.hero{position:relative;min-height:100vh;padding:150px clamp(20px,16.6vw,240px) 120px;overflow:hidden}
+#planet{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.hero>*:not(canvas){position:relative;z-index:10;min-width:0}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.3em;color:var(--cyan);text-transform:uppercase}
+h1{margin-top:22px;font:500 clamp(40px,4.75vw,68px)/1.02 var(--sans);letter-spacing:-.035em;color:var(--ink-9)}
+h1 span{display:block}h1 .l2{color:var(--ink-7)}h1 .l3{color:var(--magenta)}h1 .l3 i{font-style:normal;color:var(--ink-9)}
+.sub{margin-top:30px;max-width:540px;font-size:17px;line-height:1.65;color:var(--ink-7)}.sub b{font-weight:400;color:var(--ink-9)}
+.install{margin-top:40px;max-width:640px;min-width:0}
+.tabs{display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid transparent}
+.tabs button{appearance:none;background:none;border:0;border-bottom:1px solid transparent;padding:8px 10px;font:500 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-6);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--ink-9);border-bottom-color:var(--magenta)}
+.tabs button:hover{color:var(--ink-7)}.tabs .right{margin-left:auto;padding:8px 0;color:var(--ink-6)}
+.cmd{display:flex;margin-top:10px;border:1px solid var(--line);background:#08080bcc;min-height:50px}
+.cmd .p{display:grid;place-items:center;width:34px;border-right:1px solid var(--line);font:500 13px var(--mono);color:var(--magenta)}
+.cmd code{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:10px 14px;font:400 13.5px/1.5 var(--mono);color:var(--ink-9);overflow-x:auto;white-space:nowrap}
+.cmd button{appearance:none;background:none;border:0;border-left:1px solid var(--line);padding:0 16px;font:500 11px/1 var(--mono);letter-spacing:.22em;color:var(--ink-7);cursor:pointer}
+.cmd button:hover{color:var(--ink-9);background:oklch(100% 0 0/.04)}
+.compat{margin-top:38px}.compat ul{display:flex;flex-wrap:wrap;gap:12px 30px;margin-top:16px;list-style:none}
+.compat li{display:flex;align-items:center;gap:9px;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-6)}
+.compat svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6}
+.rail{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:30;border:1px solid var(--line);display:none}
+.rail a{position:relative;display:grid;place-items:center;width:56px;height:56px;background:var(--bg);color:var(--ink-5);border-bottom:1px solid var(--line)}
+.rail a:last-child{border-bottom:0}.rail a:hover,.rail a.on{color:var(--ink-9)}.rail a.on:before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--magenta)}
+.rail svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.rail em{position:absolute;right:4px;bottom:4px;font:400 8px/1 var(--mono);letter-spacing:.1em;font-style:normal;opacity:.55}
+@media (min-width:1100px){.rail{display:block}}
+section{position:relative;z-index:10;padding:96px clamp(20px,16.6vw,240px);border-top:1px solid var(--line)}
+section .num{font:500 11px/1 var(--mono);letter-spacing:.3em;color:var(--cyan);text-transform:uppercase}
+h2{margin-top:16px;font:500 clamp(30px,3vw,42px)/1.08 var(--sans);letter-spacing:-.03em;color:var(--ink-9)}h2 i{font-style:normal;color:var(--magenta)}
+section>p.lead{margin-top:16px;max-width:620px;color:var(--ink-7)}
+.grid{margin-top:40px;display:grid;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.grid>*{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px;min-width:0}
+.g5{grid-template-columns:repeat(5,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.cell b{display:block;margin-top:14px;font:500 17px/1.2 var(--sans);color:var(--ink-9)}.cell small{display:block;margin-top:6px;font:400 12px/1.5 var(--mono);color:var(--ink-6)}
+.cell .n{font:500 11px/1 var(--mono);letter-spacing:.2em;color:var(--magenta)}
+.cell code{font:500 13px/1.3 var(--mono);color:var(--ink-9)}.cell p{margin-top:8px;font-size:14px;line-height:1.5;color:var(--ink-7)}
+table{margin-top:40px;width:100%;border-collapse:collapse;border-top:1px solid var(--line)}
+td{padding:14px 16px 14px 0;border-bottom:1px solid var(--line);vertical-align:top;font-size:15px;color:var(--ink-7)}
+td:first-child{white-space:nowrap;font:500 13px/1.7 var(--mono);color:var(--ink-9);padding-right:28px}td:first-child:before{content:"$ ";color:var(--magenta)}
+pre{margin-top:28px;border:1px solid var(--line);background:#08080bcc;padding:18px 20px;font:400 12.5px/1.75 var(--mono);color:var(--ink-6);overflow-x:auto}
+pre b{font-weight:500;color:var(--ink-9)}pre i{font-style:normal;color:var(--magenta)}pre u{text-decoration:none;color:var(--cyan)}
+.notes{margin-top:32px;list-style:none;border-top:1px solid var(--line)}
+.notes li{border-bottom:1px solid var(--line)}.notes a{display:flex;gap:16px;align-items:baseline;padding:14px 0;color:var(--ink-7)}
+.notes a:hover{color:var(--ink-9)}.notes a span{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--ink-6);min-width:92px;text-transform:uppercase}
+.chart{margin-top:40px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:38% minmax(0,1fr) 150px;gap:8px 28px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.row h3{font:500 16px/1.3 var(--sans);color:var(--ink-9)}.row h3+small{display:block;margin-top:4px;font:400 11.5px/1.5 var(--mono);color:var(--ink-6)}
+.bars{display:grid;gap:7px;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:25% 100%}
+.bar{display:flex;align-items:center;gap:10px;font:400 12px/1 var(--mono);color:var(--ink-6);white-space:nowrap}
+.bar i{display:block;height:10px;background:var(--before)}
+.bar.after{color:var(--ink-9)}.bar.after i{background-color:var(--magenta);background-image:linear-gradient(90deg,transparent calc(100% - 18px),#0008 0),repeating-conic-gradient(#0000 0 25%,#0006 0 50%);background-size:auto,4px 4px;background-blend-mode:normal}
+.delta{font:500 22px/1 var(--sans);letter-spacing:-.02em;color:var(--ink-9);text-align:right;white-space:nowrap}
+.legend{display:flex;gap:22px;margin-top:28px;font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-6)}
+.legend i{display:inline-block;width:22px;height:8px;margin-right:8px;background:var(--before)}.legend .a i{background:var(--magenta)}
+details{margin-top:24px;font-size:13.5px;color:var(--ink-6)}summary{cursor:pointer;font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-7)}
+details ul{margin-top:14px;list-style:none;display:grid;gap:8px}details li b{font-weight:500;color:var(--ink-7)}
+.panel h3{font:500 16px/1.3 var(--sans);color:var(--ink-9)}.panel .bar{margin-top:8px}.panel .who{margin-top:18px;font:500 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-6)}
+.panel .bar b{font:500 18px/1 var(--sans);color:var(--ink-9)}.panel .sd{margin-top:6px;font:400 11px/1 var(--mono);color:var(--ink-6)}
+.caption{margin-top:22px;max-width:680px;font-size:14.5px;color:var(--ink-7)}.caption b{font-weight:500;color:var(--ink-9)}
+.frames{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.frames figure{position:relative;background:var(--bg)}.frames img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.frames figcaption{position:absolute;left:8px;bottom:8px;padding:5px 8px;background:#050507e6;font:500 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-9)}
+ul.plain{margin-top:24px;display:grid;gap:10px;list-style:none;max-width:680px}ul.plain li{padding-left:18px;position:relative}ul.plain li:before{content:"";position:absolute;left:0;top:.7em;width:6px;height:1px;background:var(--magenta)}
+footer{position:relative;z-index:10;display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between;padding:28px clamp(20px,16.6vw,240px) 40px;border-top:1px solid var(--line);font:500 11px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-6)}
+footer a{color:var(--ink-7)}footer a:hover{color:var(--ink-9)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:1px solid var(--cyan);outline-offset:2px}
+@media (max-width:900px){nav,.hero,section,footer{padding-left:22px;padding-right:22px}.tabs button{white-space:nowrap}.cmd code{font-size:12.5px}h1{font-size:clamp(38px,11vw,56px)}.g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}.row{grid-template-columns:1fr}.delta{text-align:left}.frames{grid-template-columns:repeat(2,1fr)}
+.hero{padding-top:120px;padding-bottom:230px}nav .links a.hide{display:none}.tabs{overflow-x:auto}.tabs .right{display:none}td{display:block;border:0;padding:0 0 12px}td:first-child{padding-top:12px;border-top:1px solid var(--line);white-space:normal;word-break:break-word}table{border-top:0;border-bottom:1px solid var(--line)}section{padding-top:72px;padding-bottom:72px}}
+html.banner .hero{min-height:640px;height:640px;padding:104px 140px 0}html.banner nav{padding:20px 60px}html.banner h1{font-size:58px;margin-top:18px}html.banner .sub{margin-top:20px;font-size:16px}
+html.banner .install{margin-top:26px;max-width:540px}html.banner .compat,html.banner .rail,html.banner section,html.banner footer{display:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<nav aria-label="Site"><a class="brand" href="#top" aria-label="wisecraft, top of page"><svg viewBox="0 0 100 100" width="20" height="20" aria-hidden="true"><polygon points="8,10 30,10 30,27 39,27 39,10 61,10 61,27 70,27 70,10 92,10 92,54 71,90 50,58 29,90 8,54" fill="#F5F5F5"/><rect x="39" y="10" width="22" height="17" fill="#F84FCC"/></svg>wisecraft</a>
+<div class="links"><a class="hide" href="#knowledge">NOTES</a><a class="hide" href="#install">INSTALL</a><a href="https://github.com/Wiserax/wisecraft">GITHUB ↗</a></div></nav>
+<aside class="rail" aria-label="Sections"><a href="#loop" title="The loop" aria-label="The loop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.7M20 12a8 8 0 0 1-13.7 5.7M17 3v4h-4M7 21v-4h4"/></svg><em>01</em></a><a href="#skills" title="Skills" aria-label="Skills"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><em>02</em></a><a href="#cli" title="The wise CLI" aria-label="The wise CLI"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM7 10l3 2-3 2M12.5 14.5H17"/></svg><em>03</em></a><a href="#knowledge" title="Knowledge base" aria-label="Knowledge base"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM9.5 12h6M9.5 16h6"/></svg><em>04</em></a><a href="#measured" title="Measured" aria-label="Measured"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><em>05</em></a><a href="#versus" title="With vs without" aria-label="With vs without"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V8h5v12M14 20V5h5v15M3 20h18"/></svg><em>06</em></a><a href="#built" title="Built with it" aria-label="Built with it"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM10 9l5.5 3-5.5 3z"/></svg><em>07</em></a><a href="#install" title="Install" aria-label="Install"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg><em>08</em></a></aside>
+<main id="top">
+<header class="hero">
+<canvas id="planet" aria-hidden="true"></canvas>
+<p class="eyebrow">wisecraft · for ai agents</p>
+<h1><span>The game studio</span><span class="l2">with the agents</span><span class="l3">wired in<i>.</i></span></h1>
+<p class="sub">Skills, a CLI and field notes that let any AI coding agent build, balance, polish and ship a mobile web game. <b>Measured in a real phone browser, not promised.</b></p>
+<div class="install"><div class="tabs" role="tablist" aria-label="Install for your agent"><button role="tab" aria-selected="false" data-cmd="/plugin marketplace add Wiserax/wisecraft|/plugin install wisecraft@wisecraft" data-note="in the agent">Claude Code</button><button role="tab" aria-selected="false" data-cmd="codex plugin marketplace add Wiserax/wisecraft|codex plugin add wisecraft@wisecraft" data-note="shell">Codex</button><button role="tab" aria-selected="false" data-cmd="gemini extensions install https://github.com/Wiserax/wisecraft" data-note="shell">Gemini</button><button role="tab" aria-selected="false" data-cmd="git clone https://github.com/Wiserax/wisecraft" data-note="then open the folder">Cursor</button><button role="tab" aria-selected="false" data-cmd="npx skills add https://github.com/Wiserax/wisecraft" data-note="any agent">Skills</button><span class="label right" aria-hidden="true"></span></div>
+<div class="cmd" id="cmd"><span class="p" aria-hidden="true">$</span><code aria-live="polite"></code><button type="button" data-copy-from="#cmd code">COPY</button></div></div>
+<div class="compat"><p class="label">Compatible</p><ul><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>Claude Code</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg>Codex</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-6 1.5L10 20z"/></svg>Cursor</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9z"/></svg>Gemini CLI</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3zM9 13v2M15 13v2"/></svg>Copilot</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>OpenCode</li></ul></div>
+</header>
+
+<section id="loop"><p class="num">01 · the loop</p><h2>One loop, <i>every time</i>.</h2>
+<p class="lead">Ask for anything: “stage 1 is boring”, “the explosions are too loud”, “it lags on stage 7”. The agent finds its place in the loop and works from there.</p>
+<div class="grid g5"><div class="cell"><span class="n">01</span><b>Recon</b><small>wise scan</small></div><div class="cell"><span class="n">02</span><b>Slice</b><small>one playable loop</small></div><div class="cell"><span class="n">03</span><b>Economy</b><small>player-model bots</small></div><div class="cell"><span class="n">04</span><b>UI kit</b><small>one golden CTA</small></div><div class="cell"><span class="n">05</span><b>Feel + audio</b><small>a measured mix</small></div><div class="cell"><span class="n">06</span><b>Performance</b><small>60 fps that holds</small></div><div class="cell"><span class="n">07</span><b>Browser QA</b><small>wise qa</small></div><div class="cell"><span class="n">08</span><b>Release</b><small>wise publish check</small></div><div class="cell"><span class="n">09</span><b>Trailer</b><small>wise video compile</small></div><div class="cell"><span class="n">10</span><b>Field note</b><small>wise kb add</small></div></div></section>
+
+<section id="skills"><p class="num">02 · skills</p><h2>Twelve skills. <i>One router</i>.</h2>
+<p class="lead">Agent Skills format. The same files for every agent; <span class="mono">make-web-game</span> says which one to open next.</p>
+<div class="grid g4"><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/make-web-game"><code>make-web-game</code><p>The loop, the producer contract, the golden rules, and which skill to open next</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/web-game-recon"><code>web-game-recon</code><p>Stack, saves, analytics, debug hooks and the baseline, before anything changes</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/game-economy"><code>game-economy</code><p>Player-model bots, a difficulty index, rising-sine stages, boss tiers</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/game-ui-kit"><code>game-ui-kit</code><p>One golden call to action, a one-row battle bar, a wordless first session</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/game-feel-audio"><code>game-feel-audio</code><p>Bosses you feel, and a mix that is measured, never played aloud</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/game-performance"><code>game-performance</code><p>Budgets, real late-stage tests, a quality guard that recovers</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/browser-qa"><code>browser-qa</code><p>Muted phone bots that tap like players; errors and overflow fail the run</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/release-web-game"><code>release-web-game</code><p>Version, prebuilt deploy, live checks, frozen older versions</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/agent-orchestration"><code>agent-orchestration</code><p>A lead, workers, file ownership, milestone notes</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/trailer-video"><code>trailer-video</code><p>A hook in 3 s, the loop by 8 s, a slow-motion finale</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/design-boards"><code>design-boards</code><p>HTML mockups to phone-sized boards</p></a><a class="cell" href="https://github.com/Wiserax/wisecraft/tree/main/skills/share-field-notes"><code>share-field-notes</code><p>Search the knowledge base, write a note, open the PR</p></a></div></section>
+
+<section id="cli"><p class="num">03 · the wise cli</p><h2>Tools that <i>measure</i>.</h2>
+<p class="lead">One Python CLI. Every command has <span class="mono">--help</span> with examples.</p>
+<table><tbody><tr><td>wise scan</td><td>What a web game is made of: stack, versions, entry points, debug hooks, analytics, audio, bundle size.</td></tr><tr><td>wise qa</td><td>A muted phone-sized browser that taps like a player. Console errors and overflow fail the run.</td></tr><tr><td>wise board</td><td>HTML mockups in, phone-sized screens and one review board out.</td></tr><tr><td>wise loudness</td><td>How loud a file is, measured with ffmpeg. Never played.</td></tr><tr><td>wise dupframes</td><td>Repeated frames in a video: the stutter check for slow motion.</td></tr><tr><td>wise video compile</td><td>An edit list in, a finished trailer out.</td></tr><tr><td>wise kb</td><td>The knowledge base: search, add, check, index, pr.</td></tr><tr><td>wise publish check</td><td>Stops secrets, private URLs and names you listed from going public.</td></tr></tbody></table>
+<pre aria-label="Real output of wise qa on the sample game"><b><i>$</i> wise qa http://127.0.0.1:5890/ --ready "window.__game" --seconds 10 --out shots</b>
+<u>PASS</u>  chromium 390x844  http://127.0.0.1:5890/  (system chrome)
+  ready:        yes after 201 ms  (window.__game)
+  game:         window.__game found, keys: sim, state, step, tap; other hooks: __THREE__
+  taps:         20 of 20 over 10 s in canvas, seed 1
+  blocked:      1 request(s) matching **/api/events
+  errors:       none
+  overflow:     none
+  failed requests: none
+  screenshots:  shots/1-start.png, shots/2-middle.png, shots/3-end.png</pre></section>
+
+<section id="knowledge"><p class="num">04 · knowledge base</p><h2>20 field notes, <i>written by agents</i>.</h2>
+<p class="lead">Each one is a problem a real web game hit, the cause and the fix: versions, verification, and what was not verified. When your agent learns something, it can open a pull request with its own note.</p>
+<ul class="notes"><li><a href="https://github.com/Wiserax/wisecraft/blob/main/knowledge/games/horde-tower-defense-mobile-web/a-double-size-boss-stood-half-a-metre-out-of-reach-and-never.md"><span>game</span>A double-size boss stood half a metre out of reach and never hit the wall</a></li><li><a href="https://github.com/Wiserax/wisecraft/blob/main/knowledge/games/horde-tower-defense-mobile-web/the-audio-mix-measured-not-listened-to-music-at-34-lufs-made.md"><span>game</span>The audio mix measured, not listened to: music at -34 LUFS made every boom read 9 to 19 dB too loud</a></li><li><a href="https://github.com/Wiserax/wisecraft/blob/main/knowledge/games/horde-tower-defense-mobile-web/a-quality-guard-that-asked-for-13-ms-frames-never-recovered.md"><span>game</span>A quality guard that asked for 13 ms frames never recovered on a 60 Hz screen</a></li><li><a href="https://github.com/Wiserax/wisecraft/blob/main/knowledge/techniques/sim-bots-and-a-real-browser-bot-disagree-about-the-first-ses.md"><span>technique</span>Sim bots and a real-browser bot disagree about the first session: prove the first minutes with real taps</a></li></ul>
+<pre><b><i>$</i> wise kb search "boss never reaches the wall"</b>
+<b><i>$</i> wise kb add --game "My roguelite (mobile web)" --title "A dash that never clips walls"</b></pre></section>
+
+<section id="measured"><p class="num">05 · measured</p><h2>Before and after, <i>on a shipped game</i>.</h2>
+<p class="lead">A horde tower defense for phones: Vite + three.js, 8,000 enemies on screen at 60 fps. One project, one machine; each figure is a single measurement or a small set, as its source says.</p>
+<div class="legend"><span><i></i>before</span><span class="a"><i></i>after</span></div>
+<div class="chart"><div class="row"><div><h3>Dead air in the first stage</h3><small>longest stretch with nothing new to watch, waves 2–3</small></div><div class="bars"><div class="bar"><i style="width:78.0%"></i>18.4 s</div><div class="bar after"><i style="width:40.3%"></i>9.5 s</div></div><div class="delta">−48%</div></div><div class="row"><div><h3>First sound after the first tap</h3><small>new player, Fast 4G profile, 4× slower CPU, median of 5</small></div><div class="bars"><div class="bar"><i style="width:78.0%"></i>7.6 s</div><div class="bar after"><i style="width:15.4%"></i>1.5 s</div></div><div class="delta">5× sooner</div></div><div class="row"><div><h3>Frame rate when the horde piles up</h3><small>slow phone (4× CPU throttle), about 5,000 enemies</small></div><div class="bars"><div class="bar"><i style="width:29.5%"></i>14 fps</div><div class="bar after"><i style="width:78.0%"></i>37 fps</div></div><div class="delta">2.6×</div></div><div class="row"><div><h3>Slow-motion frames that show new motion</h3><small>out of 24 slowed frames in a boss death</small></div><div class="bars"><div class="bar"><i style="width:30.5%"></i>9 of 24</div><div class="bar after"><i style="width:78.0%"></i>23 of 24</div></div><div class="delta">2.6×</div></div><div class="row"><div><h3>How long a boss survives a fast tapper</h3><small>stage boss, producer-like player model</small></div><div class="bars"><div class="bar"><i style="width:28.9%"></i>10 s</div><div class="bar after"><i style="width:78.0%"></i>27 s</div></div><div class="delta">2.7×</div></div><div class="row"><div><h3>Boss-death boom over the music</h3><small>loudest 400 ms against the music bed</small></div><div class="bars"><div class="bar"><i style="width:78.0%"></i>+11.5 dB</div><div class="bar after"><i style="width:18.3%"></i>−2.7 dB</div></div><div class="delta">−14 dB</div></div></div>
+<details><summary>Where each number comes from</summary><ul><li><b>Dead air in the first stage</b>: 18.4 s to 9.5 s. outputs/coordination/log.md, stage-1 scout entry (real build, 390×844, one seed).</li><li><b>First sound after the first tap</b>: 7.6 s to 1.5 s. MODLOG.md, 2026-10-09 audio load order entry.</li><li><b>Frame rate when the horde piles up</b>: 14 fps to 37 fps. MODLOG.md, 2026-10-09 adaptive quality guard entry (lowest 20 s window).</li><li><b>Slow-motion frames that show new motion</b>: 9 of 24 to 23 of 24. MODLOG.md, 2026-10-11 VFX entry; trailer NOTES.md.</li><li><b>How long a boss survives a fast tapper</b>: 10 s to 27 s. MODLOG.md, 2.3.1 open list (about 10 s); outputs/coordination/log.md, 2.3.2 release entry (27 s).</li><li><b>Boss-death boom over the music</b>: +11.5 dB to −2.7 dB. outputs/audio-235/loudness-table.md (muted captures, BS.1770).</li></ul></details></section>
+
+<section id="versus"><p class="num">06 · with vs without</p><h2>A benchmark that <i>shows nothing yet</i>.</h2>
+<p class="lead">Three toy tasks on a 200-line sample game, 18 headless runs, scored by script.</p>
+<div class="grid g3"><div class="panel"><h3>Checks passed</h3><div class="who">without</div><div class="bar"><i style="width:60.6%"></i><b>98%</b></div><div class="sd">± 7 · n = 9</div><div class="who">with wisecraft</div><div class="bar after"><i style="width:62.0%"></i><b>100%</b></div><div class="sd">± 0 · n = 9</div></div><div class="panel"><h3>Minutes per task</h3><div class="who">without</div><div class="bar"><i style="width:60.7%"></i><b>3.6</b></div><div class="sd">± 1.6 · n = 9</div><div class="who">with wisecraft</div><div class="bar after"><i style="width:62.0%"></i><b>3.7</b></div><div class="sd">± 1.3 · n = 9</div></div><div class="panel"><h3>Tokens per task</h3><div class="who">without</div><div class="bar"><i style="width:57.9%"></i><b>825 k</b></div><div class="sd">± 420 k · n = 9</div><div class="who">with wisecraft</div><div class="bar after"><i style="width:62.0%"></i><b>884 k</b></div><div class="sd">± 454 k · n = 9</div></div></div>
+<p class="caption">Three toy tasks, 18 runs: 100% vs 98% of checks. <b>The tasks were too easy to separate the two</b>, so this shows no difference yet. Harder, real-game tasks are next. Harness and raw results: <a href="https://github.com/Wiserax/wisecraft/tree/main/benchmarks"><u>benchmarks/</u></a>.</p></section>
+
+<section id="built"><p class="num">07 · built with it</p><h2>Written while <i>shipping one</i>.</h2>
+<ul class="plain"><li>Ten-stage chapters shaped as a rising sine, with bosses and a titan that walk in from the edge of the field and slam the walls.</li>
+<li>Balanced with four player-model bots, then proven with a browser bot that taps the real UI.</li>
+<li>A mix measured in a muted browser and never played aloud by an agent.</li>
+<li>A producer, a lead agent and worker agents; every step written down.</li></ul>
+<div class="frames"><figure><img src="frames/boss.jpg" alt="2x boss slam: a frame from the shipped game" loading="lazy" width="480" height="270"><figcaption>2x boss slam</figcaption></figure><figure><img src="frames/horde.jpg" alt="8,000 at 60 fps: a frame from the shipped game" loading="lazy" width="480" height="270"><figcaption>8,000 at 60 fps</figcaption></figure><figure><img src="frames/titan.jpg" alt="titan wave: a frame from the shipped game" loading="lazy" width="480" height="270"><figcaption>titan wave</figcaption></figure><figure><img src="frames/vault.jpg" alt="vault reveal: a frame from the shipped game" loading="lazy" width="480" height="270"><figcaption>vault reveal</figcaption></figure><figure><img src="frames/blade.jpg" alt="blade frenzy: a frame from the shipped game" loading="lazy" width="480" height="270"><figcaption>blade frenzy</figcaption></figure><figure><img src="frames/clear.jpg" alt="chapter clear: a frame from the shipped game" loading="lazy" width="480" height="270"><figcaption>chapter clear</figcaption></figure></div></section>
+
+<section id="install"><p class="num">08 · install</p><h2>Pick your agent. <i>Same skills</i>.</h2>
+<table><tbody><tr><td>/plugin marketplace add Wiserax/wisecraft</td><td>Claude Code · then /plugin install wisecraft@wisecraft</td></tr><tr><td>codex plugin marketplace add Wiserax/wisecraft</td><td>Codex · then codex plugin add wisecraft@wisecraft</td></tr><tr><td>gemini extensions install https://github.com/Wiserax/wisecraft</td><td>Gemini</td></tr><tr><td>git clone https://github.com/Wiserax/wisecraft</td><td>Cursor</td></tr><tr><td>npx skills add https://github.com/Wiserax/wisecraft</td><td>Skills</td></tr><tr><td>uv tool install git+https://github.com/Wiserax/wisecraft</td><td>The CLI alone</td></tr></tbody></table>
+<p class="caption">Needs Python 3.10+, Node 18+ and ffmpeg. The browser tools use Playwright from your game's folder.</p></section>
+</main>
+<footer><span>MIT · created by Alex Wiserax</span><span>Architecture adapted from <a href="https://github.com/rehan-remade/universal-modder">Universal Modder</a> by Rehan, MIT</span><a href="https://github.com/Wiserax/wisecraft">github.com/Wiserax/wisecraft</a></footer>
+<script>
+(()=>{
+// the planet: a dithered arc and stippled particles, drawn once on a coarse pixel grid from a seeded generator
+const cv=document.getElementById('planet');if(cv){
+const draw=()=>{const hero=cv.parentElement,W=hero.clientWidth,H=hero.clientHeight,px=3,cw=Math.ceil(W/px),chh=Math.ceil(H/px);
+cv.width=cw;cv.height=chh;cv.style.imageRendering='pixelated';const g=cv.getContext('2d'),im=g.createImageData(cw,chh),d=im.data;
+let s=20261012;const rnd=()=>{s=(s+0x6D2B79F5)|0;let t=Math.imul(s^(s>>>15),1|s);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296};
+const wide=W>=700,R=(wide?W*1.9:H*.62)/px,cx=(wide?W*1.74:W*1.05)/px,cy=(wide?H*.176+W*1.9:H*1.42)/px,fall=wide?1:.55;
+const put=(i,r,gg,b,a)=>{d[i]=r;d[i+1]=gg;d[i+2]=b;d[i+3]=a};
+for(let y=0;y<chh;y++)for(let x=0;x<cw;x++){const dist=Math.hypot(x-cx,y-cy)-R,i=(y*cw+x)*4;
+if(dist<0){const depth=-dist*px;                       // inside: a thin blue rim, then mottled magenta thinning into the dark
+if(depth<6){rnd()<.82?put(i,140,156,251,255):put(i,205,190,255,255)}
+else{const lum=.5*Math.max(0,1-depth/(H*.95))+(rnd()-.5)*.26,r=rnd();
+if(depth<46&&rnd()<.3*(1-depth/46))put(i,140,156,251,255);
+else r<lum?(rnd()<.12?put(i,255,160,228,255):put(i,248,79,204,255)):(rnd()<.55?put(i,119,2,85,255):put(i,26,4,24,255))}}
+else{const far=dist*px,p=.3*Math.exp(-far/(45*fall))+.035*Math.exp(-far/(170*fall))+.0005;if(rnd()<p)put(i,245,245,245,far<50?255:120+rnd()*135)}}
+g.putImageData(im,0,0)};
+draw();let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,150)})}
+// install tabs
+const tabs=[...document.querySelectorAll('.tabs button')],out=document.querySelector('#cmd code'),note=document.querySelector('.tabs .right');
+const show=b=>{tabs.forEach(x=>x.setAttribute('aria-selected',x===b));out.innerHTML=b.dataset.cmd.split('|').map(l=>'<span>'+l.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span>').join('');out.dataset.copy=b.dataset.cmd.split('|').join('\n');if(note)note.textContent=b.dataset.note||''};
+tabs.forEach(b=>b.addEventListener('click',()=>show(b)));if(tabs[0])show(tabs[0]);
+// copy buttons (clipboard API, with a fallback for pages opened from a file)
+document.querySelectorAll('[data-copy-from]').forEach(btn=>btn.addEventListener('click',async()=>{const src=document.querySelector(btn.dataset.copyFrom),text=src.dataset.copy||src.textContent;
+try{await navigator.clipboard.writeText(text)}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){}ta.remove()}
+const old=btn.textContent;btn.textContent='COPIED';setTimeout(()=>btn.textContent=old,1200)}));
+// the rail follows the section in view
+const links=[...document.querySelectorAll('.rail a')];if('IntersectionObserver'in window&&links.length){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>io.observe(s))}
+if(location.hash==='#banner')document.documentElement.classList.add('banner');
+})();
+</script>
+</body>
+</html>

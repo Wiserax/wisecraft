@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/media/banner.png" alt="wisecraft: ship any game. Point any AI coding agent at your web game. Balance it, polish it, test it on real phones, ship it, cut the trailer." width="100%">
+  <img src="docs/media/banner.png" alt="wisecraft: the game studio with the agents wired in. Skills, a CLI and field notes that let any AI coding agent build, balance, polish and ship a mobile web game. Install: /plugin marketplace add Wiserax/wisecraft, then /plugin install wisecraft@wisecraft." width="100%">
 </p>
 
 <p align="center">
@@ -17,6 +17,8 @@
 <p align="center">
   <img src="docs/media/teaser.gif" alt="Moments from a game shipped with wisecraft: a double-size boss looming over the fort, a horde of thousands, a titan slamming the walls, a blade sweeping through the crowd, the boss dying, then the wisecraft tile." width="560">
 </p>
+
+<p align="center"><b>Website:</b> <a href="https://wiserax.github.io/wisecraft/">wiserax.github.io/wisecraft</a></p>
 
 <p align="center"><b>Coming next: harder real-game benchmarks and more field notes.</b></p>
 
@@ -226,7 +228,7 @@ Use `made-with-light.svg` on a light page.
 - Built from real agent sessions on a shipped mobile web game.
 - Standing on the shoulders of three.js, Vite, Playwright and ffmpeg.
 
-Brand type: Silkscreen, JetBrains Mono and Space Grotesk. Video titles: Space Grotesk and JetBrains Mono. All under the SIL OFL.
+Brand type: Geist and JetBrains Mono. Video titles: Space Grotesk and JetBrains Mono. All under the SIL OFL.
 
 ## License
 
