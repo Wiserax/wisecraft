@@ -1,0 +1,20 @@
+{
+  "name": "wizerax",
+  "interface": {
+    "displayName": "wizerax"
+  },
+  "plugins": [
+    {
+      "name": "wizerax",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/Wiserax/wizerax-gamedev.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "wizerax",
+  "description": "Skills, the wz CLI and a shared knowledge base for making web games with AI agents.",
+  "owner": {
+    "name": "Alex Wiserax",
+    "url": "https://github.com/Wiserax"
+  },
+  "plugins": [
+    {
+      "name": "wizerax",
+      "source": "./",
+      "description": "Build, balance, polish and ship a mobile web game with an AI agent: stack recon, an economy tuned with player-model bots, a clean mobile UI kit, game feel and a measured audio mix, performance budgets, muted phone-browser QA, releases, lead/worker orchestration, trailers, and a shared knowledge base of what real web games learned."
+    }
+  ]
+}

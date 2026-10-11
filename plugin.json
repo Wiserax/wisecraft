@@ -1,0 +1,27 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "wizerax",
+  "version": "0.2.0",
+  "description": "Build, balance, polish and ship a mobile web game with an AI agent: stack recon, an economy tuned with player-model bots, a clean mobile UI kit, game feel and a measured audio mix, performance budgets, muted phone-browser QA, releases, lead/worker orchestration, trailers, and a shared knowledge base of what real web games learned.",
+  "author": {
+    "name": "Alex Wiserax",
+    "url": "https://github.com/Wiserax"
+  },
+  "homepage": "https://github.com/Wiserax/wizerax-gamedev",
+  "repository": "https://github.com/Wiserax/wizerax-gamedev",
+  "license": "MIT",
+  "keywords": [
+    "game-development",
+    "web-games",
+    "html5-games",
+    "threejs",
+    "vite",
+    "mobile-games",
+    "game-balance",
+    "game-economy",
+    "playwright",
+    "game-audio",
+    "knowledge-base",
+    "agent-skills"
+  ]
+}
