@@ -52,24 +52,34 @@ void main(){
   bool solid = abs(sd) < 2.5 * s;
 
   if (!solid && sd < 0.0) {
-    // inside: shade it as a sphere that slowly turns; liquid caustics ride on its surface
+    // inside: a dark, airy body like the reference - dense just under the rim, thinning into sparse blue -
+    // with a few liquid islands floating on the surface, turning with the sphere and slowly changing shape
     vec2 m = n / w; float z = sqrt(max(0.0, 1.0 - dot(m, m)));
     vec3 N = vec3(m, z), L = normalize(LIGHT);
-    float lit = clamp(dot(N, L) * 1.05 + 0.08, 0.0, 1.0);
-    float lon = atan(m.x, max(z, 1e-3)) + t * 0.0018, lat = asin(clamp(m.y, -1.0, 1.0));
-    float caus = 0.5 + 0.5 * sin(lon * 4.2 + 2.3 * sin(lat * 3.6 + t * 0.0072) - t * 0.0046);
-    caus *= 0.6 + 0.4 * sin(lat * 6.5 - 1.7 * sin(lon * 2.7 - t * 0.0058) + t * 0.0078);
-    float spec = pow(max(0.0, dot(reflect(-L, N), vec3(0.0, 0.0, 1.0))), 22.0);
-    float fres = pow(1.0 - z, 3.0), dp = -sd;
-    pr = exp(-dp / (7.0 * s)) + 0.6 * lit * lit * caus + 0.9 * spec;
-    pm = (mix(0.32, 0.92, lit) * (0.6 + 0.4 * caus) + 0.25 * fres) * ramp(dp, 4.0 * s);
-    pd = 0.12 + 0.40 * (1.0 - lit);
-    glow = 0.22;
+    float lit = clamp(dot(N, L) * 1.05 + 0.08, 0.0, 1.0), dp = -sd;
+    float spin = t * 0.0016, cs = cos(spin), sn = sin(spin);
+    vec3 P = vec3(cs * N.x + sn * N.z, N.y, -sn * N.x + cs * N.z);          // surface point in the sphere's own frame
+    // warp the surface at two scales so the islands get ragged, liquid outlines that keep slowly reshaping
+    P += 0.16 * vec3(sin(P.y * 4.0 + t * 0.005), sin(P.z * 3.5 - t * 0.004), sin(P.x * 4.5 + t * 0.006));
+    P += 0.06 * vec3(sin(P.z * 11.0 - t * 0.009), sin(P.x * 13.0 + t * 0.008), sin(P.y * 12.0 - t * 0.010));
+    P = normalize(P);
+    float isl = 0.0;
+    isl = max(isl, smoothstep(0.825, 0.940, dot(P, normalize(vec3(-0.55, -0.35, 0.76)))));
+    isl = max(isl, smoothstep(0.875, 0.970, dot(P, normalize(vec3(0.45, 0.30, 0.84)))));
+    isl = max(isl, smoothstep(0.845, 0.950, dot(P, normalize(vec3(0.85, -0.45, -0.28)))));
+    isl = max(isl, smoothstep(0.895, 0.985, dot(P, normalize(vec3(-0.30, 0.62, 0.72)))));
+    isl = max(isl, smoothstep(0.835, 0.940, dot(P, normalize(vec3(-0.70, 0.20, -0.68)))));
+    float rimBand = exp(-dp / (34.0 * s));
+    float core = isl * isl;                                                   // islands are densest in the middle
+    pr = exp(-dp / (5.0 * s)) * 0.9 + 0.08 * core * lit;
+    pm = (0.62 * rimBand + (0.30 * isl + 0.32 * core) * (0.55 + 0.45 * lit)) * ramp(dp, 3.0 * s);
+    pd = (0.06 + 0.24 * exp(-dp / (200.0 * s))) * (0.55 + 0.45 * lit) + 0.12 * isl;
+    glow = 0.10;
   } else if (!solid) {
     float d = sd;
     // a thin stippled corona and a smooth bloom; the space beyond stays dark so the spray reads
     pr = exp(-d / (7.0 * s)) * 0.85; pm = exp(-d / (16.0 * s)) * 0.45 * ramp(d, 3.0 * s); pd = exp(-d / (38.0 * s)) * ramp(d, 6.0 * s) * 0.6;
-    glow = 0.30 * exp(-d / (190.0 * s));
+    glow = 0.12 * exp(-d / (120.0 * s));
     float mk = textMask(p); pm *= mk; pd *= mk; pr *= mix(0.3, 1.0, mk); glow *= mk;
   }
   base += DEEP * glow * shade;
