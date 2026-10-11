@@ -1,5 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+uv.lock
+.env
+build/
+dist/
+*.egg-info/
 node_modules/
 .DS_Store
+.pytest_cache/
+# captures and scratch
+/scratch/
 *-workspace/
 qa-out/
 shots/
+# the launcher lives in bin/
+!bin/
