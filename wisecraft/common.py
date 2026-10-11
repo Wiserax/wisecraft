@@ -23,8 +23,8 @@ def is_mac() -> bool:
 
 
 def data_dir() -> Path:
-    """Per-user state: the cached knowledge base, QA output defaults. Override with WZ_HOME."""
-    d = Path(os.environ.get("WZ_HOME", Path.home() / ".wizerax"))
+    """Per-user state: the cached knowledge base, QA output defaults. Override with WISE_HOME."""
+    d = Path(os.environ.get("WISE_HOME", Path.home() / ".wisecraft"))
     d.mkdir(parents=True, exist_ok=True)
     return d
 
@@ -39,7 +39,7 @@ def run(cmd: list[str], check: bool = True, capture: bool = True, timeout: float
 
 
 def die(msg: str, code: int = 1):
-    print(f"wz: {msg}", file=sys.stderr)
+    print(f"wise: {msg}", file=sys.stderr)
     sys.exit(code)
 
 
@@ -62,12 +62,12 @@ def need(module: str, pip_name: str | None = None):
     try:
         return __import__(module)
     except ImportError:
-        die(f"this command needs {pip_name or module}: `pip install {pip_name or module}` (or run through bin/wz, which uses uv)")
+        die(f"this command needs {pip_name or module}: `pip install {pip_name or module}` (or run through bin/wise, which uses uv)")
 
 
 def need_tool(name: str, hint: str = "") -> str:
     """Path of an external program (ffmpeg, ffprobe, node), or exit with how to get it."""
     found = shutil.which(name)
     if not found:
-        die(f"{name} not found on PATH{': ' + hint if hint else ''}")
+        die(f"{name} not found on PATH{': ' + hint if hint else ''}", 2)
     return found

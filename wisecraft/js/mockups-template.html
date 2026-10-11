@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8">
+<!-- Mockups: one .screen per phone screen, 390x844 CSS px, each with an id. `wise board mockups.html --board board.html`
+     writes shots/<id>.png for every screen. Use the game's fonts and tokens; a real screenshot makes a good backdrop
+     (background-image on the .screen) with the new UI drawn over it. CSS shapes are fine for a design pass: say so on the board. -->
+<style>
+:root{--ink:#fff;--panel:#241a3a;--line:#3a2b55;--accent:#ffd34d;--good:#7ee05a;--bad:#ff7b6b}
+body{margin:0;background:#0d0817;color:var(--ink);font-family:system-ui,sans-serif;display:flex;gap:40px;padding:40px;flex-wrap:wrap}
+.screen{width:390px;height:844px;position:relative;overflow:hidden;background:linear-gradient(#2b1f47,#140c22);flex:none}
+.hud{position:absolute;inset:16px 16px auto;display:flex;justify-content:space-between;font-weight:700;font-size:18px}
+.card{position:absolute;left:16px;right:16px;bottom:24px;background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:18px}
+.card h2{margin:0 0 6px;font-size:22px}.card p{margin:0 0 14px;font-size:15px;opacity:.85}
+.btn{display:block;text-align:center;background:var(--accent);color:#2a1a00;font-weight:800;font-size:18px;border-radius:14px;padding:14px}
+</style>
+<div class="screen" id="s1">
+  <div class="hud"><span>Stage 3</span><span>1,240</span></div>
+  <div class="card"><h2>Before</h2><p>The screen as it is today.</p><span class="btn">Continue</span></div>
+</div>
+<div class="screen" id="s2">
+  <div class="hud"><span>Stage 3</span><span>1,240</span></div>
+  <div class="card" style="border-color:var(--good)"><h2>After</h2><p>What changes for the player.</p><span class="btn">Claim</span></div>
+</div>

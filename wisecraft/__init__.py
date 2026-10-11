@@ -1,6 +1,6 @@
-"""wizerax: tools any AI agent (Claude Code, Codex, Cursor, Gemini CLI, ...) uses to build and ship web games.
+"""wisecraft: tools any AI agent (Claude Code, Codex, Cursor, Gemini CLI, ...) uses to build and ship web games.
 
-Subcommands (see `wz --help`):
+Subcommands (see `wise --help`):
   scan       fingerprint a web game (folder or URL): stack, versions, entry points, debug hooks, analytics, audio, bundle size
   qa         drive the game in a muted phone-sized browser: taps like a player, console errors, overflow, screenshots
   board      render HTML mockups to phone-sized PNG screens and one review board

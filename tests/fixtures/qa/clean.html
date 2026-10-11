@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>clean fixture</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#102030}
+canvas{width:100vw;height:100vh;display:block}
+#play{position:fixed;left:20px;top:20px;font-size:18px}
+.glow{position:fixed;inset:-40px;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="glow"></div>
+<button id="play">Play</button>
+<script>
+// A game-shaped page: a canvas, a start button, a debug hook, an analytics beacon, a sound engine.
+window.__game = { taps: 0, started: false, get run() { return { stage: 1 }; } };
+document.getElementById("play").addEventListener("click", () => { window.__game.started = true; });
+document.getElementById("c").addEventListener("pointerdown", () => {
+  window.__game.taps++;
+  fetch("/api/events", { method: "POST", body: "{}" }).catch(() => {});
+});
+const AC = window.AudioContext || window.webkitAudioContext;
+if (AC) { const ctx = new AC(); window.__game.audioMuted = ctx.destination.gain ? ctx.destination.gain.value === 0 : null; }
+</script>
+</body>
+</html>

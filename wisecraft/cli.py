@@ -1,13 +1,13 @@
 # Ported from Universal Modder (https://github.com/rehan-remade/universal-modder), um/cli.py.
 # Copyright (c) 2026 Rehan and universal-modder contributors. MIT License; see LICENSE and NOTICE.
-"""`wz` command line: one entry point for every tool, so skills can say `wz <group> <cmd>`."""
+"""`wise` command line: one entry point for every tool, so skills can say `wise <group> <cmd>`."""
 from __future__ import annotations
 
 import argparse
 import importlib
 import sys
 
-from wz import __doc__ as DOC, __version__
+from wisecraft import __doc__ as DOC, __version__
 
 GROUPS = ["scan", "qa", "board", "loudness", "dupframes", "video", "kb", "publish"]
 
@@ -19,11 +19,11 @@ def main(argv=None):
             stream.reconfigure(encoding="utf-8", errors="replace")
         except (AttributeError, ValueError, OSError):
             pass
-    ap = argparse.ArgumentParser(prog="wz", description=DOC, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--version", action="version", version=f"wizerax {__version__}")
+    ap = argparse.ArgumentParser(prog="wise", description=DOC, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--version", action="version", version=f"wisecraft {__version__}")
     sub = ap.add_subparsers(dest="group", metavar="<group>")
     for g in GROUPS:
-        importlib.import_module(f"wz.{g}").register(sub)
+        importlib.import_module(f"wisecraft.{g}").register(sub)
     args = ap.parse_args(argv)
     if not getattr(args, "func", None):
         # a group without a command: show that group's help

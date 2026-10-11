@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# wizerax CLI launcher. Works from a clone, a Claude Code plugin install, or a PATH symlink.
+# wisecraft CLI launcher. Works from a clone, a Claude Code plugin install, or a PATH symlink.
 # Launcher ported from Universal Modder (bin/um), MIT, (c) 2026 Rehan and universal-modder contributors; see NOTICE.
-#   wz scan ./my-game | wz qa http://127.0.0.1:5173 | wz board mockups.html --board board.html | wz kb search "boss" ...
+#   wise scan ./my-game | wise qa http://127.0.0.1:5173 | wise board mockups.html --board board.html | wise kb search "boss" ...
 # Uses uv when available (it creates the project's .venv with Pillow, numpy and PyYAML on first run);
 # otherwise the system python3, which then needs `pip install pillow numpy pyyaml`.
 set -euo pipefail
@@ -12,8 +12,8 @@ while [ -L "$SRC" ]; do
   [[ "$SRC" != /* ]] && SRC="$DIR/$SRC"
 done
 ROOT="$(cd -P "$(dirname "$SRC")/.." && pwd)"
-if command -v uv >/dev/null 2>&1 && [ -z "${WZ_NO_UV:-}" ]; then
-  exec uv run --quiet --project "$ROOT" python -m wz "$@"
+if command -v uv >/dev/null 2>&1 && [ -z "${WISE_NO_UV:-}" ]; then
+  exec uv run --quiet --project "$ROOT" python -m wisecraft "$@"
 fi
 PY="$(command -v python3 || command -v python)"
-PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" exec "$PY" -m wz "$@"
+PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" exec "$PY" -m wisecraft "$@"

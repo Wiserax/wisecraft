@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>broken fixture</title>
+<style>
+html,body{margin:0;height:100%;background:#102030}
+canvas{width:100vw;height:60vh;display:block}
+#hud{width:520px;color:#fff}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">a HUD row that is wider than the phone</div>
+<script>
+// Two faults the gate must catch: errors (console + uncaught) and a row wider than the viewport.
+console.error("boom from the game");
+setTimeout(() => { throw new Error("late crash"); }, 200);
+</script>
+</body>
+</html>
