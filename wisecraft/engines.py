@@ -162,7 +162,7 @@ def _audio_route(audio: dict) -> list[dict]:
     if f.lower().endswith((".bank", ".fsb", ".wem", ".bnk", ".xm", ".mod", ".it", ".s3m", ".mid", ".midi")):
         return []
     return [dict(do=f'wise music-enhance "{f}" --check --for music',
-                 why=f"{audio['files']} audio files ({human(audio['bytes'])}): measure the biggest one against a target without playing it")]
+                 why=f"{audio['files']} audio file{'s' if audio['files'] != 1 else ''} ({human(audio['bytes'])}): measure the biggest one against a target without playing it")]
 
 
 CLIP_ROUTE = dict(do="record a short gameplay clip, then: wise scan clip.mp4 --sheet",
@@ -681,7 +681,8 @@ def format_project(r: dict) -> str:
         lines.append("  also:       " + "; ".join(f"{o['label']} ({o['evidence'][0]})" for o in r["also"]))
     for k, v in r["details"].items():
         if isinstance(v, list):
-            v = ", ".join(_kv(x) if isinstance(x, dict) else str(x) for x in v)
+            v = ", ".join((f"{x.get('label') or x.get('name')} {x.get('version') or x.get('type') or ''}".strip() if isinstance(x, dict) and "name" in x
+                           else _kv(x) if isinstance(x, dict) else str(x)) for x in v)
         elif isinstance(v, dict):
             v = _kv(v)
         lines.append(f"  {(k.replace('_', ' ') + ':'):<24}{v}")

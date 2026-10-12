@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # wisecraft CLI launcher. Works from a clone, a Claude Code plugin install, or a PATH symlink.
 # Launcher ported from Universal Modder (bin/um), MIT, (c) 2026 Rehan and universal-modder contributors; see NOTICE.
-#   wise scan ./my-game | wise qa http://127.0.0.1:5173 | wise board mockups.html --board board.html | wise kb search "boss" ...
-# Uses uv when available (it creates the project's .venv with Pillow, numpy and PyYAML on first run);
-# otherwise the system python3, which then needs `pip install pillow numpy pyyaml`.
+#   wise scan ./my-game | wise qa http://127.0.0.1:5173 | wise board mockups.html --board board.html | wise music-enhance theme.mp3 ...
+# Uses uv when available (it creates the project's .venv with Pillow and numpy on first run);
+# otherwise the system python3, which then needs `pip install pillow numpy`.
 set -euo pipefail
 SRC="${BASH_SOURCE[0]}"
 while [ -L "$SRC" ]; do

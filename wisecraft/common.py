@@ -23,7 +23,7 @@ def is_mac() -> bool:
 
 
 def data_dir() -> Path:
-    """Per-user state: the cached knowledge base, QA output defaults. Override with WISE_HOME."""
+    """Per-user state (QA output defaults). Override with WISE_HOME."""
     d = Path(os.environ.get("WISE_HOME", Path.home() / ".wisecraft"))
     d.mkdir(parents=True, exist_ok=True)
     return d

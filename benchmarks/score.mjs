@@ -48,7 +48,12 @@ const checks = {
   version_bumped: () => { const v = JSON.parse(read("package.json") || "{}").version; return !!v && v !== "0.1.0"; },
   version_matches_in_code: () => { const v = JSON.parse(read("package.json") || "{}").version; const src = (read("src/main.js") || "") + (read("index.html") || ""); return !!v && v !== "0.1.0" && !src.includes('"0.1.0"') && !src.includes("'0.1.0'"); },
   build_works: () => (flags.includes("--build") ? sh("npm", ["run", "build"]).ok && fs.existsSync(path.join(root, "dist/index.html")) : null),
-  publish_check_clean: () => { const r = sh(process.env.WISE || "wise", ["publish", "check", "."]); return r.ok; },
+  // nothing private ships: no key-shaped string and no preview-deploy host in any text file of the game
+  publish_check_clean: () => {
+    const bad = /\b(sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|phc_[A-Za-z0-9]{30,}|AIza[0-9A-Za-z_-]{35})\b|-----BEGIN [A-Z ]*PRIVATE KEY-----|https?:\/\/[a-z0-9-]+-[a-z0-9]{9}-[a-z0-9-]+\.vercel\.app/;
+    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (["node_modules", "dist", ".git"].includes(e.name) ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]));
+    return !walk(root).some((f) => /(^|\/)\.env(\.|$)/.test(f) && !/\.example$/.test(f) || (fs.statSync(f).size < 1e6 && bad.test(fs.readFileSync(f, "utf8"))));
+  },
   changelog_or_release_notes: () => fs.readdirSync(root).some((f) => /^(changelog|release[-_ ]?notes|history)/i.test(f)) || /##\s*(changelog|release|what'?s new)/i.test(read("README.md") || ""),
 };
 

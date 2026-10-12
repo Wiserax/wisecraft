@@ -1,14 +1,13 @@
 [project]
 name = "wisecraft"
 version = "0.2.0"
-description = "Tools and a shared knowledge base for AI agents that build, balance, polish and ship mobile web games: stack scanner, muted phone-browser QA, design boards, loudness and slow-motion checks, EDL trailer compiler, pre-release lint, field notes."
+description = "Tools and a shared knowledge base for AI agents that build, balance, polish and ship games: a scanner for any game project or video, muted phone-browser QA for web games, design boards, loudness measured and fixed, an EDL trailer compiler, field notes."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 dependencies = [
     "pillow>=10",
     "numpy>=1.24",
-    "pyyaml>=6",
 ]
 
 [project.scripts]

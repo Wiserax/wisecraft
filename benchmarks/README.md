@@ -29,7 +29,7 @@ build proven in a phone browser.
   and read files. They never read what the agent said. Examples: the tests pass and a test was added; the walls
   take damage in the first 60 s but an attentive player still clears; the boss first appears at the rim, reaches
   the fort, damages the walls and survives at least 8 s of tapping; the version changed everywhere it is written;
-  `wise publish check` is clean.
+  the build carries no key or private URL.
 - **Measured:** share of checks passed, wall-clock minutes, tokens as reported by the agent CLI; mean and standard
   deviation over the trials of each arm.
 
