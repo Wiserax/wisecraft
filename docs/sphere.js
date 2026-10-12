@@ -10,7 +10,7 @@
 
   const COMMON = `#version 300 es
 precision highp float; precision highp int;
-uniform vec2 uRes; uniform float uDpr, uT, uDust; uniform vec4 uE; uniform vec2 uK;   // uE: centre.xy, radii.zw; uK: tilt, wide
+uniform vec2 uRes; uniform float uDpr, uT; uniform vec4 uE; uniform vec2 uK;   // uE: centre.xy, radii.zw; uK: tilt, wide
 const float TAU = 6.2831853;
 uint hh(uint x){ x ^= x >> 17; x *= 0xed5ad4bbu; x ^= x >> 11; x *= 0xac4c1b51u; x ^= x >> 15; x *= 0x31848babu; x ^= x >> 14; return x; }
 float rf(uint x){ return float(hh(x) >> 8) / 16777216.0; }
@@ -33,7 +33,7 @@ float vig(vec2 p){ float n = distance(p, WH() * 0.5) / (1600.0 * SC()); return m
 void main(){ gl_Position = vec4(gl_VertexID == 1 ? 3.0 : -1.0, gl_VertexID == 2 ? 3.0 : -1.0, 0.0, 1.0); }`;
 
   const FIELD_FS = COMMON + `
-const vec3 RIM = vec3(0.84, 1.00, 0.97), MID = vec3(0.45, 0.96, 0.93), DEEP = vec3(0.06, 0.20, 1.00), BLK = vec3(0.016, 0.018, 0.045);
+const vec3 RIM = vec3(0.84, 1.00, 0.97), MID = vec3(0.45, 0.96, 0.93), DEEP = vec3(0.06, 0.20, 1.00), BLK = vec3(0.0);
 const vec3 LIGHT = vec3(-0.50, -0.62, 0.60);
 out vec4 o;
 float ramp(float d, float l){ return min(1.0, d / l); }
@@ -43,7 +43,7 @@ void main(){
   float grain = (rf(uint(dev.y) * uint(uRes.x) + uint(dev.x) ^ 0x51f15e3du) - 0.5) * (22.0 / 255.0);
   vec2 cell = floor(dev * 0.5) * 2.0, p = (cell + 1.0) / uDpr;
   float shade = vig(p);
-  vec3 base = max(BLK * vig(dev / uDpr) + grain, 0.0);
+  vec3 base = BLK;
 
   vec2 lq = R2(p - uE.xy, -uK.x), n = lq / uE.zw;
   float th = atan(n.y, n.x), w = wob(th, t), sd = (length(n) - w) * min(uE.z, uE.w);
@@ -107,21 +107,6 @@ void main(){
   const PART_VS = COMMON + `
 out float vA; out vec3 vC;
 void main(){
-  if (uDust > 0.5) {
-    uint dd = hh(uint(gl_VertexID) ^ 0x9b05688cu);
-    float a1 = rf(dd), a2 = rf(dd ^ 0x1f83d9abu), a3 = rf(dd ^ 0x5be0cd19u), a4 = rf(dd ^ 0x6a09e667u);
-    vec2 w = WH(); float s = SC();
-    // most motes sit low and to the left, drifting up and right very slowly, and twinkle
-    vec2 p = vec2(pow(a1, 1.9) * w.x * 1.05, w.y * (1.0 - pow(a2, 2.2) * 0.95));
-    p += vec2(0.045, -0.03) * s * uT * (0.4 + a3);
-    p = mod(p + w * 0.1, w * 1.2) - w * 0.1;
-    float tw = 0.5 + 0.5 * sin(uT * (0.01 + 0.03 * a4) + a3 * TAU);
-    vA = (0.55 + 0.45 * a4) * (0.45 + 0.55 * tw) * mix(0.35, 1.0, textMask(p));
-    vC = a3 > 0.82 ? vec3(0.55, 0.98, 0.95) : vec3(0.95, 0.97, 1.0);
-    gl_Position = vec4(p.x / w.x * 2.0 - 1.0, 1.0 - p.y / w.y * 2.0, 0.0, 1.0);
-    gl_PointSize = 2.0;
-    return;
-  }
   uint sd = hh(uint(gl_VertexID) ^ 0x2545f491u);
   float u1 = rf(sd), u2 = rf(sd ^ 0x68e31da4u), u3 = rf(sd ^ 0xb5297a4du), u4 = rf(sd ^ 0x1b56c4e9u),
         u5 = rf(sd ^ 0x7fb5d329u), u6 = rf(sd ^ 0xd2a98b26u), u7 = rf(sd ^ 0x3c6ef372u);
@@ -164,10 +149,10 @@ precision highp float; in float vA; in vec3 vC; out vec4 o; void main(){ o = vec
   };
   const field = prog(FIELD_VS, FIELD_FS), parts = prog(PART_VS, PART_FS);
   gl.bindVertexArray(gl.createVertexArray());
-  const loc = (p) => Object.fromEntries(['uRes', 'uDpr', 'uT', 'uE', 'uK', 'uDust'].map((n) => [n, gl.getUniformLocation(p, n)]));
+  const loc = (p) => Object.fromEntries(['uRes', 'uDpr', 'uT', 'uE', 'uK'].map((n) => [n, gl.getUniformLocation(p, n)]));
   const L = new Map([[field, loc(field)], [parts, loc(parts)]]);
 
-  let E = [0, 0, 1, 1], K = [0, 0], N = 0, ND = 0, dpr = 1;
+  let E = [0, 0, 1, 1], K = [0, 0], N = 0, dpr = 1;
   const geom = () => {
     const hero = cv.parentElement, W = hero.clientWidth, H = hero.clientHeight;
     dpr = Math.min(devicePixelRatio || 1, 1.5);
@@ -192,20 +177,19 @@ precision highp float; in float vA; in vec3 vC; out vec4 o; void main(){ o = vec
       const r = 0.40 * W;
       E = [0.64 * W, Math.max(bottom + 36 + r * 1.02, H - r * 1.1), r, r * 1.02]; K = [-0.3, 0];
     }
-    N = Math.round(0.0034 * W * H); ND = Math.round(0.0016 * W * H);
+    N = Math.round(0.0034 * W * H);
     gl.viewport(0, 0, cv.width, cv.height);
   };
   const set = (p, t) => {
     const u = L.get(p); gl.useProgram(p);
     gl.uniform2f(u.uRes, cv.width, cv.height); gl.uniform1f(u.uDpr, dpr); gl.uniform1f(u.uT, t);
-    gl.uniform4fv(u.uE, E); gl.uniform2fv(u.uK, K); gl.uniform1f(u.uDust, 0);
+    gl.uniform4fv(u.uE, E); gl.uniform2fv(u.uK, K);
   };
   const stats = (window.__planet = { frames: 0, ms: 0 });
   const render = (t) => {
     const t0 = performance.now();
     gl.disable(gl.BLEND); set(field, t); gl.drawArrays(gl.TRIANGLES, 0, 3);
     gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); set(parts, t); gl.drawArrays(gl.POINTS, 0, N);
-    gl.uniform1f(L.get(parts).uDust, 1); gl.drawArrays(gl.POINTS, 0, ND);
     stats.ms += (performance.now() - t0 - stats.ms) / ++stats.frames;
   };
 
