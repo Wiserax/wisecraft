@@ -11,8 +11,8 @@ Each one names the mistake behind it.
   has said to ship on green for this project. Workers never merge, push or deploy.
 - **Never push the repository's `main` without explicit permission.** Release branches and tags are fine
   once shipping is agreed; `main` is not.
-- **Run `wise publish check <dir>` before anything goes public.** It looks for secrets, keys, private URLs,
-  large binaries and denylisted names. Fix every FAIL.
+- **Read what is about to go public before it does.** Search the folder for keys and tokens, `.env` files,
+  private or preview URLs, names that must stay private, and large binaries nobody plays. Fix every hit.
 - **Preview URLs can sit behind sign-in.** Don't work around it; deploy where the producer can open it.
 
 ## Sound
@@ -20,7 +20,7 @@ Each one names the mistake behind it.
   in a call or asleep, and the agent can't hear anyway.
 - Chromium runs with `--mute-audio`. WebKit has no such flag, so an init script routes every `AudioContext`
   through a zero-gain node (the template in the **browser-qa** skill does this).
-- Judge sound by measurement (`wise loudness`, recorded stems) and say plainly that nobody has heard it.
+- Judge sound by measurement (`wise music-enhance --check`, recorded stems) and say plainly that nobody has heard it.
 
 ## Money, players and data
 - **No real purchases.** Never complete a real payment, ad view or subscription flow. Test the spender

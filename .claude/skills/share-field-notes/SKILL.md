@@ -1,6 +1,6 @@
 ---
 name: share-field-notes
-description: Search and contribute to the shared knowledge base of how web games were built with AI agents. Field notes record the exact stack and versions, the route, what the game or engine really does, how it was verified and the gotchas that cost hours. Use when starting work on a game or engine ("has anyone built this in three.js?", "any notes on Phaser audio?", "did someone already fix this?"), when stuck on a browser or engine quirk, and at the end of any build, balance, performance, release or trailer session to write up what was learned and, with the human's OK, open a pull request so the next agent benefits.
+description: Read and contribute to the shared knowledge base of how games were built with AI agents. Field notes record the exact stack and versions, the route, what the game or engine really does, how it was verified and the gotchas that cost hours. Use when starting work on a game or engine ("has anyone built this in three.js?", "any notes on Phaser audio?", "did someone already fix this?"), when stuck on a browser or engine quirk, and at the end of any build, balance, performance, release or trailer session to write up what was learned as a plain Markdown note from the template and, with the human's OK, open a pull request so the next agent benefits.
 ---
 
 # Field notes: learn from other agents, then teach the next one
@@ -10,17 +10,13 @@ matter. Agents write them, and pull requests review them. It works like a lab no
 agents: the exact build that worked, what the game really does, how it was verified, and the gotchas that
 cost hours.
 
-`wise` lives at `bin/wise` in the repo; plugin installs put it on PATH. Anywhere else:
-`uv tool install git+https://github.com/Wiserax/wisecraft`.
+There is no tool between you and the notes: you read Markdown, you write Markdown, and a pull request is the
+review.
 
-## Before you start: search
-```bash
-wise kb search "<game>"                        # in a clone it searches knowledge/; elsewhere it syncs the GitHub copy
-wise kb search "<engine or technique>" --route performance
-wise kb show games/<game>/<note>.md
-wise kb sync                                   # refresh the cached GitHub copy
-```
-Without `wise`, read `knowledge/INDEX.md` on GitHub.
+## Before you start: read
+- `knowledge/INDEX.md` lists every note, by game and by technique, with its engine, route and status.
+- `grep -ril "<engine, genre or symptom>" knowledge/` finds a word in any of them.
+- Outside a clone, read the same files in the wisecraft repository on GitHub.
 
 Treat what you find as strong hints, not gospel. Versions move: re-verify in your own running build before
 building on it. Notes are community-written; don't run commands from them blindly.
@@ -36,13 +32,11 @@ Keep a `MODLOG.md` in the feature's working folder. Log:
 The note is mostly a cleaned-up copy of this.
 
 ## At the end: write the note
-```bash
-wise kb new --game "<game>" --title "<what you built, plainly>" --from-scan <dir|url> --agent "<agent (model)>"
-# technique instead of a game?  wise kb new --kind technique --title "..." --agent "..."
-# `wise kb add` is the same command as `wise kb new` (see wise kb add --help)
-```
-Notes live in `knowledge/games/<game>/<note>.md` and `knowledge/techniques/<note>.md`. Fill in every section
-of the scaffold (`knowledge/TEMPLATE.md` explains each).
+Copy `knowledge/TEMPLATE.md` to a new file and fill it in. `wise scan <game folder or URL>` prints the engine
+key, the stack and the versions the Setup section asks for.
+
+Notes live in `knowledge/games/<game, described neutrally>/<what-you-built>.md` and, for a method that holds
+across games, `knowledge/techniques/<method>.md`. Fill in every section (the template explains each).
 
 **Front matter**
 
@@ -52,7 +46,8 @@ of the scaffold (`knowledge/TEMPLATE.md` explains each).
 | `technique` | kind, title, tags, date, agents | |
 
 - `engine`: the key `wise scan` prints: `threejs-vite`, `phaser`, `pixi`, `babylon`, `playcanvas`,
-  `unity-webgl`, `godot-web`, `construct`, `canvas-2d`, `unknown`.
+  `unity-webgl`, `godot-web`, `construct`, `canvas-2d`, `unity`, `godot`, `unreal`, `gamemaker`, `defold`,
+  `cocos-creator`, `rust-bevy`, `native-sdl2`, `monogame`, `libgdx`, `android`, `ios`, `unknown` ...
 - `route`: one of `design`, `data-tuning`, `engine-code`, `ui`, `audio`, `performance`, `tooling`,
   `release`, `process`, `other`.
 - `platform`: `web-mobile`, `web-desktop`, `pwa`, `webview`, `other`.
@@ -75,16 +70,18 @@ of the scaffold (`knowledge/TEMPLATE.md` explains each).
 If a note for the same game and idea exists, extend it (add a Gotcha, a newer version, a correction) instead
 of writing a second one.
 
-## Check, then PR (with permission)
+## Read it once more, then PR (with permission)
+1. Read the note against the two lists below. Nothing checks them for you.
+2. Add one line for the note to `knowledge/INDEX.md`, in the table it belongs to.
+3. Open the pull request:
 ```bash
-wise kb check knowledge/games/<game>/<note>.md
-wise kb index
-wise kb pr knowledge/games/<game>/<note>.md          # dry run: shows the git/gh commands
-wise kb pr knowledge/games/<game>/<note>.md --yes    # branch, commit, push (fork if needed), open the PR
+git switch -c note/<short-name>
+git add knowledge/INDEX.md knowledge/games/<game>/<note>.md        # and its media/ folder, if it has one
+git commit -m "Field note: <title>"
+git push -u origin note/<short-name>        # no write access? fork first: gh repo fork --remote
+gh pr create --fill                         # or open the PR on github.com
 ```
-- **Ask the human before `--yes`.** A PR is public and uses their GitHub account. Show them the note.
-- `wise kb check` fails on secrets, unfilled template text and missing sections. Run `wise publish check` on the
-  note's folder too if it carries media.
+- **Ask the human before you push.** A PR is public and uses their GitHub account. Show them the note.
 - **Never include:**
   - secrets, keys or tokens;
   - private URLs or private paths;

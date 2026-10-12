@@ -9,7 +9,7 @@ Goal: in about ten minutes, know what you're dealing with and which route to tak
 every later step can rely on it. Recon reads; it changes nothing in the game.
 
 ## 0. Has another agent been here?
-`wise kb search "<game>"` and `wise kb search "<engine>"` (for example `threejs-vite`). A field note in the
+Read `knowledge/INDEX.md`: it lists every note by game and by engine (for example `threejs-vite`). A field note in the
 shared knowledge base can hand you the working versions, the route and the gotchas before you touch
 anything. See the **share-field-notes** skill. Also read the repo's own `MODLOG.md` files if it has them.
 

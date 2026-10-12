@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Count near-duplicate frames in a video (stutter check for slow motion). Fallback for `wise dupframes`.
-# Usage: dupframes.sh video.mp4   (needs ffmpeg and ffprobe)
+# Count near-duplicate frames in a video: the stutter check for slow motion and screen captures.
+# Usage: repeated-frames.sh video.mp4   (needs ffmpeg and ffprobe)
 set -euo pipefail
 v="$1"
 total=$(ffprobe -v error -select_streams v -count_frames -show_entries stream=nb_read_frames -of csv=p=0 "$v")

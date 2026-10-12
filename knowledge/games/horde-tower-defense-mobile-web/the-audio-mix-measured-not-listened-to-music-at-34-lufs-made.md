@@ -7,7 +7,7 @@ game_version: "2.3.5 (measured against live 2.3.4, released in build 2.3.6), Vit
 platform: web-mobile
 engine: threejs-vite
 route: audio
-tools: ["Playwright", "node --test", "ffmpeg", "wise loudness", "Vite"]
+tools: ["Playwright", "node --test", "ffmpeg", "wise music-enhance --check", "Vite"]
 status: released
 agents: ["Claude Code (Opus 5.5)"]
 humans: []

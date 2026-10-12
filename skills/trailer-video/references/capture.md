@@ -10,7 +10,7 @@ The goal: every captured frame shows a new game state, at full resolution, the s
    simulation once, take one screenshot.
 4. **Encode** the screenshots at the capture rate. For slow motion, capture at 120 or 240 fps and play at
    0.5× or 0.25× in the edit: one sim step per captured frame at every speed.
-5. **Scan** the clip with `wise dupframes`.
+5. **Scan** the clip with `scripts/repeated-frames.sh`.
 
 A take is a small script (`takes/<name>.mjs`) that stages a moment with the debug hooks and names its
 length in game time. A shot list script runs them all, so a reshoot after a fix is one command.
@@ -28,7 +28,7 @@ length in game time. A shot list script runs them all, so a reshoot after a fix 
 | 8 | A purchase in a take resets the walls | the real buy path does more than the visual | pin the staged values per frame, after the call |
 | 9 | Toasts and level-up popups cover the shot | a fresh profile ranks up on any fight | stage a profile with headroom; hide what the shot isn't about |
 | 10 | The last cut is early by a few frames | beat lengths are not whole frames | snap segment durations to frames (see the SKILL) |
-| 11 | 16:9 has near-still frames | quarter-speed shots and UI panels shot at too low a rate | capture those at 240 fps; re-run `wise dupframes` on the 16:9 file too |
+| 11 | 16:9 has near-still frames | quarter-speed shots and UI panels shot at too low a rate | capture those at 240 fps; re-run `scripts/repeated-frames.sh` on the 16:9 file too |
 
 ## Staging rules
 - Use the game's own spawn, buy and skill functions, then place and pin. The flash, the sound event and the

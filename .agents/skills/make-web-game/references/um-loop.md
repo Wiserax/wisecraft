@@ -18,7 +18,7 @@ here you own the source, so "mod loader" means the hooks in your own code.
    `window.__game`) and prove the slice works. See the **browser-qa** skill.
 6. **Showcase:** record scripted takes (`showcase/record.mjs`) and compile a short video from an EDL
    (`wise video compile`). See the **trailer-video** skill.
-7. **Publish check:** tests, QA, fps, analytics events tagged with `game_version`, save import from previous
+7. **Release check:** tests, QA, fps, analytics events tagged with `game_version`, save import from previous
    versions, and a separate save key while it's a prototype. See the **release-web-game** skill.
 
 ## Routes that were rejected, and why

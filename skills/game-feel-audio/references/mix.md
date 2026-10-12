@@ -9,7 +9,7 @@ Nothing is listened to. The game runs in a muted Chromium with a zero-gain outpu
 - each bus (music, effects, ambience);
 - one stem per sound family (boss death, mortar, claims, and so on).
 
-Meter them (BS.1770 / EBU R128, the same numbers `wise loudness` prints). For each family, take the loudest
+Meter them (BS.1770 / EBU R128, the same numbers `wise music-enhance --check` prints). For each family, take the loudest
 400 ms and compare it with the music's short-term level in the same scene.
 
 Stage the scenes that matter with the debug hooks: a battle, a boss arrival and death, a titan slam, a

@@ -1,7 +1,7 @@
 ---
 kind: technique
 title: "Smooth slow motion for a trailer: one sim step per captured frame and a duplicate-frame check"
-tags: [trailer, capture, slow-motion, fake-clock, playwright, determinism, ffmpeg, dupframes, frame-rate, showcase]
+tags: [trailer, capture, slow-motion, fake-clock, playwright, determinism, ffmpeg, duplicate-frames, frame-rate, showcase]
 date: 2026-10-11
 agents: ["Claude Code (Opus 5.5)"]
 humans: []
@@ -14,7 +14,7 @@ links: []
 > web game the cure is to stop recording in real time: pause the page's clock, advance it one frame interval,
 > take one screenshot, repeat. Shoot at the output frame rate divided by the slowest playback speed (60 fps
 > output at quarter speed needs a 240 fps take). Then prove it with a duplicate-frame scan of the finished
-> file. `wise dupframes` is that scan.
+> file (ffmpeg's `mpdecimate` filter drops near-duplicates; frames in minus frames out is the count).
 
 ## When to use it
 - Any trailer or clip with slowed shots, cut from a browser game.

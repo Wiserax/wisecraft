@@ -11,7 +11,7 @@ Score each line out of 10 from the contact sheet, the frame scans and the loudne
 | 4 | Escalation and arc | each shot is bigger than the last, ending on the titan | reorder: horde → giants → reveal → towers → pierce → skill → titan |
 | 5 | Pacing and rhythm | cuts on the beat within about 16 ms; shot lengths vary | snap the EDL to frames; mix 1, 2 and 4-beat shots |
 | 6 | VFX polish | explosions and lightning hold up in a still frame | fix the effect in the game, then reshoot |
-| 7 | Motion smoothness | `wise dupframes`: no repeats outside the end card | one sim step per frame; higher capture rate for slow motion |
+| 7 | Motion smoothness | `scripts/repeated-frames.sh`: no repeats outside the end card | one sim step per frame; higher capture rate for slow motion |
 | 8 | Sound design and sync | SFX under the music, impacts on the cut, about -15 LUFS, peak ≤ -1.5 dB | add the game's own SFX; duck the music 3–10 dB on impacts |
 | 9 | Platform fit | vertical, titles inside the safe box for at least 0.6 s, readable on a phone | move titles; shorten to one line |
 | 10 | Brand and call to action | logo + PLAY FREE held to the last frame | hold the end card while the music fades; don't fade the picture |

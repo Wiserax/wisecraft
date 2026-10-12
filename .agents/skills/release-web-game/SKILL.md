@@ -1,6 +1,6 @@
 ---
 name: release-web-game
-description: Version, deploy and verify a web game release. Covers the pre-release lint (`wise publish check` for secrets, keys, private URLs, large binaries and denylisted names), the version bump, tests and a prebuilt deploy, live checks of assets and audio, the regression run against the live URL, tags, the analytics release field, frozen older versions on their own URL for side-by-side comparison, and preview URLs behind sign-in. Use when the user says "ship it", "deploy", "release 1.2", "put the old version up next to it", "is it live?", "tag it", or when tests, browser QA and fps are green and the producer has said to ship on green. The agent never pushes or deploys without being asked.
+description: Version, deploy and verify a web game release. Covers the pre-release read-through for secrets, keys, private URLs, large binaries and names that must stay private, the version bump, tests and a prebuilt deploy, live checks of assets and audio, the regression run against the live URL, tags, the analytics release field, frozen older versions on their own URL for side-by-side comparison, and preview URLs behind sign-in. Use when the user says "ship it", "deploy", "release 1.2", "put the old version up next to it", "is it live?", "tag it", or when tests, browser QA and fps are green and the producer has said to ship on green. The agent never pushes or deploys without being asked.
 ---
 
 # Release a web game
@@ -11,15 +11,16 @@ URL plays. Only the lead releases. Workers hand over branches.
 **Never push or deploy unasked.** A deploy needs the producer's word: either for this release, or a standing
 "ship when green" for the project. A push to the repository's `main` needs explicit permission every time.
 
-## 1. Lint
+## 1. Read what goes out
 ```bash
-wise publish check dist            # the build that will be uploaded
-wise publish check .               # the repo, before it or any part of it goes public
+grep -rnIE "(api[_-]?key|secret|token|password)[\"' ]*[:=]" dist      # the build that will be uploaded
+git grep -nIE "https?://[a-z0-9.-]+\.(vercel\.app|netlify\.app|pages\.dev)" -- .   # private or preview hosts
+git ls-files -z | xargs -0 du -k | sort -rn | head                   # the largest files that ship
 ```
-It looks for secrets and keys, private URLs, large binaries and denylisted names (a company or product
-name that must not appear in a public repo).
+Look for secrets and keys, `.env` files, private URLs, large binaries and any name (a company, an unreleased
+product) that must not appear in a public repo. No command does this for you: read the hits.
 
-Fix every FAIL. Resolve each WARN on purpose: a 1.4 MB music stem nobody plays is a large binary worth
+Fix every secret, URL and name. Decide about each large file on purpose: a 1.4 MB music stem nobody plays is a large binary worth
 acting on (two of them once rode along in every deploy).
 
 ## 2. Gate (all green before the bump)
@@ -89,7 +90,7 @@ One short message, in plain language:
 - what is still open.
 
 ## Done means
-- `wise publish check` has no FAIL.
+- The read-through of the build and the repo found no secret, private URL or private name.
 - The live URL serves the new VERSION, all assets and audio return 200, and the regression and a first-fight
   bot pass against it.
 - The commit is tagged; the game branch is fast-forwarded; the release is logged.

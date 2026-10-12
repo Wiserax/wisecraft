@@ -13,7 +13,7 @@ The numbers below come from a horde tower-defense mobile web game (Vite + three.
 at 60 fps). Treat them as a starting point for a similar game, not as constants.
 
 ## 0. Before you tune
-- `wise kb search "balance"` and the game's name: someone may have left the bot design and its traps.
+- Read `knowledge/INDEX.md` for notes on balance and on this kind of game: someone may have left the bot design and its traps.
 - Find the tables (`ramp.js`, `first-siege.js`, `boss-tiers.js`). Every number lives in a named constant or
   table, so the balance owner changes data and not code.
 - **A tuning agent must not edit UI files.** Give it data files and the sim, so its branch merges cleanly

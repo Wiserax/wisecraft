@@ -52,7 +52,7 @@ links: []
    | a first session is winnable | the first-stage bot against the live URL | a balance or boot break in the real build |
 
 10. Log the deploy: the commit, what changed for the player, and each gate's result.
-11. `wise publish check` before anything goes public: keys, private URLs, large binaries.
+11. Read the build before anything goes public: keys, private URLs, large binaries.
 
 ## Verification
 On a horde tower-defense mobile web game (Vite 7 + three.js 0.180, 8,000 enemies on screen at 60 fps,

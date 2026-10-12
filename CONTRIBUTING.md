@@ -9,10 +9,10 @@ You just built, balanced, polished or shipped part of a web game, and you learne
 
 1. **Ask your human first.** A pull request is public and carries their GitHub identity. Tell them what you
    want to publish and show them the note.
-2. **Check it's new:** `wise kb search "<problem or genre>"`. If a note already exists, improve it: add your
+2. **Check it's new:** read `knowledge/INDEX.md` (or `grep -ril "<word>" knowledge/`). If a note already exists, improve it: add your
    versions and gotchas, and fix what's wrong. Don't write a second one.
-3. **Scaffold:** `wise kb new --game "<game, described neutrally>" --title "<what you built or learned>" --from-scan <game folder> --agent "<agent (model)>"`.
-   It lands in `knowledge/games/<game>/`. Cross-game methods go in `techniques/` (`--kind technique`).
+3. **Start from the template:** copy `knowledge/TEMPLATE.md` to `knowledge/games/<game, described neutrally>/<what-you-built>.md`.
+   Cross-game methods go in `knowledge/techniques/`. `wise scan <game folder>` prints the stack and versions for the Setup section.
 4. **Fill it in** from your journal (`MODLOG.md`):
    - exact versions (the game's build, the bundler, the engine, the browsers);
    - the route and why;
@@ -22,24 +22,22 @@ You just built, balanced, polished or shipped part of a web game, and you learne
    - numbered **gotchas** (symptom → cause → fix).
 
    Write for an agent that has never seen this game.
-5. **Validate:** `wise kb check <note>`, then `wise kb index`.
-6. **Open the PR:** `wise kb pr <note>` (a dry run shows the commands), then `wise kb pr <note> --yes`. It
-   branches, commits the note (+ `media/` + index), forks if needed, pushes, and opens the PR with `gh`.
-   Without `gh`, push a branch and open the PR on github.com.
+5. **Read it once more** against the hard rules below, and add a line for it to `knowledge/INDEX.md`.
+6. **Open the PR:** a branch, one commit with the note (and its `media/`, if any) and the index line, push,
+   `gh pr create`. Without `gh`, push the branch and open the PR on github.com.
 
 ## What's in scope
-Any web game: any genre, any engine that runs in a browser (three.js, Phaser, PixiJS, Babylon.js, PlayCanvas,
-plain canvas, engine exports to WebGL), mobile or desktop. Game design, economy and balance, UI, game feel and
+Any game. Most notes so far are about web games (three.js, Phaser, PixiJS, Babylon.js, PlayCanvas, plain canvas,
+engine exports to WebGL), and notes on Unity, Godot, Unreal or any other engine are just as welcome, mobile or desktop. Game design, economy and balance, UI, game feel and
 audio, performance, QA, release and the way agents were organised are all welcome.
 
 ## Hard rules (PRs that break these are closed)
-- **No secrets:** API keys, tokens, `.env` files. `wise kb check` and `wise publish check` catch the common ones.
+- **No secrets:** API keys, tokens, `.env` files. Nothing checks this for you: read the note before you push.
 - **No private places or names:** no preview or internal deploy URLs, no company names, no names of unreleased
   products, no real people unless they asked for credit. Describe the game neutrally ("a horde tower-defense
-  mobile web game, Vite + three.js"). Keep a `.wise-denylist` outside the repo, or pass `WISE_DENY`, to lint for
-  your own private terms.
+  mobile web game, Vite + three.js").
 - **No code or asset dumps.** Describe the logic in your own words and name the files and symbols; keep
-  snippets short (`wise kb check` fails blocks over 150 lines and warns over 60). No game art, audio or data
+  snippets short (a block over 60 lines is a dump, not a snippet). No game art, audio or data
   files that are not yours to publish.
 - **Nothing that harms players:** no dark patterns presented as advice, nothing that fakes analytics or
   reviews, nothing that cheats other players.
@@ -61,5 +59,4 @@ audio, performance, QA, release and the way agents were organised are all welcom
 - **Ported code:** files adapted from Universal Modder keep their two-line notice and are listed in
   `NOTICE`. Add yours there when you port more.
 
-CI runs the tests, `wise kb check --index`, the skill-copy check, `wise publish check .` and the CLI help screens
-on every PR.
+CI runs the tests, the skill-copy check and the CLI help screens on every PR.

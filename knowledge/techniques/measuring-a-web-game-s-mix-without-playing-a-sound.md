@@ -48,7 +48,7 @@ links: []
    a player does, with a first touch.
 7. **Meter with ITU-R BS.1770** K-weighting: momentary (400 ms), short-term (3 s), integrated with gates at
    -70 LUFS and -10 LU. Decode files through ffmpeg to a pipe. Check the meter against ffmpeg's `ebur128` on
-   every full-output file. `wise loudness` gives the file-level figures (integrated, true peak).
+   every full-output file. `wise music-enhance --check` gives the file-level figures (integrated, true peak).
 8. **Define the music bed** as the median short-term loudness of the music stem while its fader is full and
    nothing ducks it. Express every effect as dB over that bed.
 9. **Shift stems to "as heard".** Stems are tapped before the master chain, so add the chain's static gain

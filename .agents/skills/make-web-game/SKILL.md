@@ -14,7 +14,7 @@ It is opinionated because each rule here was paid for by a real mistake. Read th
 companion skill you need.
 - The loop this follows: `references/um-loop.md` (the Universal Modder loop, adapted to a game you own).
 - What the agent never does: `references/safety.md`.
-- Everything other agents have written down: the knowledge base (`knowledge/` in the repo, `wise kb search`).
+- Everything other agents have written down: the knowledge base (`knowledge/` in the repo; start at `knowledge/INDEX.md`).
 
 ## Your tools
 
@@ -24,14 +24,12 @@ once for any agent: `uv tool install git+https://github.com/Wiserax/wisecraft`. 
 
 | Need | Command |
 |---|---|
-| What a game is built with: stack, versions, entry points, `window.__game` hooks, analytics endpoint, audio, bundle size | `wise scan <dir\|url>` |
+| What any game is built with: engine and versions, entry points, build targets, asset and audio folders; for a web game also `window.__game` hooks, the analytics endpoint and bundle size | `wise scan <dir\|url>` |
+| What a video clip is: duration, size, fps, codecs, loudness, cuts, first real frame, a contact sheet | `wise scan <video\|folder> [--sheet]` |
 | Play it in a muted phone browser, tap like a player, gate on errors and overflow, take screenshots | `wise qa <url> [--engine chromium\|webkit] [--size 390x844] [--seconds N] [--out DIR]` |
 | HTML mockups or screenshots to PNG screens and one board | `wise board <mockups.html> --board <board.html>`, `wise board --init DIR` |
-| Loudness and true peak of a file, without playing it | `wise loudness <file> [--target -15]` |
-| Stutter check for slow motion | `wise dupframes <video>` |
+| Measure and fix loudness and true peak of music, a trailer, game sounds or voice, without playing it | `wise music-enhance <file> [--for music\|trailer\|game-sfx\|voice] [--check]` |
 | Cut a trailer from an edit list | `wise video compile <edl.json> <out.mp4>` (also `probe`, `contact`, `beats`, `first-frame`) |
-| Field notes by other agents; write yours | `wise kb search\|show\|new\|add\|check\|index\|sync\|pr` |
-| Lint before anything goes public (secrets, keys, private URLs, large binaries, denylisted names) | `wise publish check <dir>` |
 
 Tools that drive a browser need Playwright in the game repo:
 `npm i -D playwright && npx playwright install chromium webkit`. Audio and video tools need ffmpeg.
@@ -65,7 +63,7 @@ The person you work with is a **producer**, not a reviewer of question sheets.
   journal is lost at the next context compaction. On a merge conflict in MODLOG, keep both entries.
 
 ### 1. Recon (the web-game-recon skill)
-- **Search the knowledge base first:** `wise kb search "<game>"`, `wise kb search "<engine>"`. A field note
+- **Read the knowledge base first:** `knowledge/INDEX.md` lists every note by game, engine and route. A field note
   hands you versions, the route and the gotchas. Don't repeat its dead ends.
 - Run `wise scan <dir|url>` and read the code it points at. Write `GAME_PLAN.md`.
 
@@ -187,4 +185,4 @@ defaults and a build estimate).
   main game. Read it when starting a new mode or feature.
 - `references/safety.md`: the rules with their reasons and the ask-first list. Read it before any step that
   leaves the machine.
-- The knowledge base (`knowledge/` at the repo root; `wise kb search`): field notes per game and per technique.
+- The knowledge base (`knowledge/` at the repo root; `knowledge/INDEX.md` lists it): field notes per game and per technique.

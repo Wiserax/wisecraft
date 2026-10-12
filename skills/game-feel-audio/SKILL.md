@@ -1,6 +1,6 @@
 ---
 name: game-feel-audio
-description: Make a web game feel good and sound right without the agent ever hearing it. Covers UI juice (taps, windows, claims, counters), presence beats for bosses (entrance, walk in from the field edge, slam, death, drop), the VFX quality bar (explosions, lightning, crowd readability, slow motion) and a measured audio mix (music about -20 LUFS short-term in battle, no effect more than about 6 dB over it, one budget for stacked booms, a compressor on the effects bus, absolute level checked too). Use when the user says "I need to feel the boss", "the effects look cheap", "the boom is too loud", "the music is too quiet", "add juice", "fix the sound", or asks for VFX, SFX, music or mix work. Audio is measured with `wise loudness` and muted captures, never played aloud.
+description: Make a web game feel good and sound right without the agent ever hearing it. Covers UI juice (taps, windows, claims, counters), presence beats for bosses (entrance, walk in from the field edge, slam, death, drop), the VFX quality bar (explosions, lightning, crowd readability, slow motion) and a measured audio mix (music about -20 LUFS short-term in battle, no effect more than about 6 dB over it, one budget for stacked booms, a compressor on the effects bus, absolute level checked too). Use when the user says "I need to feel the boss", "the effects look cheap", "the boom is too loud", "the music is too quiet", "add juice", "fix the sound", or asks for VFX, SFX, music or mix work. Audio is measured and levelled with `wise music-enhance` and muted captures, never played aloud.
 ---
 
 # Game feel and audio
@@ -68,11 +68,14 @@ The five beats: **entrance → walk in → slam → death → drop.** A boss tha
 
 ## Measuring
 ```bash
-wise loudness preview-battle.mp3                 # integrated LUFS, range, true peak; nothing is played
-wise loudness trailer.mp4 --target -15           # compare against a target
-bash scripts/loudness.sh preview-battle.mp3    # fallback: plain ffmpeg ebur128, same numbers
+wise music-enhance preview-battle.mp3 --check              # integrated LUFS, range, true peak; nothing is played
+wise music-enhance music/*.ogg --check --target -20        # a gate: exit 1 when a file is off the target
+wise music-enhance theme.wav --for music                   # writes theme.enhanced.wav at -14 LUFS, true peak <= -1 dBTP
+wise music-enhance sfx/*.wav --for game-sfx --out-dir sfx-level   # one level for a set of sounds, with a before/after report
+bash scripts/loudness.sh preview-battle.mp3              # fallback: plain ffmpeg ebur128, same numbers
 ```
-To measure the game itself, run it in a muted browser, record the output and each bus, and meter the files.
+`music-enhance` levels files; it does not mix a game. Relative levels (music against effects) are set in the
+game's own mixer. To measure the game itself, run it in a muted browser, record the output and each bus, and meter the files.
 `references/mix.md` has the method, the bus graph and a full before/after table.
 
 ## Done means
@@ -85,4 +88,4 @@ To measure the game itself, run it in a muted browser, record the output and eac
 ## References
 - `references/mix.md`: how to measure a game's mix without hearing it, the bus graph, the stacked-boom
   budget, and the case where the fix made the whole game louder. Read it before changing any volume.
-- `scripts/loudness.sh`: ffmpeg fallback for `wise loudness`.
+- `scripts/loudness.sh`: ffmpeg fallback for `wise music-enhance --check`.

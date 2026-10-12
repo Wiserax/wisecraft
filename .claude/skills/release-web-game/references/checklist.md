@@ -13,7 +13,7 @@ Copy into the release log entry and tick as you go.
 - [ ] 60 fps at 2,000 / 5,000 / 8,000 (or "not confirmed" + last good run)
 - [ ] Sound-default check: Chromium, WebKit
 - [ ] VERSION bumped to <X.Y.Z>
-- [ ] Build; prepare step; wise publish check dist: no FAIL
+- [ ] Build; prepare step; the build read through for keys, private URLs and names: none
 - [ ] Prebuilt deploy to production
 - [ ] Live: hashed assets 200; bundle contains <X.Y.Z>; audio files 200
 - [ ] Live: main regression; first-fight bot
