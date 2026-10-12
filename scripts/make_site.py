@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
-"""Write the one-page site (docs/site/index.html) and, for the README media, a page of templates to screenshot.
+"""Write the README media templates to screenshot (and, on request, the old long one-page site).
 
-    python3 scripts/make_site.py                                  # the site only
-    python3 scripts/make_site.py --frames DIR --media build.html  # also the site's frames and the media templates
+    python3 scripts/make_site.py --frames DIR --media build.html  # the media templates, the icons and the made-with badge
     node scripts/shoot.mjs <folder with node_modules/playwright> build.html      # screenshots -> docs/media, _preview
     python3 scripts/make_site.py --shrink                         # 256-colour PNGs for the big screenshots
+    python3 scripts/make_site.py --site old-site.html             # the long page this script used to publish
 
-The site is static: one HTML file, inline CSS and a little JS, fonts from Google Fonts (Geist and JetBrains Mono,
-SIL OFL). Every number on it is read from scripts/art_data.json, benchmarks/results.json and knowledge/index.json.
+The live page is docs/index.html, edited by hand: this script never writes into docs/ except docs/media. The page
+it can still write is static: one HTML file, inline CSS and a little JS, fonts from Google Fonts (Geist and JetBrains Mono,
+SIL OFL). Every number on it is read from scripts/art_data.json, benchmarks/results.json and the notes in knowledge/.
 --frames holds stills of your own game (boss, horde, titan, vault, blade, clear .png and qa-1..qa-4 .png): check each
 for titles, logos and names before you use it.
 """
 import argparse
 import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -156,7 +158,7 @@ RAIL = [("loop", "The loop", "M4 12a8 8 0 0 1 13.7-5.7M20 12a8 8 0 0 1-13.7 5.7M
         ("install", "Install", "M12 3v12M7 10l5 5 5-5M4 20h16")]
 
 LOOP = [("Recon", "wise scan"), ("Slice", "one playable loop"), ("Economy", "player-model bots"), ("UI kit", "one golden CTA"), ("Feel + audio", "a measured mix"),
-        ("Performance", "60 fps that holds"), ("Browser QA", "wise qa"), ("Release", "wise publish check"), ("Trailer", "wise video compile"), ("Field note", "wise kb add")]
+        ("Performance", "60 fps that holds"), ("Browser QA", "wise qa"), ("Release", "a build read through"), ("Trailer", "wise video compile"), ("Field note", "a note and a pull request")]
 
 SKILLS = [("make-web-game", "The loop, the producer contract, the golden rules, and which skill to open next"),
           ("web-game-recon", "Stack, saves, analytics, debug hooks and the baseline, before anything changes"),
@@ -169,16 +171,13 @@ SKILLS = [("make-web-game", "The loop, the producer contract, the golden rules, 
           ("agent-orchestration", "A lead, workers, file ownership, milestone notes"),
           ("trailer-video", "A hook in 3 s, the loop by 8 s, a slow-motion finale"),
           ("design-boards", "HTML mockups to phone-sized boards"),
-          ("share-field-notes", "Search the knowledge base, write a note, open the PR")]
+          ("share-field-notes", "Read the knowledge base, write a note from the template, open the PR")]
 
-CLI = [("wise scan", "What a web game is made of: stack, versions, entry points, debug hooks, analytics, audio, bundle size."),
-       ("wise qa", "A muted phone-sized browser that taps like a player. Console errors and overflow fail the run."),
+CLI = [("wise scan", "What any game or any video clip is made of: engine, versions, entry points, build targets, assets; duration, cuts and loudness."),
+       ("wise qa", "For web games: a muted phone-sized browser that taps like a player. Console errors and overflow fail the run."),
        ("wise board", "HTML mockups in, phone-sized screens and one review board out."),
-       ("wise loudness", "How loud a file is, measured with ffmpeg. Never played."),
-       ("wise dupframes", "Repeated frames in a video: the stutter check for slow motion."),
-       ("wise video compile", "An edit list in, a finished trailer out."),
-       ("wise kb", "The knowledge base: search, add, check, index, pr."),
-       ("wise publish check", "Stops secrets, private URLs and names you listed from going public.")]
+       ("wise music-enhance", "Loudness measured and fixed to a target with ffmpeg, on audio or a video's audio track. Never played."),
+       ("wise video compile", "An edit list in, a finished trailer out.")]
 
 INSTALL = [("Claude Code", "/plugin marketplace add Wiserax/wisecraft|/plugin install wisecraft@wisecraft", "in the agent"),
            ("Codex", "codex plugin marketplace add Wiserax/wisecraft|codex plugin add wisecraft@wisecraft", "shell"),
@@ -303,8 +302,8 @@ def site(data, R, idx, have_frames):
 <section id="knowledge"><p class="num">04 · knowledge base</p><h2>{len(idx)} field notes, <i>written by agents</i>.</h2>
 <p class="lead">Each one is a problem a real web game hit, the cause and the fix: versions, verification, and what was not verified. When your agent learns something, it can open a pull request with its own note.</p>
 <ul class="notes">{notes}</ul>
-<pre><b><i>$</i> wise kb search "boss never reaches the wall"</b>
-<b><i>$</i> wise kb add --game "My roguelite (mobile web)" --title "A dash that never clips walls"</b></pre></section>
+<pre><b><i>$</i> cp knowledge/TEMPLATE.md knowledge/games/my-roguelite/a-dash-that-never-clips-walls.md</b>
+<b><i>$</i> gh pr create --fill</b></pre></section>
 
 <section id="measured"><p class="num">05 · measured</p><h2>Before and after, <i>on a shipped game</i>.</h2>
 <p class="lead">A horde tower defense for phones: Vite + three.js, 8,000 enemies on screen at 60 fps. One project, one machine; each figure is a single measurement or a small set, as its source says.</p>
@@ -363,9 +362,9 @@ def media(data, R, frames):
 <div style="{cardcss}"><div style="flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px">{"".join(f'<div style="background:url({f}/qa-{i}.png) 50% 28%/cover"></div>' for i in (1, 2, 3, 4))}</div>{cap("wise qa --size 390x844")}</div></div>
 <p style="font:500 17px/1 var(--sans);letter-spacing:-.02em;color:var(--ink-9);margin-top:6px">Ship: <span style="color:var(--ink-7)">a measured mix,</span> <span style="color:var(--accent)">a smooth trailer.</span></p>
 <div style="display:grid;grid-template-columns:172px auto 172px auto 1fr auto 170px;gap:8px">
-<div style="{cardcss}">{kv([("music", "-34.1 to -20.0", None), ("", "lufs", None), ("boss boom", boom["before_text"] + " to", None), ("over music", boom["after_text"], "var(--accent)")])}{cap("wise loudness")}</div>{arrow}
+<div style="{cardcss}">{kv([("music", "-34.1 to -20.0", None), ("", "lufs", None), ("boss boom", boom["before_text"] + " to", None), ("over music", boom["after_text"], "var(--accent)")])}{cap("wise music-enhance")}</div>{arrow}
 <div style="{cardcss}"><div style="flex:1;display:grid;place-content:center;gap:8px"><div style="display:grid;grid-template-columns:repeat(8,11px);gap:3px">{cells}</div>
-<p style="font:400 9.5px var(--mono);color:var(--ink-5);text-align:center">{slow["after_text"]} frames move<br>was {slow["before_text"]}</p></div>{cap("wise dupframes")}</div>{arrow}
+<p style="font:400 9.5px var(--mono);color:var(--ink-5);text-align:center">{slow["after_text"]} frames move<br>was {slow["before_text"]}</p></div>{cap("1 step per frame")}</div>{arrow}
 <div style="{cardcss}">{img("titan")}{cap("wise video compile")}</div>{arrow}
 <div style="{cardcss}">{img("horde")}{cap('<span style="color:var(--rim)">■</span> 8,000 at 60 fps')}</div></div></div>"""
     tile = f"""<div data-shot="@tile" class="shot" style="position:relative;width:560px;height:315px;background:var(--bg);display:grid;place-content:center;justify-items:center;gap:16px;overflow:hidden">
@@ -379,16 +378,13 @@ body{{padding:24px;display:grid;gap:24px;justify-items:start;background:#222}}.s
 """
 
 
-# 12 x 12 pixel icons: (unused, accent path, ink path). scan, video, kb and publish are Universal Modder's (MIT).
+# 12 x 12 pixel icons: (unused, accent path, ink path). scan and video are Universal Modder's (MIT).
 ICONS = {
     "scan": (0, "M4 3h2v2h-2zM6 5h2v2h-2z", "M0 0h3v1h-3zM9 0h3v1h-3zM0 1h1v2h-1zM11 1h1v2h-1zM0 8h12v1h-12zM0 9h1v2h-1zM11 9h1v2h-1zM0 11h3v1h-3zM9 11h3v1h-3z"),
     "qa": (3, "M4 6h1v1h-1zM5 7h1v1h-1zM6 6h1v1h-1zM7 5h1v1h-1z", "M2 0h8v1h-8zM2 1h1v10h-1zM9 1h1v10h-1zM2 11h8v1h-8zM5 9h2v1h-2z"),
     "board": (2, "M2 2h3v6h-3z", "M0 0h12v1h-12zM0 1h1v10h-1zM11 1h1v10h-1zM0 11h12v1h-12zM6 2h4v2h-4zM6 5h4v3h-4zM2 9h8v1h-8z"),
-    "loudness": (1, "M5 1h2v10h-2z", "M1 7h1v4h-1zM3 4h1v7h-1zM8 5h1v6h-1zM10 8h1v3h-1zM0 11h12v1h-12z"),
-    "dupframes": (2, "M6 6h4v4h-4z", "M0 0h8v1h-8zM0 1h1v6h-1zM7 1h1v3h-1zM0 7h4v1h-4zM4 4h8v1h-8zM4 5h1v6h-1zM11 5h1v6h-1zM4 11h8v1h-8z"),
+    "music-enhance": (1, "M5 1h2v10h-2z", "M1 7h1v4h-1zM3 4h1v7h-1zM8 5h1v6h-1zM10 8h1v3h-1zM0 11h12v1h-12z"),
     "video": (1, "M4 4h2v1h-2zM4 5h4v1h-4zM4 6h6v1h-6zM4 7h4v1h-4zM4 8h2v1h-2z", "M0 0h12v1h-12zM0 1h1v1h-1zM2 1h1v1h-1zM4 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM10 1h2v1h-2zM0 2h12v1h-12zM0 3h1v6h-1zM11 3h1v6h-1zM0 9h12v1h-12zM0 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM10 10h2v1h-2zM0 11h12v1h-12z"),
-    "kb": (0, "M4 8h2v1h-2zM6 9h2v1h-2z", "M1 0h9v1h-9zM9 1h2v1h-2zM3 2h5v1h-5zM9 2h1v1h-1zM11 2h1v1h-1zM9 3h3v1h-3zM3 4h5v1h-5zM3 6h4v1h-4zM1 1h1v10h-1zM11 4h1v7h-1zM1 11h11v1h-11z"),
-    "publish": (3, "M5 0h2v1h-2zM4 1h4v1h-4zM3 2h6v1h-6zM5 3h2v3h-2z", "M0 5h4v1h-4zM8 5h4v1h-4zM3 7h6v1h-6zM0 6h1v5h-1zM11 6h1v5h-1zM0 11h12v1h-12z"),
 }
 
 
@@ -433,7 +429,8 @@ def made_with(out, mono):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--frames", help="folder with stills of your game; writes docs/site/frames/*.jpg")
+    ap.add_argument("--frames", help="folder with stills of your game, for the media templates (and, with --site, a frames/ folder next to it)")
+    ap.add_argument("--site", help="write the long one-page site to this path")
     ap.add_argument("--media", help="also write the media template page to this path (needs --frames)")
     ap.add_argument("--mono", default="~/Library/Fonts/JetBrainsMono-Medium.ttf", help="JetBrains Mono .ttf for the made-with badge outlines")
     ap.add_argument("--shrink", action="store_true", help="quantize docs/media/{banner,pipeline,before-after-*}.png to 256 colours and exit")
@@ -446,24 +443,28 @@ def main():
         return
     data = json.loads((ROOT / "scripts" / "art_data.json").read_text())["before_after"]
     R = json.loads((ROOT / "benchmarks" / "results.json").read_text())
-    idx = json.loads((ROOT / "knowledge" / "index.json").read_text())
-    out = ROOT / "docs" / "site"
-    out.mkdir(parents=True, exist_ok=True)
+    idx = []        # every note's path, kind and title, from its front matter
+    for f in sorted((ROOT / "knowledge").glob("*/**/*.md")):
+        head = f.read_text().split("---", 2)[1]
+        field = lambda k: (re.search(rf'^{k}:\s*"?(.*?)"?\s*$', head, re.M) or [None, ""])[1]
+        idx.append({"path": f.relative_to(ROOT / "knowledge").as_posix(), "kind": field("kind"), "title": field("title")})
     frames = Path(a.frames) if a.frames else None
-    if frames:
-        from PIL import Image
-        crops = {"vault": (0.42, 0.03, 0.92, 0.53), "clear": (0.415, 0.07, 0.915, 0.57)}
-        (out / "frames").mkdir(exist_ok=True)
-        for name, _ in FRAMES:
-            im = Image.open(frames / f"{name}.png").convert("RGB")
-            if name in crops:
-                W, H = im.size
-                c = crops[name]
-                im = im.crop((int(c[0] * W), int(c[1] * H), int(c[2] * W), int(c[3] * H)))
-            im.resize((480, 270), Image.LANCZOS).save(out / "frames" / f"{name}.jpg", quality=72, optimize=True)
-    have = (out / "frames" / "boss.jpg").exists()
-    (out / "index.html").write_text(site(data, R, idx, have))
-    print(f"wrote docs/site/index.html ({(out / 'index.html').stat().st_size / 1e3:.0f} kB){', frames' if frames else ''}")
+    if a.site:
+        out = Path(a.site).resolve().parent
+        out.mkdir(parents=True, exist_ok=True)
+        if frames:
+            from PIL import Image
+            crops = {"vault": (0.42, 0.03, 0.92, 0.53), "clear": (0.415, 0.07, 0.915, 0.57)}
+            (out / "frames").mkdir(exist_ok=True)
+            for name, _ in FRAMES:
+                im = Image.open(frames / f"{name}.png").convert("RGB")
+                if name in crops:
+                    W, H = im.size
+                    c = crops[name]
+                    im = im.crop((int(c[0] * W), int(c[1] * H), int(c[2] * W), int(c[3] * H)))
+                im.resize((480, 270), Image.LANCZOS).save(out / "frames" / f"{name}.jpg", quality=72, optimize=True)
+        Path(a.site).write_text(site(data, R, idx, (out / "frames" / "boss.jpg").exists()))
+        print(f"wrote {a.site} ({Path(a.site).stat().st_size / 1e3:.0f} kB){', frames' if frames else ''}")
     if a.media:
         Path(a.media).write_text(media(data, R, frames))
         icons(ROOT / "docs" / "media")

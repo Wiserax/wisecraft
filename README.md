@@ -82,13 +82,10 @@ found, fixed and verified. Each note gives:
 **Every agent that finishes a piece of work can open a pull request with its note**, so the next agent starts
 where it left off instead of rediscovering the same traps.
 
-```bash
-wise kb search "boss never reaches the wall"    # before you start: prior art (works outside the repo too)
-wise kb new --game "My roguelite (mobile web)" --title "A dash that never clips walls" --from-scan . --agent "Codex (gpt-6)"
-wise kb check knowledge/games/my-roguelite-mobile-web/a-dash-that-never-clips-walls.md
-wise kb pr knowledge/games/my-roguelite-mobile-web/a-dash-that-never-clips-walls.md --yes    # after your human says OK: branch, push, PR
-```
-Browse [`knowledge/INDEX.md`](knowledge/INDEX.md). Every web game is welcome. Contribution rules, for humans and
+The notes are plain Markdown: an agent reads them like any other file, writes its own from
+[`knowledge/TEMPLATE.md`](knowledge/TEMPLATE.md), and opens a pull request.
+
+Browse [`knowledge/INDEX.md`](knowledge/INDEX.md). Every game is welcome. Contribution rules, for humans and
 AIs, are in [`CONTRIBUTING.md`](CONTRIBUTING.md): no secrets, no private URLs or company names, your own
 words, and an honest status and verification.
 
@@ -112,35 +109,33 @@ A few of the first notes:
     <tr><td><a href="skills/game-feel-audio"><code>game-feel-audio</code></a></td><td>Bosses you feel (entrance, walk-in, slam, death, drop), a VFX quality bar, and a mix that is measured, never played aloud by the agent</td></tr>
     <tr><td><a href="skills/game-performance"><code>game-performance</code></a></td><td>Capacity and real late-stage tests, budgets, an adaptive quality guard that recovers, load time, boot retry</td></tr>
     <tr><td><a href="skills/browser-qa"><code>browser-qa</code></a></td><td>Muted Chromium and WebKit phone bots that tap like players, day rollover, save robustness, an errors + overflow gate</td></tr>
-    <tr><td><a href="skills/release-web-game"><code>release-web-game</code></a></td><td>Version, prebuilt deploy, live checks, frozen older versions, tags, the analytics release field, the pre-release lint</td></tr>
+    <tr><td><a href="skills/release-web-game"><code>release-web-game</code></a></td><td>Version, prebuilt deploy, live checks, frozen older versions, tags, the analytics release field, the read-through before anything goes public</td></tr>
     <tr><td><a href="skills/agent-orchestration"><code>agent-orchestration</code></a></td><td>Lead and worker specs with file ownership, mailbox flow, milestone notes instead of heartbeats, cherry-picking game commits</td></tr>
-    <tr><td><a href="skills/trailer-video"><code>trailer-video</code></a></td><td>A hook in 3 s, the loop by 8 s, a hero finale, 120 fps slow motion, an SFX mix at −15 LUFS, a review scorecard</td></tr>
+    <tr><td><a href="skills/trailer-video"><code>trailer-video</code></a></td><td>A hook in 3 s, the loop by 8 s, a hero finale, 120 fps slow motion, a mix levelled to −14 LUFS, a review scorecard</td></tr>
     <tr><td><a href="skills/design-boards"><code>design-boards</code></a></td><td>HTML mockups → phone-sized PNG boards, the DESIGN.md shape, in-engine look-dev</td></tr>
-    <tr><td><a href="skills/share-field-notes"><code>share-field-notes</code></a></td><td>Search the knowledge base, write your own note, open the PR</td></tr>
+    <tr><td><a href="skills/share-field-notes"><code>share-field-notes</code></a></td><td>Read the knowledge base, write your own note from the template, open the PR</td></tr>
   </tbody>
 </table>
 
-**The `wise` CLI** (Python). Every command has `--help` with examples.
+**The `wise` CLI** (Python). Every command has `--help` with examples. `scan`, `music-enhance`, `board` and `video`
+work for any game; `qa` drives a browser, so it is for web games.
 
 <!-- GitHub lets images in auto-width tables shrink to nothing: the widths and the no-break spaces keep the icons at 36 px. -->
 <table>
   <thead><tr><th width="62">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th width="190">Command</th><th>What it does</th></tr></thead>
   <tbody>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/scan-dark.svg"><img src="docs/media/icons/scan-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise scan</code></td><td>Fingerprint a web game, from a folder or a URL: <code>package.json</code>, bundler and engine versions, entry points, <code>window.__game</code> debug hooks, analytics endpoints, save keys, audio files, bundle size, and what to try next</td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/qa-dark.svg"><img src="docs/media/icons/qa-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise qa</code></td><td>Drive the game in a muted phone-sized Chromium or WebKit (<code>--engine</code>, <code>--size 390x844</code>): taps like a player, analytics answered with a 204, console errors and overflow as a gate, screenshots</td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/board-dark.svg"><img src="docs/media/icons/board-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise board</code></td><td>HTML mockups → phone-sized PNG screens and one review board; <code>--init</code> writes a starter pair</td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/loudness-dark.svg"><img src="docs/media/icons/loudness-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise loudness</code></td><td>Integrated, short-term and momentary loudness and true peak (EBU R128), measured with ffmpeg and never played; <code>--target</code> turns it into a gate</td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/dupframes-dark.svg"><img src="docs/media/icons/dupframes-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise dupframes</code></td><td>Count repeated frames in a video: the stutter check for slow motion and screen captures</td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/video-dark.svg"><img src="docs/media/icons/video-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise video</code></td><td><code>compile</code> an EDL into a finished trailer (beat grid, titles, speed, fades), plus <code>contact</code>, <code>probe</code>, <code>beats</code>, <code>first-frame</code></td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/kb-dark.svg"><img src="docs/media/icons/kb-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise kb</code></td><td>The knowledge base: <code>search</code>, <code>show</code>, <code>new</code> / <code>add</code>, <code>check</code>, <code>index</code>, <code>sync</code>, <code>pr</code></td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/publish-dark.svg"><img src="docs/media/icons/publish-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise publish check</code></td><td>Block what must not go public: secrets and keys, <code>.env</code> files, private deploy URLs, names on your denylist; warn on large binaries and user paths</td></tr>
+    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/scan-dark.svg"><img src="docs/media/icons/scan-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise scan</code></td><td>Fingerprint <b>any game or any video clip</b>; the input is detected. A project folder: Unity, Godot, Unreal, GameMaker, Defold, Cocos, Rust, C/C++, C#, Android, iOS or web, with versions, entry points, build targets, asset and audio folders with sizes, and what to try next. A web game's URL: scripts, sizes, engine, cache headers. A video or a folder of them: duration, resolution, fps, codecs, bitrate, loudness, scene cuts and average shot length, first real frame; <code>--sheet</code> adds a contact sheet. <code>--json</code> for agents</td></tr>
+    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/qa-dark.svg"><img src="docs/media/icons/qa-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise qa</code></td><td>Web games: drive the game in a muted phone-sized Chromium or WebKit (<code>--engine</code>, <code>--size 390x844</code>): taps like a player, analytics answered with a 204, console errors and overflow fail the run, screenshots along the way</td></tr>
+    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/board-dark.svg"><img src="docs/media/icons/board-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise board</code></td><td>HTML mockups → phone-sized PNG screens and one review board, for any game's UI; <code>--init</code> writes a starter pair</td></tr>
+    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/music-enhance-dark.svg"><img src="docs/media/icons/music-enhance-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise music-enhance</code></td><td>Measure and fix loudness (EBU R128) without ever playing it: levels music, a trailer, game sounds or voice to a target (<code>--for music|trailer|game-sfx|voice</code>, −14 LUFS by default) under a −1 dBTP true-peak ceiling, with optional cleanup EQ and fades. Works on an audio file or on a video's audio track (the picture is copied untouched) and prints a before/after report; <code>--check</code> only measures and exits 1 off target</td></tr>
+    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/video-dark.svg"><img src="docs/media/icons/video-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise video</code></td><td><code>compile</code> an EDL into a finished trailer of any game's footage (beat grid, titles, speed, fades), plus <code>contact</code>, <code>probe</code>, <code>beats</code>, <code>first-frame</code></td></tr>
   </tbody>
 </table>
 
 The browser harness and the board renderer ship inside the package (`wisecraft/js/`): Playwright scripts the CLI
 drives through node, muted, with analytics blocked.
 
-<p align="center"><img src="docs/media/pipeline.png" alt="The balance route: wise scan reads the stack, player-model bots play eight seeds each, wise qa proves it in a 390 by 844 phone browser. The ship route: wise loudness measures the mix, wise dupframes checks slow motion, wise video compile cuts the trailer, and the build is live at 8,000 enemies and 60 fps." width="100%"></p>
+<p align="center"><img src="docs/media/pipeline.png" alt="The balance route: wise scan reads the stack, player-model bots play eight seeds each, wise qa proves it in a 390 by 844 phone browser. The ship route: wise music-enhance measures and levels the mix, every slowed frame moves, wise video compile cuts the trailer, and the build is live at 8,000 enemies and 60 fps." width="100%"></p>
 
 ## Built with it
 - **A horde tower defense for phones**, shipped to players: Vite + three.js, portrait, 8,000 enemies on screen at
