@@ -1,7 +1,7 @@
 [project]
 name = "wisecraft"
-version = "0.2.0"
-description = "Tools and a shared knowledge base for AI agents that build, balance, polish and ship games: a scanner for any game project or video, muted phone-browser QA for web games, design boards, loudness measured and fixed, an EDL trailer compiler, field notes."
+version = "0.3.0"
+description = "Tools for AI agents that make a game's trailer, test it with virtual players in a real phone browser, and tune its balance and economy: an EDL trailer compiler and a check of the finished file, persona bots in muted Chromium and WebKit, loudness measured and fixed without playing a sound, design boards."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"

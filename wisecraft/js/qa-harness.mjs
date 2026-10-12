@@ -9,8 +9,16 @@ const opts = readOptions();
 const {
   url, engine = "chromium", width: W = 390, height: H = 844, dpr = 2, out = "qa-out", seconds = 20, seed = 1,
   selectors = [], startSelector = null, area = null, ready = 'document.readyState === "complete"',
-  block = [], noOverflow = false, timeoutMs = 60000,
+  block = [], noOverflow = false, timeoutMs = 60000, persona = "casual", buy = null, maxP95 = null,
 } = opts;
+// How each virtual player behaves: taps per second in the play area, and how often it looks for something to buy.
+const PERSONAS = {
+  casual: { rate: 2, spendEvery: 0 },       // taps now and then, buys nothing: the default smoke run
+  tapper: { rate: 5, spendEvery: 0 },       // hammers the field: finds what taps break (bosses deleted, double grants)
+  idler: { rate: 0.2, spendEvery: 0 },      // sets the phone down: timers, idle income, piles that grow unattended
+  spender: { rate: 1, spendEvery: 2 },      // buys whatever in-game currency allows, every 2 actions; never real money
+};
+const P = PERSONAS[persona] || PERSONAS.casual;
 const pw = loadPlaywright(opts);
 await fs.mkdir(out, { recursive: true });
 
@@ -23,6 +31,13 @@ const answered = new WeakSet(); // requests this harness answered itself (--bloc
 for (const pattern of block) {
   await ctx.route(pattern, (r) => { blocked++; answered.add(r.request()); return r.fulfill({ status: 200, body: "" }); }); // opt-in --block only
 }
+// Frame times from requestAnimationFrame, collected from the first frame on (read at the end).
+await ctx.addInitScript(() => {
+  const f = (window.__wiseFrames = []);
+  let last = 0;
+  const tick = (t) => { if (last && f.length < 50000) f.push(t - last); last = t; requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+});
 await ctx.addInitScript(() => {
   // <audio>/<video> elements never reach the speakers either
   const play = HTMLMediaElement.prototype.play;
@@ -161,16 +176,48 @@ const box = await page.evaluate((sel) => {
   return b && b.w >= 40 && b.h >= 40 ? { ...b, source } : { x: 0, y: 0, w: vw, h: vh, source: sel ? `viewport (${sel} not found or too small)` : "viewport" };
 }, area).catch(() => ({ x: 0, y: 0, w: W, h: H, source: "viewport" }));
 
+// The spender: tap the visible control that says buy / upgrade / claim / open, least-tapped first. Anything that
+// shows a real-money price or says pay / purchase / subscribe is never touched: spending real money needs a yes.
+const spends = [], spentOn = {};
+const spend = async () => {
+  const pick = await page.evaluate(({ sel, counts }) => {
+    const BUY = /buy|upgrade|claim|collect|unlock|open|level ?up|spin|pull|summon|chest|reward|get\b/i;
+    const MONEY = /[$€£¥₹]|\b(usd|eur|gbp|pay|purchase|subscribe|checkout|billing)\b|\d+[.,]\d{2}\b/i;
+    const vw = innerWidth, vh = innerHeight, list = [];
+    for (const el of document.querySelectorAll(sel || 'button, [role="button"], [data-action], a[href="#"], [onclick]')) {
+      const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+      if (r.width < 8 || r.height < 8 || r.right < 0 || r.bottom < 0 || r.left > vw || r.top > vh) continue;
+      if (el.disabled || el.getAttribute("aria-disabled") === "true" || cs.visibility === "hidden" || cs.pointerEvents === "none" || Number(cs.opacity) < 0.1) continue;
+      const text = [el.innerText, el.getAttribute("aria-label"), el.title, el.dataset?.action].filter(Boolean).join(" ").trim().slice(0, 60);
+      if (MONEY.test(text) || (!sel && !BUY.test(text))) continue;
+      const at = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      if (at && at !== el && !el.contains(at)) continue;          // covered by something else
+      list.push({ label: text || el.tagName.toLowerCase(), x: r.left + r.width / 2, y: r.top + r.height / 2 });
+    }
+    list.sort((a, b) => (counts[a.label] || 0) - (counts[b.label] || 0));
+    return list[0] || null;
+  }, { sel: buy, counts: spentOn }).catch(() => null);
+  if (!pick) return false;
+  try { await page.touchscreen.tap(pick.x, pick.y); } catch { return false; }
+  spentOn[pick.label] = (spentOn[pick.label] || 0) + 1;
+  if (spends.length < 200) spends.push({ at: +((Date.now() - t0) / 1000).toFixed(1), label: pick.label });
+  return true;
+};
+
 // mulberry32: the same seed taps the same points
 let s = seed >>> 0;
 const rnd = () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-const total = Math.max(0, Math.round(opts.taps ?? seconds * 2));
+const total = Math.max(0, Math.round(opts.taps ?? seconds * P.rate));
 const interval = total ? (seconds * 1000) / total : 0;
 const pad = 0.06;
 let done = 0;
 const t0 = Date.now();
 for (let i = 0; i < total; i++) {
   if (i === Math.floor(total / 2)) { await shot("2-middle"); await checkOverflow("middle"); }
+  if (P.spendEvery && i % P.spendEvery === P.spendEvery - 1 && (await spend())) {
+    await page.waitForTimeout(Math.max(0, t0 + (i + 1) * interval - Date.now()));
+    continue;
+  }
   const x = box.x + box.w * (pad + rnd() * (1 - 2 * pad)), y = box.y + box.h * (pad + rnd() * (1 - 2 * pad));
   try { await page.touchscreen.tap(x, y); done++; } catch (e) { push(errors, "tap: " + String(e.message).split("\n")[0]); break; }
   await page.waitForTimeout(Math.max(0, t0 + (i + 1) * interval - Date.now()));
@@ -179,13 +226,22 @@ if (!total) { await page.waitForTimeout(seconds * 500); await shot("2-middle"); 
 // --------------------------------------------------------------------------------------------
 await shot("3-end");
 await checkOverflow("end");
+// Frame times since the page started: a headless browser is not a phone, so read them as a comparison between
+// builds on the same machine, not as the fps a player gets.
+const frames = await page.evaluate(() => (window.__wiseFrames || []).slice()).catch(() => []);
+const sorted = frames.slice(1).sort((a, b) => a - b);   // the first interval includes page start-up
+const q = (p) => (sorted.length ? +sorted[Math.min(sorted.length - 1, Math.floor(p * sorted.length))].toFixed(1) : null);
+const ms = sorted.reduce((a, b) => a + b, 0);
+const frameTime = { frames: sorted.length, fps: ms ? +(sorted.length * 1000 / ms).toFixed(1) : null, p50: q(0.5), p95: q(0.95), p99: q(0.99),
+  over33: sorted.filter((d) => d > 33.4).length, worst: sorted.length ? +sorted[sorted.length - 1].toFixed(1) : null, maxP95 };
+if (maxP95 != null && frameTime.p95 != null && frameTime.p95 > maxP95) push(errors, `frame time: p95 ${frameTime.p95} ms > --max-p95 ${maxP95} ms`);
 await settle();
 await browser.close();
 
 const ok = errors.length === 0 && (noOverflow || overflow.length === 0);
 console.log(JSON.stringify({
   url, engine, size: `${W}x${H}`, ok, errors, overflow, failedRequests, screenshots, game,
-  ready: readyState, steps, taps: { done, planned: total, seconds, seed, area: box }, blocked: { patterns: block, requests: blocked },
+  ready: readyState, steps, persona, spends, frameTime, taps: { done, planned: total, seconds, seed, area: box }, blocked: { patterns: block, requests: blocked },
   gate: { errors: true, overflow: !noOverflow }, channel, out, ms: Date.now() - started,
 }));
 process.exit(ok ? 0 : 1);

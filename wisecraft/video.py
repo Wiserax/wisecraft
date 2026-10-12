@@ -7,6 +7,8 @@
     wise video first-frame capture.mp4                     # first real gameplay frame (skips a dark or flat loading screen)
     wise video beats music.mp3                             # tempo + first beat, to cut on the beat
     wise video compile edl.json trailer.mp4 [--preview]    # the edit, described as JSON (below)
+    wise video check trailer.mp4 [--sheet] [--json]        # the finished file: fps, loudness, cuts, first frame, repeated frames
+    wise video check takes/                                # a folder of captures: one table
 
 EDL (edit decision list) - every key but "segments" is optional:
   {"size": [1920, 1080], "fps": 30, "bpm": 128,
@@ -32,8 +34,9 @@ EDL (edit decision list) - every key but "segments" is optional:
 The shape that works for a game trailer: the hook in the first 3 s (the strongest moment, no logo first), the core
 loop readable by 8 s (what the player does, and why it feels good), escalation, then a hero finale and an end card
 with the name and where to play. One-line titles, 2-4 s per clip, cuts on the beat, fade out.
-Slow motion needs a capture at fps / speed or more (60 fps for 0.5x at 30), else frames repeat (ffmpeg's
-mpdecimate filter counts them). Set the mix with `wise music-enhance`; nothing here plays audio.
+Slow motion needs a capture at fps / speed or more (60 fps for 0.5x at 30), else frames repeat (`wise video check`
+counts them). Set the mix with `wise music-enhance`; nothing here plays audio.
+`check` exits 0 when it measured the file, 1 when a video can't be read, 2 for a wrong argument (no such file, not a video).
 """
 from __future__ import annotations
 
@@ -543,9 +546,33 @@ def compile_edl(edl_path, out, preview=False, keep=False):
     print(f"wrote {out}  ({total:.2f}s, {W}x{H}@{fps})")
 
 
+def check(a):
+    """`wise video check`: the facts of one finished file, or a table for a folder of them."""
+    from wisecraft import clip
+    need_tool("ffprobe", "install ffmpeg (brew install ffmpeg, apt install ffmpeg, winget install ffmpeg)")
+    p = Path(a.input).expanduser()
+    if not p.exists():
+        die(f"no such file or folder: {a.input}", 2)
+    if p.is_dir():
+        if not clip.videos_in(p):
+            die(f"no videos (mp4, mov, webm, mkv, m4v, avi) in {a.input}", 2)
+        r = clip.fingerprint_folder(p, a.sheet, a.scene)
+        print(json.dumps(r, indent=2) if a.json else clip.format_folder(r))
+        return
+    if not clip.is_video(p):
+        die(f"{a.input} is not a video (mp4, mov, webm, mkv, m4v, avi); for an audio file use: wise music-enhance {p.name} --check", 2)
+    try:
+        r = clip.fingerprint(p, a.sheet, a.scene)
+    except clip.ClipError as e:
+        die(str(e), 1)
+    print(json.dumps(r, indent=2) if a.json else clip.format_video(r))
+
+
 def main(a):
     need_tool("ffmpeg", "install it (brew install ffmpeg, apt install ffmpeg, winget install ffmpeg)")
-    if a.cmd == "probe":
+    if a.cmd == "check":
+        check(a)
+    elif a.cmd == "probe":
         print(json.dumps(probe(a.input), indent=2))
     elif a.cmd == "contact":
         contact(a.input, a.output, a.every, a.cols, a.width, a.start, a.end)
@@ -559,7 +586,7 @@ def main(a):
 
 def register(sub):
     import argparse
-    p = sub.add_parser("video", help="compile styled game trailers from an EDL, contact sheets, probe, beats",
+    p = sub.add_parser("video", help="cut a game trailer: an EDL compiled on the beat, contact sheets, beats, and a check of the finished file",
                        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     cs = p.add_subparsers(dest="cmd", metavar="<cmd>")
     q = cs.add_parser("probe", help="duration / size / fps / audio")
@@ -579,6 +606,12 @@ def register(sub):
     q.set_defaults(func=main)
     q = cs.add_parser("beats", help="tempo and first beat of a music file")
     q.add_argument("input")
+    q.set_defaults(func=main)
+    q = cs.add_parser("check", help="a finished cut or a capture (or a folder): fps, loudness, cuts, first frame, repeated frames")
+    q.add_argument("input", help="a video file, or a folder of them")
+    q.add_argument("--sheet", nargs="?", const="", metavar="PNG", help="also write a contact sheet (default <name>.sheet.png next to it; a folder for several)")
+    q.add_argument("--scene", type=float, default=0.30, metavar="0..1", help="how different two frames must be to count as a cut (default 0.3)")
+    q.add_argument("--json", action="store_true", help="print the report as JSON")
     q.set_defaults(func=main)
     q = cs.add_parser("compile", help="render an EDL json into a finished video")
     q.add_argument("edl")

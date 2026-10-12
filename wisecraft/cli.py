@@ -9,7 +9,7 @@ import sys
 
 from wisecraft import __doc__ as DOC, __version__
 
-GROUPS = ["scan", "qa", "board", "music-enhance", "video"]
+GROUPS = ["video", "qa", "music-enhance", "board"]
 
 
 def main(argv=None):

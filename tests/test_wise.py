@@ -49,7 +49,7 @@ def test_cli_help_for_every_group(group, capsys):
 
 
 @pytest.mark.parametrize("argv", [
-    ["video", "probe"], ["video", "contact"], ["video", "first-frame"], ["video", "beats"], ["video", "compile"],
+    ["video", "probe"], ["video", "contact"], ["video", "first-frame"], ["video", "beats"], ["video", "compile"], ["video", "check"],
 ])
 def test_cli_help_for_subcommands(argv, capsys):
     assert exit_code(argv + ["--help"]) == 0
@@ -76,12 +76,12 @@ def test_video_mux_is_not_ported(capsys):
 
 
 def test_help_lists_only_the_kept_commands(capsys):
-    assert cli.GROUPS == ["scan", "qa", "board", "music-enhance", "video"]
+    assert cli.GROUPS == ["video", "qa", "music-enhance", "board"]
     assert exit_code(["--help"]) == 0
     out = capsys.readouterr().out
     listed = re.findall(r"^    ([a-z][\w-]+)", out, re.M)
     assert listed == cli.GROUPS, listed
-    for gone in ("kb", "publish", "dupframes"):
+    for gone in ("kb", "publish", "dupframes", "scan"):
         assert exit_code([gone, "--help"]) == 2          # argparse: invalid choice
         assert "invalid choice" in capsys.readouterr().err
     assert exit_code(["loudness", "--help"]) == 0        # the old name still answers for one release, unlisted
@@ -89,16 +89,16 @@ def test_help_lists_only_the_kept_commands(capsys):
 
 
 def test_unicode_output_on_cp1252_console(tmp_path):
-    # a project name outside cp1252 must not UnicodeEncodeError when stdout isn't UTF-8
-    make(tmp_path, {"project.godot": 'config_version=5\n[application]\nconfig/name="Señor → test"\n'})
+    # a file name outside cp1252 must not UnicodeEncodeError when stdout isn't UTF-8
     env = dict(os.environ, PYTHONIOENCODING="cp1252", PYTHONPATH=str(REPO))
-    r = subprocess.run([sys.executable, "-m", "wisecraft", "scan", str(tmp_path)], capture_output=True, encoding="utf-8", env=env)
+    r = subprocess.run([sys.executable, "-m", "wisecraft", "board", "--init", str(tmp_path / "Señor → test")],
+                       capture_output=True, encoding="utf-8", env=env)
     assert r.returncode == 0 and "Señor →" in r.stdout
 
 
 # --------------------------------------------------------------------------- attribution
 
-@pytest.mark.parametrize("rel", ["wisecraft/cli.py", "wisecraft/common.py", "wisecraft/scan.py", "wisecraft/video.py", "tests/test_wise.py"])
+@pytest.mark.parametrize("rel", ["wisecraft/cli.py", "wisecraft/common.py", "wisecraft/video.py", "tests/test_wise.py"])
 def test_ported_files_carry_the_attribution_header(rel):
     head = (REPO / rel).read_text(encoding="utf-8").splitlines()[:2]
     assert head[0].startswith("# Ported from Universal Modder (https://github.com/rehan-remade/universal-modder), ")

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>shop fixture</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#102030;font:16px sans-serif}
+canvas{width:100vw;height:70vh;display:block}
+.dock{position:fixed;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:8px;padding:10px}
+.dock button{font-size:15px;padding:10px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="dock">
+  <button id="up">Upgrade</button>
+  <button id="chest">Open chest</button>
+  <button id="gems">Buy 500 gems $4.99</button>
+  <button id="pay">Purchase starter pack</button>
+  <button id="settings">Settings</button>
+</div>
+<script>
+// A shop-shaped page: two in-game buys, two real-money offers the spender must never touch, one control that is not a buy.
+window.__game = { bought: [], paid: 0 };
+document.getElementById("up").addEventListener("click", () => window.__game.bought.push("up"));
+document.getElementById("chest").addEventListener("click", () => window.__game.bought.push("chest"));
+for (const id of ["gems", "pay"]) document.getElementById(id).addEventListener("click", () => { window.__game.paid++; throw new Error("real money tapped: " + id); });
+</script>
+</body>
+</html>

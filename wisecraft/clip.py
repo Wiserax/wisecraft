@@ -1,9 +1,9 @@
-"""Fingerprint a video file, or a folder of them: `wise scan trailer.mp4`, `wise scan captures/`.
+"""Check a finished cut or a capture, or a folder of them: `wise video check trailer.mp4`, `wise video check takes/`.
 
 What it reads, all with ffprobe and ffmpeg and never by playing anything: container, duration, resolution, frame
 rate, codecs, bitrate; the audio's integrated loudness and true peak (EBU R128); how many scene cuts there are and
-the average shot length; the time of the first real frame (after a black or flat opening); and, with --sheet, a
-contact sheet of timestamped frames to look at.
+the average shot length; the time of the first real frame (after a black or flat opening); how many frames repeat
+the one before (the stutter check for slow motion); and, with --sheet, a contact sheet of timestamped frames.
 """
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from wisecraft.music_enhance import measure
 
 VIDEO_EXT = (".mp4", ".mov", ".webm", ".mkv", ".m4v", ".avi")
 SCENE = 0.30          # ffmpeg's scene score above which two frames count as a cut
+MPDECIMATE = "hi=768:lo=320:frac=0.33"   # how close two frames must be to count as the same picture
 
 
 class ClipError(ValueError):
@@ -90,6 +91,40 @@ def cuts(path: Path, duration: float, threshold: float = SCENE, timeout: float =
                 average_shot_s=round(duration / shots, 2) if duration else None, at_s=times[:60], listed=min(len(times), 60))
 
 
+def duplicates(path: Path, fps: float | None, duration: float, timeout: float = 900) -> dict:
+    """Frames that repeat the one before (ffmpeg's mpdecimate): the stutter check for slow motion and screen captures.
+    A deliberate hold at the very end (the end card) is reported apart, since it is the one place repeats belong."""
+    ffmpeg = shutil.which("ffmpeg")
+    try:
+        p = subprocess.run([ffmpeg, "-hide_banner", "-nostats", "-nostdin", "-i", str(path), "-an", "-map", "0:v:0",
+                            "-vf", f"showinfo,mpdecimate={MPDECIMATE},showinfo", "-f", "null", "-"],
+                           capture_output=True, text=True, errors="replace", timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return dict(found=False, note=f"ffmpeg did not finish within {timeout:.0f} s")
+    if p.returncode:
+        return dict(found=False, note=(p.stderr.strip().splitlines() or ["ffmpeg failed"])[-1][-200:])
+    seen: dict[str, list[float]] = {}
+    for inst, t in re.findall(r"\[Parsed_showinfo_(\d+)[^\]]*\].*?\bn:\s*\d+.*?pts_time:([\d.]+)", p.stderr):
+        seen.setdefault(inst, []).append(float(t))
+    if len(seen) != 2:
+        return dict(found=False, note="ffmpeg printed no frame list")
+    first, kept = (seen[k] for k in sorted(seen, key=int))
+    total, repeats = len(first), len(first) - len(kept)
+    step = 1 / fps if fps else (duration / total if total else 0)
+    runs, prev = [], None
+    for t in kept:                      # a gap between two kept frames is a run of repeats
+        if prev is not None and step and t - prev > 1.5 * step:
+            runs.append(dict(at_s=round(prev, 3), frames=round((t - prev) / step) - 1))
+        prev = t
+    end_hold = 0
+    if kept and step and first and first[-1] - kept[-1] > 0.5 * step:
+        end_hold = sum(1 for t in first if t > kept[-1] + 0.5 * step)
+    outside = max(0, repeats - end_hold)
+    return dict(found=True, frames=total, unique=len(kept), repeats=repeats, end_hold=end_hold, outside_end_hold=outside,
+                runs=runs[:20], note="only the end-card hold should repeat" if outside else "every frame moves, apart from the end-card hold"
+                if end_hold else "every frame moves")
+
+
 def first_real_frame(path: Path, duration: float, timeout: float = 300) -> dict:
     """When the picture first shows something: the end of the black (or near-black) opening, 0 when there is none."""
     ffmpeg = shutil.which("ffmpeg")
@@ -139,6 +174,7 @@ def fingerprint(path: Path, want_sheet: str | None = None, scene: float = SCENE)
                                           silent=m["silent"], note=m.get("note"))
     r["cuts"] = cuts(path, r["duration_s"], scene)
     r["first_real_frame"] = first_real_frame(path, r["duration_s"])
+    r["duplicates"] = duplicates(path, r["video"]["fps"], r["duration_s"])
     if want_sheet is not None:
         out = Path(want_sheet) if want_sheet else path.with_name(path.stem + ".sheet.png")
         if want_sheet and Path(want_sheet).is_dir():
@@ -166,8 +202,12 @@ def routes(r: dict) -> list[dict]:
     c = r["cuts"]
     if c.get("found") and r["duration_s"] >= 6 and c["count"] == 0:
         out.append(dict(do=f'wise video contact "{name}" sheet.png', why="one unbroken shot: pick moments from a contact sheet and cut a trailer with wise video compile"))
+    d = r.get("duplicates") or {}
+    if d.get("found") and d["outside_end_hold"]:
+        out.append(dict(do="re-capture the slowed shots with one simulation step per captured frame, at output fps / speed",
+                        why=f"{d['outside_end_hold']} frames repeat the one before outside the end-card hold: slow motion that stutters"))
     if "sheet" not in r:
-        out.append(dict(do=f'wise scan "{name}" --sheet', why="writes a contact sheet of timestamped frames to look at"))
+        out.append(dict(do=f'wise video check "{name}" --sheet', why="writes a contact sheet of timestamped frames to look at"))
     return out
 
 
@@ -219,6 +259,14 @@ def format_video(r: dict) -> str:
         lines.append("               at " + ", ".join(f"{t:.2f}" for t in c["at_s"][:12]) + (" ..." if c["count"] > 12 else "") + " s")
     f = r["first_real_frame"]
     lines.append(f"  first frame: {f['at_s']:.2f} s ({f['note']})" if f.get("found") else f"  first frame: not found ({f.get('note')})")
+    d = r.get("duplicates") or {}
+    if d.get("found"):
+        lines.append(f"  repeats:     {d['repeats']} of {d['frames']} frames repeat the one before"
+                     + (f", {d['end_hold']} in the end hold" if d["end_hold"] else "") + f" ({d['note']})")
+        if d["outside_end_hold"] and d["runs"]:
+            lines.append("               at " + ", ".join(f"{x['at_s']:.2f} s x{x['frames']}" for x in d["runs"][:8]) + (" ..." if len(d["runs"]) > 8 else ""))
+    elif d:
+        lines.append(f"  repeats:     not measured ({d.get('note')})")
     if "sheet" in r:
         s = r["sheet"]
         lines.append(f"  sheet:       {s['file']} (a frame every {s['every_s']} s)" if s["written"] else f"  sheet:       not written ({s['note']})")
@@ -233,21 +281,22 @@ def format_folder(r: dict) -> str:
              f"  clips:  {r['count']}, {r['total_s']:.1f} s in all, {_human(r['total_bytes'])}", ""]
     names = [Path(c["file"]).name for c in r["clips"]]
     w = max([4] + [len(n) for n in names])
-    lines.append(f"  {'file':<{w}}  {'dur s':>7} {'size':>10} {'fps':>6} {'codec':>6} {'kb/s':>6} {'LUFS':>6} {'TP':>6} {'cuts':>5} {'shot s':>6} {'first':>6}")
+    lines.append(f"  {'file':<{w}}  {'dur s':>7} {'size':>10} {'fps':>6} {'codec':>6} {'kb/s':>6} {'LUFS':>6} {'TP':>6} {'cuts':>5} {'shot s':>6} {'first':>6} {'rep':>5}")
     for n, c in zip(names, r["clips"]):
         if "error" in c:
             lines.append(f"  {n:<{w}}  could not read: {c['error']}")
             continue
-        v, lo, cu, f = c["video"], c["audio"].get("loudness") or {}, c["cuts"], c["first_real_frame"]
+        v, lo, cu, f, dp = c["video"], c["audio"].get("loudness") or {}, c["cuts"], c["first_real_frame"], c.get("duplicates") or {}
 
         def num(x, fmt="{:.1f}"):
             return "n/a" if x is None else fmt.format(x)
         lines.append(f"  {n:<{w}}  {c['duration_s']:>7.2f} {str(v['width']) + 'x' + str(v['height']):>10} {num(v['fps'], '{:g}'):>6} {str(v['codec'])[:6]:>6} "
                      f"{num(c['bitrate_kbps'], '{}'):>6} {num(lo.get('integrated_lufs')):>6} {num(lo.get('true_peak_dbtp')):>6} "
-                     f"{num(cu.get('count'), '{}'):>5} {num(cu.get('average_shot_s'), '{}'):>6} {num(f.get('at_s'), '{:.2f}'):>6}")
+                     f"{num(cu.get('count'), '{}'):>5} {num(cu.get('average_shot_s'), '{}'):>6} {num(f.get('at_s'), '{:.2f}'):>6} {num(dp.get('outside_end_hold'), '{}'):>5}")
     sheets = [c["sheet"]["file"] for c in r["clips"] if c.get("sheet", {}).get("written")]
     if sheets:
         lines += ["", "  sheets: " + ", ".join(sheets)]
     lines += ["", "  LUFS and TP are the audio's integrated loudness and true peak; n/a means no audio stream or too short to measure.",
-              "  For one clip in full: wise scan <file>"]
+              "  rep: frames that repeat the one before, outside a final end-card hold.",
+              "  For one clip in full: wise video check <file>"]
     return "\n".join(lines)

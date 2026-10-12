@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      # ffmpeg is for the video scan, music-enhance and small EDL tests. Without recommends apt skips about half the
+      # ffmpeg is for video check, music-enhance and small EDL tests. Without recommends apt skips about half the
       # download. When the mirror crawls, the step gives up after 8 minutes and the run goes on: those tests skip
       # without ffmpeg instead of failing the build.
       - name: ffmpeg
@@ -18,6 +18,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
       - run: uv run --with pytest pytest -q tests
-      - run: ./bin/wise --help && for g in scan qa board music-enhance video; do ./bin/wise $g --help > /dev/null; done
+      - run: ./bin/wise --help && for g in video qa music-enhance board; do ./bin/wise $g --help > /dev/null; done
       - name: skill copies
         run: python3 scripts/sync_skills.py --check
