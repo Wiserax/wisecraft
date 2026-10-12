@@ -32,7 +32,6 @@ Copy into the release log entry and tick as you go.
 | The old and new builds share a save | both on one origin | freeze the old build on its own project and origin |
 | The live bundle shows the old version | the build was not rerun after the bump, or a cached HTML | bump, then build; HTML must revalidate |
 | fps gate fails on every build, live included | the laptop is on battery in low-power mode (30 fps cap) | plug in, re-measure, or report "not confirmed" |
-| Test players in the dashboard | an automated run reached the analytics endpoint | answer `**/api/events` with 204 in every run |
 | A worker's tooling is in the game build | its whole branch was merged | cherry-pick the game commits only |
 | Unrelated files in the release commit | `git add .` | explicit `git add <paths>` |
 | The deploy is several MB larger than the game needs | orphan assets | pin the list of shipped files with a test |

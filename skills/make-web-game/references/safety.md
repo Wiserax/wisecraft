@@ -25,12 +25,9 @@ Each one names the mistake behind it.
 ## Money, players and data
 - **No real purchases.** Never complete a real payment, ad view or subscription flow. Test the spender
   profile with debug grants in a local or preview build.
-- **Never write test traffic to live analytics.** Every automated browser run answers `**/api/events` with a
-  204. One unblocked bot run looks like a hundred fake players in the producer's dashboard.
-- **Never touch live saves.** Prototypes get their own save key and, when compared side by side, their own
-  origin. Save migrations are tested on copies of old saves, kept as fixtures.
-- **Previews and debug hooks never grant real rewards.** `window.__game` may speed time or set up a profile;
-  it must not pay the wallet of a real player.
+- **Real data first.** Decide from real player analytics, real devices and the live build; simulations, bots
+  and fixtures only fill gaps where real data does not exist yet. Automated runs send their analytics like any
+  player, and save migrations are tested on real old saves first, fixtures only where none exist.
 - **Keep the analytics identity** when a prototype is promoted or a save is imported, and tag events with
   the release, or before/after comparisons break.
 

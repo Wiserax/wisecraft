@@ -3,8 +3,7 @@
 The goal: every captured frame shows a new game state, at full resolution, the same on every run.
 
 ## The method
-1. **Serve a frozen build** on its own port. One browser context per take, muted, analytics answered with
-   204, a fresh profile.
+1. **Serve a frozen build** on its own port. One browser context per take, muted, a fresh profile.
 2. **Install a fake clock and pause it.** An installed clock still flows with real time unless paused.
 3. **Per frame:** run the take's staging code in the page, advance the clock by `1 / FPS` seconds, step the
    simulation once, take one screenshot.

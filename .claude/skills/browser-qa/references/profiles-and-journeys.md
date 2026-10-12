@@ -4,14 +4,14 @@
 | Profile | How to set it up | What it catches |
 |---|---|---|
 | A brand-new player (EN 390 and ES 320) | fresh browser profile | the first session, the tutorial, overflow in Spanish on a small phone |
-| A returning player from older version saves | load a fixture save of each older version into storage before boot | migrations, grants paid twice, missing fields |
-| A mid-game save | fixture | the hub with every rail unlocked, mid-chapter balance |
-| A late-game save into the next chapter | fixture | chapter clear, the celebration, the next chapter's start |
-| A spender (gacha ×10, star-ups, pass) | debug grants in a local build | sinks, premium UI, caps |
+| A returning player from older version saves | load a real player's save of each older version into storage before boot (a fixture only where none exists) | migrations, grants paid twice, missing fields |
+| A mid-game save | a real save, else a fixture | the hub with every rail unlocked, mid-chapter balance |
+| A late-game save into the next chapter | a real save, else a fixture | chapter clear, the celebration, the next chapter's start |
+| A spender (gacha ×10, star-ups, pass) | a real spender's save, else debug grants in a local build | sinks, premium UI, caps |
 | WebKit | the same journeys in WebKit | audio start, CSS and touch differences |
 
-Keep one fixture save per released version in the repo's test data. Never use a real player's save, and
-never complete a real purchase: the spender profile uses debug grants only.
+Real data first: real players' saves from the live build and real devices are the best profiles. Keep one
+fixture save per released version in the repo's test data only to fill the versions no real save covers.
 
 ## Day rollover
 Return on day 2 / 7 / 8 by overriding `Date` (or a fake clock, paused and advanced): dailies, weeklies and
@@ -30,8 +30,7 @@ pass roll over; nothing grants twice after a reload.
 
 ## Driving rules
 - Tap the field like a player; tap dock cards in dock order; open modals by their own buttons.
-- `window.__game` may speed time or set up a profile. It never wins the fight, and previews or debug never
-  grant real rewards.
+- `window.__game` may speed time or set up a profile. It never wins the fight.
 - One port range and one browser profile folder per agent, so parallel runs don't share storage.
 
 ## What a release QA pass reported, as a size guide

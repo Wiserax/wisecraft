@@ -13,7 +13,7 @@ OWNERSHIP: you may edit <files/dirs>. Don't touch <files owned by other agents r
 
 GATE: tests pass; browser QA errors [] in chromium 390, webkit 390, chromium 320x568; 60 fps at the stress count; <feature-specific proof>; a board at <path>.
 
-CONSTRAINTS: no speaker output (Chromium --mute-audio, WebKit zero-gain); intercept **/api/events with 204; explicit git add only; commit trailer line; don't push, merge or deploy; no rm (move files); ports <range>; stop your servers.
+CONSTRAINTS: no speaker output (Chromium --mute-audio, WebKit zero-gain); explicit git add only; commit trailer line; don't push, merge or deploy; no rm (move files); ports <range>; stop your servers.
 
 PRODUCER UPDATES: post a plain-language note at each milestone (what changed for the player, where to see it). Start the final report with "What changed in the game". No routine heartbeats; send only milestones, questions, blockers and the final report.
 

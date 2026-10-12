@@ -58,8 +58,9 @@ def make(root: Path, files: dict):
 
 @pytest.fixture
 def serve():
-    """serve(folder, headers=None) -> base URL of an http.server thread on 127.0.0.1 (closed after the test)."""
-    servers = []
+    """serve(folder, headers=None) -> base URL of an http.server thread on 127.0.0.1 (closed after the test).
+    POSTs are answered 200 and their paths kept in serve.posts, so a test can see a beacon reach the server."""
+    servers, posts = [], []
 
     def start(folder: Path, headers=None) -> str:
         class Handler(http.server.SimpleHTTPRequestHandler):
@@ -69,6 +70,13 @@ def serve():
                         self.send_header(name, value)
                 super().end_headers()
 
+            def do_POST(self):
+                self.rfile.read(int(self.headers.get("Content-Length") or 0))
+                posts.append(self.path)
+                self.send_response(200)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+
             def log_message(self, *args):
                 pass
 
@@ -77,6 +85,7 @@ def serve():
         servers.append(srv)
         return f"http://127.0.0.1:{srv.server_address[1]}"
 
+    start.posts = posts
     yield start
     for srv in servers:
         srv.shutdown()
@@ -136,7 +145,7 @@ GAME = {
     "tests/ramp.test.js": 'import test from "node:test";\n',
     "tests/shop.test.js": 'import test from "node:test";\n',
     "scripts/capture.mjs": 'import { chromium } from "playwright";\nawait page.evaluate(() => { window.__cap = { n: 1 }; });\n'
-                           'await ctx.route("**/api/events", (r) => r.fulfill({ status: 204 }));\n',
+                           'page.on("request", (r) => r.url().endsWith("/api/events") && console.log(r.postData()));\n',
     "public/audio/music.mp3": b"\0" * 5000,
     "public/audio/hit0.wav": b"\0" * 1200,
     "public/audio/hit1.wav": b"\0" * 800,
@@ -449,7 +458,7 @@ def test_qa_options_defaults():
     assert o == {"url": "http://127.0.0.1:5173/play.html", "engine": "chromium", "width": 390, "height": 844, "dpr": 2,
                  "out": os.path.join("qa-out", "chromium-390x844"), "seconds": 20, "seed": 1, "selectors": [],
                  "startSelector": None, "area": None, "ready": 'document.readyState === "complete"',
-                 "block": ["**/api/events"], "noOverflow": False, "timeoutMs": 60000}
+                 "block": [], "noOverflow": False, "timeoutMs": 60000}
 
 
 def test_qa_options_from_flags(tmp_path):
@@ -555,7 +564,8 @@ def test_qa_real_run_gate(tmp_path, serve, capsys, engine, ready):
     assert r["game"]["found"] and {"taps", "started", "run"} <= set(r["game"]["keys"])
     assert r["steps"] == [{"selector": "#play", "found": True, "via": "tap"}]
     assert r["taps"]["done"] == 4 and r["taps"]["area"]["source"] == "canvas"
-    assert r["blocked"]["requests"] >= 1 and r["failedRequests"] == []        # the beacon never left the browser
+    assert r["blocked"]["requests"] == 0 and r["failedRequests"] == []        # nothing is blocked by default
+    assert "/api/events" in serve.posts                                         # the beacon reached the real server
     names = [Path(s).name for s in r["screenshots"]]
     assert names == ["1-start.png", "step-1.png", "2-middle.png", "3-end.png"] and all((out / n).stat().st_size > 500 for n in names)
 
@@ -573,6 +583,15 @@ def test_qa_real_run_missing_selector_fails(tmp_path, serve, capsys):
     real_playwright()
     code, r = run_qa(capsys, serve(FIXTURES / "qa") + "/clean.html", "--seconds", "0", "--out", tmp_path, "--selector", "#nope")
     assert code == 1 and r["errors"] == ["selector not found: #nope"] and r["steps"][0]["found"] is False
+
+
+def test_qa_real_run_block_is_opt_in(tmp_path, serve, capsys):
+    real_playwright()
+    base = serve(FIXTURES / "qa")
+    code, r = run_qa(capsys, base + "/clean.html", "--engine", "webkit", "--seconds", "1", "--out", tmp_path,
+                     "--start-selector", "#play", "--block", "**/api/events", "--timeout", "20")
+    assert code == 0 and r["blocked"]["patterns"] == ["**/api/events"] and r["blocked"]["requests"] >= 1
+    assert serve.posts == [] and r["failedRequests"] == []                     # answered in the browser, never sent
 
 
 # --------------------------------------------------------------------------- board

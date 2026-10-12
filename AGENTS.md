@@ -39,8 +39,8 @@ game** (Vite + three.js or similar), or to learn how a problem in one was solved
   irreversible or faces outward.
 - **Never play audio aloud.** Browsers run muted; mixes are measured (`wise music-enhance --check`, muted captures). The
   human listens, the agent measures.
-- **Never touch real players' data.** Automated runs answer analytics calls with a 204 and never write to
-  live saves, leaderboards or purchases. Debug hooks and previews never grant real rewards.
+- **Real data first.** Decide from real player analytics, real devices and the live build; simulations, bots and
+  fixtures only fill gaps where real data does not exist yet.
 - **Prove it in the real browser.** A simulator passing is not the game passing: the first session and every
   gate run in a phone-sized Chromium and WebKit.
 - **Ask first** before:

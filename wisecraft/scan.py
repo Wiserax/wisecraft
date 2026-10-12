@@ -975,12 +975,10 @@ def dir_routes(r: dict) -> list[dict]:
     game = next((h for h in r["hooks"] if h["name"] == "window.__game"), None) or (r["hooks"][0] if r["hooks"] else None)
     entry = next((e for e in r["entries"] if game and game["name"] in e.get("hooks", [])), None) or \
         next((e for e in r["entries"] if e["file"] == "index.html"), None) or (r["entries"][0] if r["entries"] else None)
-    blocks = [e["path"] for e in r["analytics"]["endpoints"] if "host" not in e]
     if entry:
         page = "" if entry["file"] == "index.html" else entry["file"].removeprefix("public/")
         url = f"http://127.0.0.1:{dev['port']}/{page}" if dev.get("port") else f"http://127.0.0.1:<port>/{page}"
-        flags = (f" --ready 'window.{game['name'].split('.', 1)[1]}'" if game and game["name"] in entry.get("hooks", []) else "") + \
-            "".join(f" --block '**{p}'" for p in blocks if p != "/api/events")
+        flags = f" --ready 'window.{game['name'].split('.', 1)[1]}'" if game and game["name"] in entry.get("hooks", []) else ""
         why = (f"`npm run {dev['script']}` first" if dev.get("found") else "serve the folder first") + \
             (f"; port from {dev['port_source']}" if dev.get("port") else "; port not found, read it from the server's output")
         routes.append({"do": f"wise qa {url}{flags}", "why": f"muted phone-sized browser, taps, console errors, overflow ({why})"})
@@ -993,8 +991,6 @@ def dir_routes(r: dict) -> list[dict]:
     if r["tuning"]:
         routes.append({"do": "read " + ", ".join(t["file"] for t in r["tuning"][:4]),
                        "why": "tuning tables seem to live here (telling file name + many numeric literals)"})
-    if "/api/events" in blocks:
-        routes.append({"do": "keep `wise qa` on its default --block '**/api/events'", "why": "test runs stay out of analytics"})
     if r["tests"]["found"] and "test" in scripts:
         routes.append({"do": "npm test", "why": f"{r['tests']['files']} test files" +
                        (f", {', '.join(x['name'] for x in r['tests']['runners'])}" if r["tests"]["runners"] else "")})
@@ -1218,15 +1214,11 @@ def fingerprint_url(url: str, fetch: Callable[..., Fetched] | None = None,
     )
     routes = []
     game = next((h for h in report["hooks"] if h["name"] == "window.__game"), None)
-    blocks = [e["path"] for e in endpoints.values() if "host" not in e]
-    routes.append({"do": f"wise qa {page.url}" + (" --ready 'window.__game'" if game else "") +
-                   "".join(f" --block '**{p}'" for p in blocks if p != "/api/events"),
+    routes.append({"do": f"wise qa {page.url}" + (" --ready 'window.__game'" if game else ""),
                    "why": "muted phone-sized browser, taps, console errors, overflow"})
     if report["hooks"]:
         routes.append({"do": "use " + ", ".join(h["name"] for h in report["hooks"][:4]) + " from the page",
                        "why": "debug hooks ship in this build; speed time or set up state with them, never win with them"})
-    if "/api/events" in blocks:
-        routes.append({"do": "keep `wise qa` on its default --block '**/api/events'", "why": "test runs stay out of analytics"})
     if skipped:
         routes.append({"do": "scan the project folder for the full picture", "why": f"{skipped} asset(s) were not fetched (limit reached)"})
     report["routes"] = routes

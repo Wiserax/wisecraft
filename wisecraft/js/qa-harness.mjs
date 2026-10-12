@@ -9,7 +9,7 @@ const opts = readOptions();
 const {
   url, engine = "chromium", width: W = 390, height: H = 844, dpr = 2, out = "qa-out", seconds = 20, seed = 1,
   selectors = [], startSelector = null, area = null, ready = 'document.readyState === "complete"',
-  block = ["**/api/events"], noOverflow = false, timeoutMs = 60000,
+  block = [], noOverflow = false, timeoutMs = 60000,
 } = opts;
 const pw = loadPlaywright(opts);
 await fs.mkdir(out, { recursive: true });
@@ -18,9 +18,10 @@ await fs.mkdir(out, { recursive: true });
 const { browser, channel } = engine === "webkit" ? await launchWebkit(pw) : await launchChromium(pw, opts);
 const ctx = await browser.newContext({ viewport: { width: W, height: H }, isMobile: true, hasTouch: true, deviceScaleFactor: dpr });
 let blocked = 0;
-const answered = new WeakSet(); // requests this harness answered itself; Chromium reports a fulfilled beacon as aborted
+const answered = new WeakSet(); // requests this harness answered itself (--block); Chromium reports a fulfilled beacon as aborted
+// Nothing is intercepted by default: analytics and every other request reach the real servers.
 for (const pattern of block) {
-  await ctx.route(pattern, (r) => { blocked++; answered.add(r.request()); return r.fulfill({ status: 204 }); }); // keep test runs out of analytics
+  await ctx.route(pattern, (r) => { blocked++; answered.add(r.request()); return r.fulfill({ status: 200, body: "" }); }); // opt-in --block only
 }
 await ctx.addInitScript(() => {
   // <audio>/<video> elements never reach the speakers either
@@ -43,9 +44,18 @@ page.on("console", (m) => {
   const at = m.location()?.url;
   push(errors, "console: " + m.text() + (at && at !== page.url() && !m.text().includes(at) ? ` (${at})` : ""));
 });
-page.on("requestfailed", (r) => answered.has(r) || push(failedRequests, { url: r.url(), method: r.method(), error: r.failure()?.errorText || "failed" }));
+// Chromium reports a request as aborted when the page never reads a body the server already sent in full
+// (a fire-and-forget analytics fetch): the server answered, so that is not a failure.
+const answeredByServer = (r) => r.failure()?.errorText === "net::ERR_ABORTED" && r.timing().responseEnd > 0;
+page.on("requestfailed", (r) => answered.has(r) || answeredByServer(r) || push(failedRequests, { url: r.url(), method: r.method(), error: r.failure()?.errorText || "failed" }));
 page.on("response", (r) => { if (r.status() >= 400) push(failedRequests, { url: r.url(), method: r.request().method(), status: r.status() }); });
 page.on("dialog", (d) => d.dismiss().catch(() => {}));
+// Requests reach real servers, so let the ones still in flight finish before the browser closes.
+const inFlight = new Set();
+page.on("request", (r) => inFlight.add(r));
+page.on("requestfinished", (r) => inFlight.delete(r));
+page.on("requestfailed", (r) => inFlight.delete(r));
+const settle = async (ms = 3000) => { const end = Date.now() + ms; while (inFlight.size && Date.now() < end) await page.waitForTimeout(50); };
 
 const shot = async (name) => {
   const file = path.join(out, name + ".png");
@@ -169,6 +179,7 @@ if (!total) { await page.waitForTimeout(seconds * 500); await shot("2-middle"); 
 // --------------------------------------------------------------------------------------------
 await shot("3-end");
 await checkOverflow("end");
+await settle();
 await browser.close();
 
 const ok = errors.length === 0 && (noOverflow || overflow.length === 0);

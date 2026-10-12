@@ -91,6 +91,5 @@ portrait 390×844):
 
 ## Seen in
 - A horde tower-defense mobile web game, releases 2.2.0 to 2.3.6.
-- Related: `answer-the-analytics-endpoint-with-a-204-in-every-automated.md` (live QA must not pollute
-  analytics), and the game note
+- Related: the game note
   [A reset connection on one code chunk left the boot splash up for good](../games/horde-tower-defense-mobile-web/a-reset-connection-on-one-code-chunk-left-the-boot-splash-up.md).

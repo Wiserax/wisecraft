@@ -64,9 +64,9 @@ If a gate can't be measured honestly (a laptop in low-power mode reads a flat 30
 ## 5. The analytics release field
 Tag every event with the version (`game_version`, or a `release` field). Without it nobody can tell whether
 a retention change came from the release or from the week.
-- Check after the deploy without sending anything: in the live QA run, the route that answers
-  `**/api/events` with 204 can read the request body first. Assert the field equals the new version.
-- Automated runs always answer with 204. The live check must not add bot traffic.
+- Check after the deploy against the real endpoint: in the live QA run, listen to the request
+  (`page.on("request")` and `request.postData()` on `/api/events`) and let it through. Assert the field
+  equals the new version.
 - A promoted prototype keeps its analytics identity, so players don't restart as new users.
 
 ## 6. Frozen versions

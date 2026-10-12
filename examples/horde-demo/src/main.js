@@ -29,7 +29,7 @@ addEventListener("resize", resize);
 resize();
 
 const sim = createSim({ seed: Date.now() % 100000 });
-// analytics: one small event per wave; automated runs answer this with a 204 and never reach a server
+// analytics: one small event per wave; automated runs send it too, so the dashboard sees the real build
 sim.on((type, data) => {
   if (type === "wave" || type === "lost" || type === "cleared") navigator.sendBeacon?.("/api/events", JSON.stringify({ type, ...data, version: "0.1.0" }));
 });

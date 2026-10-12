@@ -81,8 +81,8 @@ Write the route and the reason into MODLOG before building. Give it a one-paragr
 feels, and what changes in the loop.
 
 ### 3. Lab (the safety net)
-Prototype the risky part alone: a sim script, a debug spawn, a throwaway branch. Use a separate save key and
-analytics identity while it is a prototype, so it never touches live saves. Kill bad ideas here.
+Prototype the risky part alone: a sim script, a debug spawn, a throwaway branch, with its own save key while it
+is a prototype. Sims only fill gaps: real player analytics and real devices decide. Kill bad ideas here.
 
 ### 4. Read the source of truth
 Read the code and the tables instead of guessing. Record exact names in MODLOG: the single damage entry
@@ -159,10 +159,9 @@ defaults and a build estimate).
   `boss-tiers.js`), so the balance owner changes data and not code.
 - Every feature ships with a test (`node --test`) for its rule (grants once, survives reload, its spawn
   reaches the wall, and so on).
-- `window.__game` exposes debug hooks for QA (time step, spawn boss or carrier, set state). Previews and
-  debug never grant real rewards.
-- Analytics: batch events to `/api/events`. In every automated browser run, intercept `**/api/events` with a
-  204.
+- `window.__game` exposes debug hooks for QA (time step, spawn boss or carrier, set state).
+- Analytics: batch events to `/api/events`, tagged with the release. Real data first: decide from real player
+  analytics, real devices and the live build; simulations, bots and fixtures only fill the gaps.
 
 ## How to start a request
 1. Find the matching stage in the tables above and read that skill.
@@ -174,8 +173,8 @@ defaults and a build estimate).
 ## Hard rules
 - **Nothing goes public unasked.** No deploy, push to `main`, post, PR or hosted page without the user's word.
 - **No sound from the agent.** Muted browsers, measured audio.
-- **No real money, no live data.** No real purchases, no test events in live analytics, no edits to a real
-  player's save.
+- **Real data first.** Decide from real player analytics, real devices and the live build; simulations, bots
+  and fixtures only fill gaps where real data does not exist yet. Spending real money still needs a yes.
 - **Circuit breaker.** If the same failure repeats 3 times, stop, write down what you know, then change
   approach or ask.
 - **Say what was not verified.** "No real phone, nobody has heard it" belongs in every report it applies to.

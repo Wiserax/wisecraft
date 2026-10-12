@@ -196,7 +196,7 @@ TERMINAL = """<b><i>$</i> wise qa http://127.0.0.1:5890/ --ready "window.__game"
   ready:        yes after 201 ms  (window.__game)
   game:         window.__game found, keys: sim, state, step, tap; other hooks: __THREE__
   taps:         20 of 20 over 10 s in canvas, seed 1
-  blocked:      1 request(s) matching **/api/events
+  blocked:      nothing (every request went through; --block is opt-in)
   errors:       none
   overflow:     none
   failed requests: none

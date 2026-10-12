@@ -26,7 +26,7 @@ Use `assets/spec-template.md`. The parts that matter:
 - **INTERFACE:** if two workers meet, name the API (`spawnBoss({scale, tier, hpMul})`) so both can build in
   parallel.
 - **GATE:** tests, QA in 3 browsers/sizes, fps, and the feature's own proof.
-- **CONSTRAINTS:** no speaker output, analytics 204, explicit adds, no push/merge/deploy, no `rm` (move
+- **CONSTRAINTS:** no speaker output, explicit adds, no push/merge/deploy, no `rm` (move
   files), its own port range, stop servers.
 - **PRODUCER UPDATES:** a plain note at each milestone; a "What changed in the game" section first in the
   final report.

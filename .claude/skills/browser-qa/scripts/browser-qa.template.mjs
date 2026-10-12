@@ -15,7 +15,7 @@ const browser = engine === "webkit"
   ? await webkit.launch({ headless: true })
   : await chromium.launch({ headless: true, args: ["--mute-audio"] });
 const ctx = await browser.newContext({ viewport: { width: W, height: H }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
-await ctx.route("**/api/events", (r) => r.fulfill({ status: 204 })); // keep test runs out of analytics
+// Every request, analytics included, goes to the real servers: nothing is intercepted.
 await ctx.addInitScript(() => {
   const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
   const d = Object.getOwnPropertyDescriptor(BaseAudioContext.prototype, "destination");

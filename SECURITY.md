@@ -10,9 +10,9 @@ There are no release branches: fixes land on `main`.
 ## What's in scope
 The code in this repository: the `wise` CLI (`bin/wise`, `wisecraft/`, the node scripts in `wisecraft/js/`), the hooks and the
 agent configs. The parts where a bug matters most:
-- **The browser harness.** `wise qa` and `wise board` open pages in a local headless browser. It must stay muted,
-  must answer the blocked analytics pattern with a 204 instead of letting it reach a server, and must write
-  only into its output folder. A page that makes the harness do otherwise is in scope.
+- **The browser harness.** `wise qa` and `wise board` open pages in a local headless browser. It must stay muted and
+  must write only into its output folder; with `--block`, a matching request must be answered in the browser and
+  never reach a server. A page that makes the harness do otherwise is in scope.
 - **Files the CLI writes.** `wise music-enhance` and `wise scan --sheet` write new files next to their input (or
   where `-o`, `--out-dir` or `--sheet` point) and never change the input. A way to make them overwrite the input,
   or write somewhere else, is in scope.

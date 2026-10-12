@@ -1,6 +1,6 @@
 ---
 name: browser-qa
-description: Test a web game the way a player meets it, in muted headless phone browsers. Covers `wise qa` and a template script for custom flows, Chromium and WebKit at 390x844 and 320x568, bots that tap the real UI, analytics answered with a 204 so test runs never pollute data, the errors and overflow gate, the main regression journey, player profiles and old saves, day rollover, robustness (rotate, hide the tab, double taps, reload), fake clock versus real time, and screenshot boards as evidence. Use when the user says "test it", "does it work on iPhone", "check the first session", "QA before release", "why did the bot lose", "prove it in the browser", or whenever a change must be verified in the real build and not only in a unit test or a simulator.
+description: Test a web game the way a player meets it, in muted headless phone browsers. Covers `wise qa` and a template script for custom flows, Chromium and WebKit at 390x844 and 320x568, bots that tap the real UI, real analytics and real player saves first, the errors and overflow gate, the main regression journey, player profiles and old saves, day rollover, robustness (rotate, hide the tab, double taps, reload), fake clock versus real time, and screenshot boards as evidence. Use when the user says "test it", "does it work on iPhone", "check the first session", "QA before release", "why did the bot lose", "prove it in the browser", or whenever a change must be verified in the real build and not only in a unit test or a simulator.
 ---
 
 # Browser QA: the agent's hands and eyes
@@ -16,8 +16,9 @@ wise qa http://localhost:5173/ --out qa-out                          # Chromium,
 wise qa http://localhost:5173/ --engine webkit --out qa-out
 wise qa http://localhost:5173/ --size 320x568 --seconds 60 --out qa-out
 ```
-`wise qa` opens the page in a muted phone browser, answers `/api/events` with 204, taps like a player for the
-given time, takes screenshots, and fails on page errors or horizontal overflow. In a clone it is `bin/wise`.
+`wise qa` opens the page in a muted phone browser, lets every request through (analytics included; `--block`
+is an opt-in), taps like a player for the given time, takes screenshots, and fails on page errors or
+horizontal overflow. In a clone it is `bin/wise`.
 
 The gate before a merge or deploy is three runs: **Chromium 390×844, WebKit 390×844, Chromium 320×568**, all
 with `errors []` and no overflow.
@@ -31,8 +32,8 @@ node browser-qa.template.mjs <url> <outDir> [chromium|webkit] [390x844]
 ## Harness rules (every automated browser run)
 - **Muted, always.** Chromium with `--mute-audio` (system Chrome channel is fine); WebKit with the zero-gain
   `AudioContext.destination` init script; never any speaker output.
-- **Analytics blocked.** Intercept `**/api/events` with `route.fulfill({ status: 204 })` so test runs never
-  pollute analytics. A 204 and not an abort: the game must see a normal answer and take its normal path.
+- **Real data first.** Analytics go to the real endpoint, and a real player's save beats a made-up one. Bots
+  and fixtures fill the gaps where no real data exists yet.
 - **Mobile context:** `isMobile`, `hasTouch`, DPR 2–3; viewports 390×844 and 320×568 (and 360×740 for mid
   Android).
 - **The gate:** collect `pageerror`; `errors: []` and no horizontal overflow

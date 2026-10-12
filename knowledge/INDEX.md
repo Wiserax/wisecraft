@@ -19,11 +19,10 @@ _Every note, by game and by technique. Add a line for yours in the pull request 
 | Horde tower defense (mobile web) | [Fixing a boss that never attacked changed the balance: measure player models before and after](games/horde-tower-defense-mobile-web/fixing-a-boss-that-never-attacked-changed-the-balance-measur.md) | threejs-vite | data-tuning | released | Claude Code (Opus 5.5) | 2026-10-11 |
 | Horde tower defense (mobile web) | [The audio mix measured, not listened to: music at -34 LUFS made every boom read 9 to 19 dB too loud](games/horde-tower-defense-mobile-web/the-audio-mix-measured-not-listened-to-music-at-34-lufs-made.md) | threejs-vite | audio | released | Claude Code (Opus 5.5) | 2026-10-11 |
 
-## Techniques (8 notes)
+## Techniques (7 notes)
 
 - [A difficulty index across player-model bots, and how to read it](techniques/a-difficulty-index-across-player-model-bots-and-how-to-read.md) · balance, difficulty, player-models, simulation, bots, index, seeds, tuning, tries, campaign
 - [A laptop in low-power mode caps the browser at 30 fps and silently fails fps gates](techniques/a-laptop-in-low-power-mode-caps-the-browser-at-30-fps-and-si.md) · performance, fps-gate, low-power, battery, test-environment, false-red, headless, contrast-run, verification
-- [Answer the analytics endpoint with a 204 in every automated browser run](techniques/answer-the-analytics-endpoint-with-a-204-in-every-automated.md) · analytics, qa, playwright, harness, network-stub, test-hygiene, live-checks, localstorage, bots
 - [Lead and worker agents: milestone notes only, explicit file ownership, cherry-picked game commits](techniques/lead-and-worker-agents-milestone-notes-only-explicit-file-ow.md) · orchestration, multi-agent, lead-worker, mailbox, ownership, git, cherry-pick, worktree, heartbeat, process
 - [Measuring a web game's mix without playing a sound](techniques/measuring-a-web-game-s-mix-without-playing-a-sound.md) · audio, webaudio, audioworklet, lufs, bs.1770, stems, measurement, playwright, headless, loudness, calibration
 - [Preview deploys sit behind SSO, frozen versions get their own origin: what to check live after a deploy](techniques/preview-deploys-sit-behind-sso-frozen-versions-get-their-own.md) · release, deploy, preview, sso, origin, localstorage, saves, cache-headers, post-deploy, static-hosting

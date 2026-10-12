@@ -125,7 +125,7 @@ work for any game; `qa` drives a browser, so it is for web games.
   <thead><tr><th width="62">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th width="190">Command</th><th>What it does</th></tr></thead>
   <tbody>
     <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/scan-dark.svg"><img src="docs/media/icons/scan-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise scan</code></td><td>Fingerprint <b>any game or any video clip</b>; the input is detected. A project folder: Unity, Godot, Unreal, GameMaker, Defold, Cocos, Rust, C/C++, C#, Android, iOS or web, with versions, entry points, build targets, asset and audio folders with sizes, and what to try next. A web game's URL: scripts, sizes, engine, cache headers. A video or a folder of them: duration, resolution, fps, codecs, bitrate, loudness, scene cuts and average shot length, first real frame; <code>--sheet</code> adds a contact sheet. <code>--json</code> for agents</td></tr>
-    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/qa-dark.svg"><img src="docs/media/icons/qa-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise qa</code></td><td>Web games: drive the game in a muted phone-sized Chromium or WebKit (<code>--engine</code>, <code>--size 390x844</code>): taps like a player, analytics answered with a 204, console errors and overflow fail the run, screenshots along the way</td></tr>
+    <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/qa-dark.svg"><img src="docs/media/icons/qa-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise qa</code></td><td>Web games: drive the game in a muted phone-sized Chromium or WebKit (<code>--engine</code>, <code>--size 390x844</code>): taps like a player against the real servers, analytics included (<code>--block</code> to opt out), console errors and overflow fail the run, screenshots along the way</td></tr>
     <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/board-dark.svg"><img src="docs/media/icons/board-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise board</code></td><td>HTML mockups → phone-sized PNG screens and one review board, for any game's UI; <code>--init</code> writes a starter pair</td></tr>
     <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/music-enhance-dark.svg"><img src="docs/media/icons/music-enhance-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise music-enhance</code></td><td>Measure and fix loudness (EBU R128) without ever playing it: levels music, a trailer, game sounds or voice to a target (<code>--for music|trailer|game-sfx|voice</code>, −14 LUFS by default) under a −1 dBTP true-peak ceiling, with optional cleanup EQ and fades. Works on an audio file or on a video's audio track (the picture is copied untouched) and prints a before/after report; <code>--check</code> only measures and exits 1 off target</td></tr>
     <tr><td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/video-dark.svg"><img src="docs/media/icons/video-light.svg" width="36" height="36" alt=""></picture></td><td><code>wise video</code></td><td><code>compile</code> an EDL into a finished trailer of any game's footage (beat grid, titles, speed, fades), plus <code>contact</code>, <code>probe</code>, <code>beats</code>, <code>first-frame</code></td></tr>
@@ -133,7 +133,7 @@ work for any game; `qa` drives a browser, so it is for web games.
 </table>
 
 The browser harness and the board renderer ship inside the package (`wisecraft/js/`): Playwright scripts the CLI
-drives through node, muted, with analytics blocked.
+drives through node, muted, with every request going through to the real servers.
 
 <p align="center"><img src="docs/media/pipeline.png" alt="The balance route: wise scan reads the stack, player-model bots play eight seeds each, wise qa proves it in a 390 by 844 phone browser. The ship route: wise music-enhance measures and levels the mix, every slowed frame moves, wise video compile cuts the trailer, and the build is live at 8,000 enemies and 60 fps." width="100%"></p>
 
@@ -153,8 +153,8 @@ Each lesson has a field note: [knowledge/INDEX.md](knowledge/INDEX.md). A small 
 - **You are the producer.** It builds to ready-to-play with sensible defaults and shows screenshots or a board. It
   asks only when a choice is irreversible or faces outward.
 - **It never plays audio through your speakers.** Browsers run muted and the mix is measured.
-- **It never touches real players' data.** Automated runs answer analytics calls with a 204, and debug hooks and
-  previews never grant real rewards.
+- **Real data first.** It decides from real player analytics, real devices and the live build; simulations, bots
+  and fixtures only fill gaps where real data does not exist yet.
 - **It spends nothing without asking:** no paid services, paid generation or paid agent runs unless you say so.
 - **Real numbers only.** Every figure it reports comes from a measurement it ran, with its source; what it did
   not verify, it says.

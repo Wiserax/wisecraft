@@ -5,8 +5,9 @@
     wise qa https://example.com/play.html --ready "window.__game" --start-selector "#play" --selector "#shop" "#close" --json
     wise qa http://127.0.0.1:5173 --dry-run                        # print the node command, run nothing
 
-The browser never makes sound (Chromium --mute-audio; WebKit gets a zero-gain AudioContext destination) and
-requests matching --block (default **/api/events) are answered with 204, so test runs stay out of analytics.
+The browser never makes sound (Chromium --mute-audio; WebKit gets a zero-gain AudioContext destination).
+Every request goes through to the real servers, analytics included; --block PATTERN is an opt-in that answers
+matching requests itself with an empty 200 instead (nothing is blocked by default).
 The gate: no console or page errors and no horizontal overflow. Exit 0 pass, 1 gate failed, 2 usage or a
 missing tool (node, Playwright, a browser). Screenshots (start, middle, end) land in ./qa-out/<engine>-<WxH>/.
 
@@ -96,7 +97,7 @@ def options(a) -> dict:
     opts = {"url": target_url(a.url), "engine": a.engine, "width": w, "height": h, "dpr": a.dpr, "out": out,
             "seconds": a.seconds, "seed": a.seed, "selectors": [s for group in a.selector or [] for s in group],
             "startSelector": a.start_selector,
-            "area": a.area, "ready": a.ready, "block": a.block or ["**/api/events"], "noOverflow": a.no_overflow,
+            "area": a.area, "ready": a.ready, "block": a.block or [], "noOverflow": a.no_overflow,
             "timeoutMs": int(a.timeout * 1000)}
     if a.taps is not None:
         opts["taps"] = a.taps
@@ -138,7 +139,9 @@ def format_result(r: dict) -> str:
         lines.append(f"  step:         {s['selector']}  " + (f"tapped ({s['via']})" if s["found"] else "NOT FOUND"))
     t = r["taps"]
     lines.append(f"  taps:         {t['done']} of {t['planned']} over {t['seconds']} s in {t['area']['source']}, seed {t['seed']}")
-    lines.append(f"  blocked:      {r['blocked']['requests']} request(s) matching {', '.join(r['blocked']['patterns'])}")
+    b = r["blocked"]
+    lines.append(f"  blocked:      {b['requests']} request(s) matching {', '.join(b['patterns'])}" if b["patterns"]
+                 else "  blocked:      nothing (every request went through; --block is opt-in)")
     lines.append(f"  errors:       {len(r['errors']) or 'none'}")
     lines += [f"    - {e}" for e in r["errors"][:20]]
     lines.append(f"  overflow:     {len(r['overflow']) or 'none'}" + ("" if gate_overflow else "  (not gated: --no-overflow)"))
@@ -188,7 +191,7 @@ def register(sub):
     p.add_argument("--selector", metavar="CSS", action="append", nargs="+",
                    help="then tap these, in order (several after one flag, or repeat it); a missing one is an error")
     p.add_argument("--area", metavar="CSS", help="element to tap inside (default: the largest canvas on screen, else the viewport)")
-    p.add_argument("--block", metavar="PATTERN", action="append", help="answer matching requests with 204; repeatable (default **/api/events)")
+    p.add_argument("--block", metavar="PATTERN", action="append", help="opt-in: answer matching requests with an empty 200 instead of sending them; repeatable (default: none, everything goes through)")
     p.add_argument("--no-overflow", action="store_true", help="report horizontal overflow but leave it out of the gate")
     p.add_argument("--channel", help="use an installed browser instead of Playwright's Chromium, e.g. chrome")
     p.add_argument("--playwright", metavar="DIR", help="a folder node can load Playwright from (or set WISE_PLAYWRIGHT)")

@@ -37,7 +37,7 @@ links: []
 8. **Interface:** when two workers meet, name the API first (for example `spawnBoss({ scale, tier, hpMul })`)
    and have it committed first, so both sides build in parallel.
 9. Gate: tests, the browser regression in three profiles, fps, and the feature's own proof.
-10. Constraints: no speaker output, analytics stubbed, explicit `git add <paths>`, no push or deploy, its own
+10. Constraints: no speaker output, explicit `git add <paths>`, no push or deploy, its own
     port range, stop its servers.
 
 **Messages**
