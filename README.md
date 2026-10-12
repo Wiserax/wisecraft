@@ -35,19 +35,19 @@
       <a href="#balance--economy"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/balance-dark.svg"><img src="docs/media/icons/balance-light.svg" width="44" height="44" alt="balance"></picture></a><br>
       <b><a href="#balance--economy">Balance &amp; economy</a></b><br>
       Waves, HP, damage and prices tuned with player-model bots, measured before and after.<br>
-      <i>"Stage 1 is too easy. Rebalance it and prove it with bots."</i>
+      Ask your agent: <i>"Stage 1 is too easy. Rebalance it and prove it with bots."</i>
     </td>
     <td width="33%" valign="top">
       <a href="#meta--monetization"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/meta-dark.svg"><img src="docs/media/icons/meta-light.svg" width="44" height="44" alt="meta"></picture></a><br>
       <b><a href="#meta--monetization">Meta &amp; monetization</a></b><br>
       Loot boxes with pity math, currencies that don't inflate, a shop, offers and a season pass, played fair.<br>
-      <i>"Design a chest with pity and disclosed odds."</i>
+      Ask your agent: <i>"Design a chest with pity and disclosed odds."</i>
     </td>
     <td width="33%" valign="top">
       <a href="#virtual-qa-testers"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/qa-dark.svg"><img src="docs/media/icons/qa-light.svg" width="44" height="44" alt="QA"></picture></a><br>
       <b><a href="#virtual-qa-testers">Virtual QA testers</a></b><br>
       Bots that play like tappers, idlers and spenders in muted phone-sized Chromium and WebKit.<br>
-      <i>"Test it like real players on an iPhone-sized screen."</i>
+      Ask your agent: <i>"Test it like real players on an iPhone-sized screen."</i>
     </td>
   </tr>
 </table>
