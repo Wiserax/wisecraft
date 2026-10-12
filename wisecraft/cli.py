@@ -9,7 +9,7 @@ import sys
 
 from wisecraft import __doc__ as DOC, __version__
 
-GROUPS = ["scan", "qa", "board", "loudness", "dupframes", "video", "kb", "publish"]
+GROUPS = ["scan", "qa", "board", "music-enhance", "video"]
 
 
 def main(argv=None):
@@ -23,7 +23,7 @@ def main(argv=None):
     ap.add_argument("--version", action="version", version=f"wisecraft {__version__}")
     sub = ap.add_subparsers(dest="group", metavar="<group>")
     for g in GROUPS:
-        importlib.import_module(f"wisecraft.{g}").register(sub)
+        importlib.import_module(f"wisecraft.{g.replace('-', '_')}").register(sub)
     args = ap.parse_args(argv)
     if not getattr(args, "func", None):
         # a group without a command: show that group's help

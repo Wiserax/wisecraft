@@ -32,8 +32,8 @@ EDL (edit decision list) - every key but "segments" is optional:
 The shape that works for a game trailer: the hook in the first 3 s (the strongest moment, no logo first), the core
 loop readable by 8 s (what the player does, and why it feels good), escalation, then a hero finale and an end card
 with the name and where to play. One-line titles, 2-4 s per clip, cuts on the beat, fade out.
-Slow motion needs a capture at fps / speed or more (60 fps for 0.5x at 30), else frames repeat: check the result
-with `wise dupframes`. Check the mix with `wise loudness`; nothing here plays audio.
+Slow motion needs a capture at fps / speed or more (60 fps for 0.5x at 30), else frames repeat (ffmpeg's
+mpdecimate filter counts them). Set the mix with `wise music-enhance`; nothing here plays audio.
 """
 from __future__ import annotations
 

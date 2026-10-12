@@ -1,6 +1,6 @@
 # Ported from Universal Modder (https://github.com/rehan-remade/universal-modder), tests/test_um.py.
 # Copyright (c) 2026 Rehan and universal-modder contributors. MIT License; see LICENSE and NOTICE.
-"""Offline tests for the web-game tools: scan, qa, board, loudness, dupframes.
+"""Offline tests for the web-game side of scan, for qa and board, and for the loudness meter in music-enhance.
 
     .venv/bin/python -m pytest -q tests/test_web.py
 
@@ -25,7 +25,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from wisecraft import board, dupframes, loudness, qa, scan  # noqa: E402
+from wisecraft import board, music_enhance, qa, scan  # noqa: E402
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 FFMPEG = pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="needs ffmpeg")
@@ -34,10 +34,10 @@ BODY = "aB3dE5fG7hJ9kL1mN3pQ5rS7tU9vW1xY3zA5bC7d"   # 40 harmless characters to 
 
 
 def wise(*argv):
-    """Run `wise <argv>` in-process with only these five commands registered (the other groups are tested elsewhere)."""
+    """Run `wise <argv>` in-process with only these commands registered (the other groups are tested elsewhere)."""
     ap = argparse.ArgumentParser(prog="wise")
     sub = ap.add_subparsers(dest="group")
-    for module in (scan, qa, board, loudness, dupframes):
+    for module in (scan, qa, board, music_enhance):
         module.register(sub)
     a = ap.parse_args([str(x) for x in argv])
     a.func(a)
@@ -228,7 +228,7 @@ def test_scan_tuning_and_routes(game):
     assert routes[0] == "wise qa http://127.0.0.1:5196/play.html --ready 'window.__game'"
     assert "read src/game/app.js:13" in routes and "npm test" in routes
     assert any(r.startswith("read src/game/ramp.js") for r in routes)
-    assert "wise loudness public/audio/*.mp3" in routes
+    assert "wise music-enhance public/audio/*.mp3 --check" in routes
     text = scan.format_report(game)
     for line in ("three.js + Vite  [threejs-vite, 100%]", "window.__game  src/game/app.js:13", "/api/events (src/game/app.js:9, fetch)",
                  "SDKs: not found", "service worker: not found; manifest: not found", "git:        not found"):
@@ -634,7 +634,7 @@ def test_board_real_render_of_the_starter_screens(tmp_path, capsys):
     assert Image.open(tmp_path / "shots" / "s1.png").size == (780, 1688)
 
 
-# --------------------------------------------------------------------------- loudness
+# --------------------------------------------------------------------------- the loudness meter (music-enhance --check)
 
 EBUR128_LOG = """Input #0, wav, from 'tone.wav':
   Duration: 00:01:04.50, bitrate: 768 kb/s
@@ -666,18 +666,18 @@ EBUR128_LOG = """Input #0, wav, from 'tone.wav':
 """
 
 
-def test_loudness_parse_log():
-    r = loudness.parse(EBUR128_LOG)
+def test_meter_parse_log():
+    r = music_enhance.parse(EBUR128_LOG)
     # integrated, range and peak come from loudnorm's two-decimal measurement, not the ebur128 summary
     assert (r["integrated_lufs"], r["lra_lu"], r["true_peak_dbfs"]) == (-16.12, 4.3, -1.23)
     assert (r["max_momentary_lufs"], r["max_short_term_lufs"]) == (-12.9, -15.1)       # -120.7 is "no window yet"
     assert (r["duration_s"], r["sample_rate"], r["channels"], r["channel_layout"], r["codec"]) == (64.5, 44100, 2, "stereo", "pcm_s16le")
     assert r["silent"] is False and "note" not in r
-    without = loudness.parse(EBUR128_LOG.replace('"input_i"', '"other"'))                # an ffmpeg without loudnorm
+    without = music_enhance.parse(EBUR128_LOG.replace('"input_i"', '"other"'))                # an ffmpeg without loudnorm
     assert (without["integrated_lufs"], without["true_peak_dbfs"]) == (-16.1, -1.2)
     with pytest.raises(ValueError):
-        loudness.parse("Stream map '0:a:0' matches no streams.")
-    assert loudness._channels("5.1(side)") == 6 and loudness._channels("3 channels") == 3 and loudness._channels("odd") is None
+        music_enhance.parse("Stream map '0:a:0' matches no streams.")
+    assert music_enhance._channels("5.1(side)") == 6 and music_enhance._channels("3 channels") == 3 and music_enhance._channels("odd") is None
 
 
 def tone(path: Path, seconds: float = 3, volume: float = 1.0, stereo: bool = False):
@@ -689,133 +689,75 @@ def tone(path: Path, seconds: float = 3, volume: float = 1.0, stereo: bool = Fal
 
 
 @FFMPEG
-def test_loudness_of_a_sine(tmp_path):
+def test_meter_of_a_sine(tmp_path):
     # BS.1770: L = -0.691 + 10*log10(sum of K-weighted channel mean squares). The K filter adds +0.691 dB at 1 kHz,
     # so a mono sine of peak amplitude A reads 20*log10(A) - 3.01 LUFS: mean square A^2/2. A = 1/8 * 0.8 = 0.1
     # is -20 dBFS peak and -23.01 LUFS; the same signal on two channels sums to 3.01 dB more.
     expect = 20 * math.log10(0.1) - 3.01
-    r = loudness.measure(str(tone(tmp_path / "tone.wav", volume=0.8)))
+    r = music_enhance.measure(str(tone(tmp_path / "tone.wav", volume=0.8)))
     assert abs(r["integrated_lufs"] - expect) < 1.5 and abs(r["integrated_lufs"] - -23.0) < 0.2
     assert abs(r["true_peak_dbfs"] - -20.0) < 0.5 and r["lra_lu"] < 1.0
     assert abs(r["max_momentary_lufs"] - expect) < 1.5
     assert r["max_short_term_lufs"] is None or abs(r["max_short_term_lufs"] - expect) < 1.5     # one 3 s window at most
     assert (r["duration_s"], r["sample_rate"], r["channels"], r["codec"]) == (3.0, 48000, 1, "pcm_s16le")
-    stereo = loudness.measure(str(tone(tmp_path / "stereo.wav", volume=0.8, stereo=True)))
+    stereo = music_enhance.measure(str(tone(tmp_path / "stereo.wav", volume=0.8, stereo=True)))
     assert abs(stereo["integrated_lufs"] - (expect + 3.01)) < 1.5 and stereo["channels"] == 2
-    bare = loudness.measure(str(tone(tmp_path / "bare.wav")))                          # amplitude 1/8, no gain
+    bare = music_enhance.measure(str(tone(tmp_path / "bare.wav")))                          # amplitude 1/8, no gain
     assert abs(bare["integrated_lufs"] - (20 * math.log10(1 / 8) - 3.01)) < 1.5
 
 
 @FFMPEG
-def test_loudness_target_gate_and_table(tmp_path, capsys):
+def test_meter_target_gate_and_table(tmp_path, capsys):
     a, b = tone(tmp_path / "a.wav", volume=0.8), tone(tmp_path / "b.wav", seconds=4)
-    wise("loudness", a, "--target", "-23", "--tolerance", "1")           # inside: no exit
+    wise("music-enhance", a, "--check", "--target", "-23", "--tolerance", "1")           # inside: no exit
     assert "inside -23 ±1 LUFS" in capsys.readouterr().out
-    assert exit_code("loudness", a, "--target", "-15", "--tolerance", "1") == 1
+    assert exit_code("music-enhance", a, "--check", "--target", "-15", "--tolerance", "1") == 1
     assert "OUTSIDE -15 ±1 LUFS by -8." in capsys.readouterr().out     # -23.0 against -15
-    wise("loudness", a, "--target", "-15", "--tolerance", "9")           # a wide tolerance lets it through
+    wise("music-enhance", a, "--check", "--target", "-15", "--tolerance", "9")           # a wide tolerance lets it through
     capsys.readouterr()
-    assert exit_code("loudness", a, b, "--target", "-23", "--json") == 1               # b reads about -21.1
+    assert exit_code("music-enhance", a, b, "--check", "--target", "-23", "--json") == 1               # b reads about -21.1
     r = json.loads(capsys.readouterr().out)
     assert r["ok"] is False and [f["target"]["ok"] for f in r["files"]] == [True, False] and r["files"][1]["target"]["delta"] > 1
-    wise("loudness", a, b)
+    assert not any(k.startswith("_") for f in r["files"] for k in f)                     # no private fields leak out
+    assert exit_code("music-enhance", a, b, "--check") == 1                              # the preset's -14 is the gate
     table = capsys.readouterr().out.splitlines()
     assert table[0].split() == ["file", "I", "LUFS", "LRA", "TP", "dBFS", "max", "S", "max", "M", "dur", "s", "Hz", "ch"]
-    assert table[1].startswith("a.wav") and table[2].startswith("b.wav") and table[3].startswith("Targets:")
+    assert table[1].startswith("a.wav") and "OUTSIDE -14" in table[1] and table[2].startswith("b.wav") and table[3].startswith("Targets:")
+    assert not list(tmp_path.glob("*.enhanced.*"))                                       # --check writes nothing
 
 
 @FFMPEG
-def test_loudness_missing_file_and_unmeasurable_input(tmp_path, capsys):
-    assert exit_code("loudness", tmp_path / "nope.wav") == 2
+def test_old_loudness_name_still_measures(tmp_path, capsys):
+    a = tone(tmp_path / "a.wav", volume=0.8)
+    wise("loudness", a)                                                  # no target: a reading and exit 0, as before
+    out = capsys.readouterr()
+    assert "integrated:      -23." in out.out and "target:" not in out.out and "music-enhance --check" in out.err
+    assert exit_code("loudness", a, "--target", "-15") == 1
+    assert not list(tmp_path.glob("*.enhanced.*"))
+
+
+@FFMPEG
+def test_meter_missing_file_and_unmeasurable_input(tmp_path, capsys):
+    assert exit_code("music-enhance", tmp_path / "nope.wav", "--check") == 2
     assert "no such file" in capsys.readouterr().err
     make(tmp_path, {"notes.txt": "not audio"})
-    assert exit_code("loudness", tmp_path / "notes.txt") == 1
+    assert exit_code("music-enhance", tmp_path / "notes.txt", "--check") == 1
     assert "could not measure" in capsys.readouterr().out
     # a 0.1 s clip never fills a 400 ms block: no loudness reading is invented, only the peak is real
-    r = loudness.measure(str(tone(tmp_path / "blip.wav", seconds=0.1)))
+    r = music_enhance.measure(str(tone(tmp_path / "blip.wav", seconds=0.1)))
     assert r["integrated_lufs"] is None and r["lra_lu"] is None and "too short" in r["note"]
     assert abs(r["true_peak_dbfs"] - 20 * math.log10(1 / 8)) < 0.6 and r["silent"] is False
-    assert exit_code("loudness", tmp_path / "blip.wav", "--target", "-15") == 1
+    assert exit_code("music-enhance", tmp_path / "blip.wav", "--check", "--target", "-15") == 1
 
 
-def test_loudness_never_plays():
-    cmd = loudness.command("ffmpeg", "x.wav")
+def test_meter_never_plays():
+    cmd = music_enhance.command("ffmpeg", "x.wav")
     assert cmd.count("null") == 2 and "ffplay" not in " ".join(cmd) and "-nostdin" in cmd      # both outputs are the null muxer
-
-
-# --------------------------------------------------------------------------- dupframes
-
-def video(path: Path, vf: str | None = None, seconds: int = 3):
-    """testsrc2 at 30 fps (every frame differs), optionally through a filter that repeats frames."""
-    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi", "-i", f"testsrc2=size=160x120:rate=30:duration={seconds}"]
-    subprocess.run(cmd + (["-vf", vf] if vf else []) + ["-pix_fmt", "yuv420p", str(path)], check=True)
-    return path
-
-
-def test_dupframes_parse_log():
-    line = "[Parsed_showinfo_{f} @ 0x1] n:{n:4d} pts:{pts:7d} pts_time:{t:<8g} duration:    512 fmt:yuv420p"
-    stamps = [(i * 512, i / 30) for i in range(8)]
-    kept = [0, 1, 2, 6, 7]                                           # frames 3, 4, 5 repeat frame 2
-    log = "  Stream #0:0[0x1](und): Video: h264 (High), yuv420p, 160x120, 27 kb/s, 30 fps, 30 tbr, 15360 tbn\n"
-    log += "\n".join(line.format(f=0, n=i, pts=p, t=t) for i, (p, t) in enumerate(stamps)) + "\n"
-    log += "\n".join(line.format(f=2, n=i, pts=stamps[k][0], t=stamps[k][1]) for i, k in enumerate(kept))
-    r = dupframes.parse(log)
-    assert (r["frames"], r["unique"], r["duplicates"], r["duplicate_pct"], r["fps"], r["runs"]) == (8, 5, 3, 37.5, 30.0, 1)
-    assert r["longest_run"] == {"frames": 3, "start_s": 0.1, "seconds": 0.1}
-    assert dupframes.parse(log, offset=2.0)["longest_run"]["start_s"] == 2.1                  # --start shifts the clock back
-    assert dupframes.runs_of([False, True, True, False, True]) == [(1, 2), (4, 1)]
-    with pytest.raises(ValueError):
-        dupframes.parse("no frames here")
-
-
-@FFMPEG
-def test_dupframes_clean_video_has_none(tmp_path, capsys):
-    r = dupframes.measure(str(video(tmp_path / "clean.mp4")))
-    assert (r["frames"], r["duplicates"], r["unique"], r["fps"]) == (90, 0, 90, 30.0)
-    assert r["longest_run"] == {"frames": 0, "start_s": None, "seconds": 0} and r["duplicate_pct"] == 0
-    assert r["definition"] == {"filter": "mpdecimate", "hi": 768, "lo": 320, "frac": 0.33}    # dupframes.sh's definition
-    wise("dupframes", tmp_path / "clean.mp4", "--max-run", "0")           # the gate passes
-    assert "longest run:  none" in capsys.readouterr().out
-
-
-@FFMPEG
-def test_dupframes_counts_repeats_and_gates(tmp_path, capsys):
-    stutter = video(tmp_path / "stutter.mp4", "fps=10,fps=30")         # every source frame shown three times
-    r = dupframes.measure(str(stutter))
-    assert (r["frames"], r["unique"], r["duplicates"], r["runs"]) == (90, 30, 60, 30)
-    assert r["longest_run"]["frames"] == 2 and abs(r["longest_run"]["start_s"] - 1 / 30) < 0.01
-    assert abs(r["duplicate_pct"] - 66.67) < 0.01
-    assert exit_code("dupframes", stutter, "--max-run", "1") == 1
-    assert "longest run 2 > --max-run 1: FAIL" in capsys.readouterr().out
-    wise("dupframes", stutter, "--max-run", "2", "--json")
-    assert json.loads(capsys.readouterr().out)["ok"] is True
-    wise("dupframes", stutter, "--start", "1", "--end", "2", "--json")
-    w = json.loads(capsys.readouterr().out)
-    assert (w["frames"], w["duplicates"]) == (30, 20) and 1.0 <= w["longest_run"]["start_s"] < 2.0
-
-
-@FFMPEG
-def test_dupframes_finds_where_a_hold_starts(tmp_path):
-    hold = video(tmp_path / "hold.mp4", "tpad=stop_mode=clone:stop_duration=1", seconds=2)     # 2 s of motion, a 1 s freeze
-    r = dupframes.measure(str(hold))
-    assert r["frames"] == 90 and r["longest_run"]["frames"] == 30 and r["runs"] == 1
-    assert abs(r["longest_run"]["start_s"] - 2.0) < 0.05 and abs(r["longest_run"]["seconds"] - 1.0) < 0.01
-
-
-@FFMPEG
-def test_dupframes_errors(tmp_path, capsys):
-    assert exit_code("dupframes", tmp_path / "nope.mp4") == 2
-    clip = video(tmp_path / "clip.mp4", seconds=1)
-    assert exit_code("dupframes", clip, "--threshold", "2") == 2
-    assert exit_code("dupframes", clip, "--start", "3", "--end", "1") == 2
-    capsys.readouterr()
-    assert exit_code("dupframes", tone(tmp_path / "audio.wav", seconds=1)) == 1
-    assert "no video stream" in capsys.readouterr().out
 
 
 # --------------------------------------------------------------------------- the command line
 
-@pytest.mark.parametrize("command", ["scan", "qa", "board", "loudness", "dupframes"])
+@pytest.mark.parametrize("command", ["scan", "qa", "board", "music-enhance"])
 def test_help_has_examples(command, capsys):
     assert exit_code(command, "--help") == 0
     out = capsys.readouterr().out

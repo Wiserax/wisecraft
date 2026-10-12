@@ -1,17 +1,24 @@
 # Ported from Universal Modder (https://github.com/rehan-remade/universal-modder), um/scan.py.
 # Copyright (c) 2026 Rehan and universal-modder contributors. MIT License; see LICENSE and NOTICE.
-"""Fingerprint a web game: stack, versions, entry points, debug hooks, analytics, saves, audio, bundle size.
+"""Fingerprint any game, or any video clip: what it is built with, how to run and build it, what to try next.
 
-    wise scan .                                 # a project folder; prints the report
+    wise scan .                                 # a project folder: the engine is detected from its files
     wise scan ~/games/tower --json              # machine-readable, for agents
-    wise scan https://example.com/play.html     # a deployed build: scripts, sizes, engine, cache headers
+    wise scan https://example.com/play.html     # a deployed web build: scripts, sizes, engine, cache headers
     wise scan http://127.0.0.1:5173 --json      # a dev server works too
+    wise scan trailer.mp4                       # a video: duration, size, fps, codecs, loudness, cuts, first frame
+    wise scan captures/ --sheet                 # a folder of videos: one table, and a contact sheet per clip
 
-Every fact is marked found or not found; nothing is guessed. The report ends with routes: what an
-agent can do next (`wise qa`, where the tuning tables seem to live). Everything here is read-only; a
-URL scan makes at most 30 requests and reads at most 20 MB. Analytics are reported as hosts and
-paths, never keys.
-Exit 0 scanned, 1 the URL could not be fetched, 2 usage (no such folder).
+The input type is detected. A folder is read as Unity, Godot, Unreal, GameMaker, Defold, Cocos, a Rust, C/C++
+or C# project, an Android or iOS app, or a web game (three.js, Phaser, PixiJS, Babylon.js, PlayCanvas, exported
+Unity/Godot/Construct builds, plain canvas). For each it reports versions, entry points, build targets, asset and
+audio folders with sizes, and ends with what to try next. A web game also gets debug hooks, analytics hosts,
+saves, tuning tables and bundle sizes; a URL is fetched (at most 30 requests, 20 MB). A video is measured with
+ffprobe and ffmpeg and never played.
+
+Every fact is marked found or not found; nothing is guessed. Everything here is read-only. Analytics are
+reported as hosts and paths, never keys.
+Exit 0 scanned, 1 the URL or the video could not be read, 2 usage (no such folder or file).
 """
 from __future__ import annotations
 
@@ -20,6 +27,7 @@ import gzip
 import json
 import os
 import re
+import shutil
 import subprocess
 import urllib.error
 import urllib.request
@@ -993,9 +1001,12 @@ def dir_routes(r: dict) -> list[dict]:
     if r["audio"]["found"]:
         d = r["audio"]["dirs"][0]["dir"]
         fmt = max(r["audio"]["formats"].items(), key=lambda kv: kv[1]["bytes"])[0]
-        routes.append({"do": f"wise loudness {d}/*.{fmt}", "why": "loudness and true peak per file, measured, never played"})
+        routes.append({"do": f"wise music-enhance {d}/*.{fmt} --check", "why": "loudness and true peak per file, measured, never played"})
     if not r["bundle"]["found"] and "build" in scripts:
         routes.append({"do": "npm run build, then wise scan again", "why": "no build output here yet, so bundle sizes are not measured"})
+    if r["engine"]["key"] == "unknown":
+        routes.append({"do": "point wise scan at the folder that holds the project file (package.json, project.godot, *.uproject, ProjectSettings/, Cargo.toml, CMakeLists.txt ...)",
+                       "why": "no engine or build marker was found at the top of this folder"})
     return routes
 
 
@@ -1225,16 +1236,42 @@ def fingerprint_url(url: str, fetch: Callable[..., Fetched] | None = None,
 # --------------------------------------------------------------------------- entry points
 
 
-def fingerprint(target: str) -> dict:
-    """Facts about a web game folder or URL. Raises ScanError when the target can't be read."""
+def fingerprint(target: str, sheet: str | None = None, scene: float | None = None) -> dict:
+    """Facts about a game project folder, a web game's URL, a video file or a folder of videos.
+
+    Raises ScanError when the target can't be read."""
+    from wisecraft import clip, engines
     if re.match(r"https?://", target, re.I):
         return fingerprint_url(target)
     p = Path(target).expanduser()
+    scene = clip.SCENE if scene is None else scene
     if p.is_file():
-        raise ScanError(f"{target} is a file; pass the project folder (or the URL of the running game)")
+        if clip.is_video(p):
+            return _clip(lambda: clip.fingerprint(p, sheet, scene))
+        if p.suffix.lower() in AUDIO_EXT:
+            raise ScanError(f"{target} is an audio file: measure or fix it with `wise music-enhance {p.name} --check`")
+        raise ScanError(f"{target} is a file; pass the project folder, the URL of the running game, or a video (mp4, mov, webm, mkv)")
     if not p.is_dir():
-        raise ScanError(f"no such folder: {target} (pass a project folder or an http(s) URL)")
+        raise ScanError(f"no such folder or file: {target} (pass a project folder, an http(s) URL, or a video)")
+    if engines.looks_native(p):
+        r = engines.fingerprint(p)
+        if r:
+            return r
+    low = {c.name.lower() for c in p.iterdir()}
+    webby = "package.json" in low or any(n.endswith((".html", ".js", ".ts")) for n in low)
+    if not webby and clip.videos_in(p):
+        return _clip(lambda: clip.fingerprint_folder(p, sheet, scene))
     return fingerprint_dir(p)
+
+
+def _clip(work):
+    from wisecraft import clip
+    if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+        raise ScanError("scanning a video needs ffmpeg and ffprobe on PATH: brew install ffmpeg / apt install ffmpeg / winget install ffmpeg")
+    try:
+        return work()
+    except clip.ClipError as e:
+        raise ScanError(str(e)) from None
 
 
 NOT_FOUND = "not found"
@@ -1378,21 +1415,28 @@ def format_url(r: dict) -> str:
 
 
 def format_report(r: dict) -> str:
-    return format_url(r) if r["kind"] == "url" else format_dir(r)
+    from wisecraft import clip, engines
+    return {"url": format_url, "dir": format_dir, "project": engines.format_project, "video": clip.format_video,
+            "videos": clip.format_folder}[r["kind"]](r)
 
 
 def main(a):
     try:
-        r = fingerprint(a.target)
+        r = fingerprint(a.target, a.sheet, a.scene)
     except ScanError as e:
-        die(str(e), 1 if re.match(r"https?://", a.target, re.I) else 2)
+        # 1: something that should be readable was not (a URL, a video file); 2: a wrong argument
+        p = Path(a.target).expanduser()
+        unreadable = re.match(r"https?://", a.target, re.I) or (p.is_file() and p.suffix.lower() in (".mp4", ".mov", ".webm", ".mkv", ".m4v", ".avi"))
+        die(str(e), 1 if unreadable else 2)
     print(json.dumps(r, indent=2) if a.json else format_report(r))
 
 
 def register(sub):
     import argparse
-    p = sub.add_parser("scan", help="fingerprint a web game (folder or URL): stack, versions, entries, hooks, analytics, audio, bundle",
+    p = sub.add_parser("scan", help="fingerprint any game project, a web game's URL, or any video clip: engine, versions, entries, targets, assets",
                        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("target", help="project folder, or the http(s) URL of a running or deployed game")
+    p.add_argument("target", help="a project folder, the http(s) URL of a running or deployed web game, a video file, or a folder of videos")
     p.add_argument("--json", action="store_true", help="print the report as JSON")
+    p.add_argument("--sheet", nargs="?", const="", metavar="PNG", help="for a video: also write a contact sheet (default <name>.sheet.png next to it; a folder for several)")
+    p.add_argument("--scene", type=float, metavar="0..1", help="for a video: how different two frames must be to count as a cut (default 0.3)")
     p.set_defaults(func=main)
