@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "wisecraft",
   "version": "0.3.0",
-  "description": "Build, balance, polish and ship a mobile web game with an AI agent: stack recon, an economy tuned with player-model bots, a clean mobile UI kit, game feel and a measured audio mix, performance budgets, muted phone-browser QA, releases, lead/worker orchestration, trailers, and a shared knowledge base of what real web games learned.",
+  "description": "Game trailers, balance, meta and QA with an AI agent: a trailer cut from the real game (frame-exact slow motion, beat-cut EDL, titles, music mixed to loudness, vertical and 16:9), balance and economy tuned with player-model bots, meta and monetization design (loot boxes with pity, currencies, shop, season pass, fair odds), and virtual QA testers that play like players in a muted phone browser. Plus UI, game feel, design boards and agent orchestration extras.",
   "author": {
     "name": "Alex Wiserax",
     "url": "https://github.com/Wiserax"
@@ -12,16 +12,18 @@
   "license": "MIT",
   "keywords": [
     "game-development",
-    "web-games",
-    "html5-games",
-    "threejs",
-    "vite",
-    "mobile-games",
+    "game-trailer",
+    "trailer",
     "game-balance",
-    "game-economy",
+    "economy-design",
+    "monetization",
+    "gacha",
+    "loot-box",
+    "game-qa",
+    "playtesting",
     "playwright",
-    "game-audio",
-    "knowledge-base",
+    "web-games",
+    "mobile-games",
     "agent-skills"
   ]
 }

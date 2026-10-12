@@ -7,7 +7,7 @@ game: "Horde tower defense (mobile web)"                  # a neutral descriptio
 games_also: []                                            # other games the same work was done in, described the same way
 game_version: "2.3.5, Vite 7 + three.js 0.180"            # exact game build and stack versions that worked
 platform: web-mobile                                      # web-mobile | web-desktop | pwa | webview | other
-engine: threejs-vite                                      # wise scan's engine key (threejs-vite, phaser, pixi, babylon, playcanvas, unity-webgl, godot-web, construct, canvas-2d) or unknown
+engine: threejs-vite                                      # a short engine key (threejs-vite, phaser, pixi, babylon, playcanvas, unity-webgl, godot-web, construct, canvas-2d, unity, godot) or unknown
 route: engine-code                                        # design | data-tuning | engine-code | ui | audio | performance | tooling | release | process | other
 tools: ["wise qa", "Playwright", "node --test"]
 status: working                                           # idea | in-progress | working | released | abandoned

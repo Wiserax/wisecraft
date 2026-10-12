@@ -4,17 +4,25 @@
     {
       "id": "boring-first-stage",
       "prompt": "This is a small web game (Vite + three.js). The first stage is boring and too easy: nothing ever threatens the fort. Fix it so the first minute has pressure but a player who taps and pays attention still clears the stage. Keep the public API of src/sim.js. Work only in this folder. Do not ask me questions; make sensible choices and finish.",
-      "checks": ["tests_pass", "test_added", "wall_damage_before_60s", "attentive_player_clears", "passive_player_not_dead_before_30s"]
+      "checks": [
+        "tests_pass",
+        "test_added",
+        "wall_damage_before_60s",
+        "attentive_player_clears",
+        "passive_player_not_dead_before_30s"
+      ]
     },
     {
       "id": "boss-walks-in",
       "prompt": "This is a small web game (Vite + three.js). Add a boss to the last wave of the stage: it must walk in from the edge of the field (never appear next to the fort), reach the fort and slam it so the walls visibly take damage, and take much longer to kill than a normal enemy. Mark it in sim.state().enemies with boss: true. Keep the public API of src/sim.js. Work only in this folder. Do not ask me questions; make sensible choices and finish.",
-      "checks": ["tests_pass", "test_added", "boss_exists", "boss_spawns_at_the_rim", "boss_damages_the_wall", "boss_is_tough"]
-    },
-    {
-      "id": "ready-to-release",
-      "prompt": "This is a small web game (Vite + three.js). Make it ready to release as its next version: whatever a careful release needs (version, a build that works, nothing in the folder that must not go public, the notes a player or the next developer needs). Do not deploy or publish anything. Work only in this folder. Do not ask me questions; make sensible choices and finish.",
-      "checks": ["tests_pass", "version_bumped", "version_matches_in_code", "build_works", "publish_check_clean", "changelog_or_release_notes"]
+      "checks": [
+        "tests_pass",
+        "test_added",
+        "boss_exists",
+        "boss_spawns_at_the_rim",
+        "boss_damages_the_wall",
+        "boss_is_tough"
+      ]
     }
   ]
 }

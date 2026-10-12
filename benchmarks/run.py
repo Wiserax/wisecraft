@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""With vs without Wisecraft: run a headless agent on three small tasks and score the result with scripts.
+"""With vs without Wisecraft: run a headless agent on two small tasks and score the result with scripts.
 
     python3 benchmarks/run.py --dry-run                      # print the commands, run nothing
-    python3 benchmarks/run.py --trials 3                     # 3 tasks x 2 arms x 3 trials = 18 agent runs
+    python3 benchmarks/run.py --trials 3                     # 2 tasks x 2 arms x 3 trials = 12 agent runs
     python3 benchmarks/run.py --tasks boss-walks-in --trials 1 --arms with
     python3 benchmarks/run.py --report ~/.wisecraft/bench/<stamp>      # re-score and summarise a finished run
 
@@ -12,8 +12,7 @@ turn limit. Afterwards benchmarks/score.mjs checks the folder (it calls the sim 
 what the agent said). Results land in ~/.wisecraft/bench/<stamp>/results.json: per trial the checks, wall-clock
 seconds, tokens and cost as reported by the agent CLI, and per arm the mean and standard deviation.
 
-This spends real tokens (18 agent sessions by default). Nothing is charted until it has run: the README shows
-"coming soon" while benchmarks/results.json does not exist.
+This spends real tokens (12 agent sessions by default), so it runs only when a person says yes.
 """
 import argparse
 import json
@@ -103,7 +102,7 @@ def main():
     ap.add_argument("--max-turns", type=int, default=60)
     ap.add_argument("--timeout", type=int, default=1500, help="seconds per trial")
     ap.add_argument("--max-usd", type=float, default=4.0, help="spending cap per trial, passed to the agent CLI (0 = none)")
-    ap.add_argument("--build", action="store_true", help="also run `npm run build` in the release task (needs --modules)")
+    ap.add_argument("--build", action="store_true", help="pass --build to score.mjs, for checks that build the game (needs --modules)")
     ap.add_argument("--modules", help="a node_modules folder (vite + three) to link into every copy")
     ap.add_argument("--out", help="run folder (default: ~/.wisecraft/bench/<stamp>, outside the repo)")
     ap.add_argument("--report", help="re-score a finished run folder and print its summary")

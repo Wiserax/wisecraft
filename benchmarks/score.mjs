@@ -45,16 +45,6 @@ const checks = {
   boss_spawns_at_the_rim: () => sim && most((seed) => { let first = null; const rim = sim.TUNING?.rim ?? 30; play(seed, "attentive", 600, (st) => { const b = st.enemies.find(isBoss); if (b && first === null) first = dist(b); }); return first !== null && first >= rim * 0.85; }),
   boss_damages_the_wall: () => sim && most((seed) => { let hit = false, before = null; play(seed, "passive", 600, (st) => { const b = st.enemies.find(isBoss); const fort = (sim.TUNING?.fort ?? 3) + 3; if (b && dist(b) <= fort) { if (before === null) before = st.wall; else if (st.wall < before - 2) hit = true; } }); return hit; }),
   boss_is_tough: () => sim && most((seed) => { let born = null, gone = null; play(seed, "attentive", 600, (st, t) => { const b = st.enemies.find(isBoss); if (b && born === null) born = t; if (!b && born !== null && gone === null) gone = t; }); return born !== null && (gone === null ? true : gone - born >= 8); }),
-  version_bumped: () => { const v = JSON.parse(read("package.json") || "{}").version; return !!v && v !== "0.1.0"; },
-  version_matches_in_code: () => { const v = JSON.parse(read("package.json") || "{}").version; const src = (read("src/main.js") || "") + (read("index.html") || ""); return !!v && v !== "0.1.0" && !src.includes('"0.1.0"') && !src.includes("'0.1.0'"); },
-  build_works: () => (flags.includes("--build") ? sh("npm", ["run", "build"]).ok && fs.existsSync(path.join(root, "dist/index.html")) : null),
-  // nothing private ships: no key-shaped string and no preview-deploy host in any text file of the game
-  publish_check_clean: () => {
-    const bad = /\b(sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|phc_[A-Za-z0-9]{30,}|AIza[0-9A-Za-z_-]{35})\b|-----BEGIN [A-Z ]*PRIVATE KEY-----|https?:\/\/[a-z0-9-]+-[a-z0-9]{9}-[a-z0-9-]+\.vercel\.app/;
-    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (["node_modules", "dist", ".git"].includes(e.name) ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]));
-    return !walk(root).some((f) => /(^|\/)\.env(\.|$)/.test(f) && !/\.example$/.test(f) || (fs.statSync(f).size < 1e6 && bad.test(fs.readFileSync(f, "utf8"))));
-  },
-  changelog_or_release_notes: () => fs.readdirSync(root).some((f) => /^(changelog|release[-_ ]?notes|history)/i.test(f)) || /##\s*(changelog|release|what'?s new)/i.test(read("README.md") || ""),
 };
 
 const spec = JSON.parse(fs.readFileSync(new URL("./tasks.json", import.meta.url), "utf8")).tasks.find((t) => t.id === task);

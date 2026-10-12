@@ -1,7 +1,8 @@
 # Horde demo
 
 A deliberately unfinished horde defense: about 200 lines of Vite + three.js. It is the sample game the Wisecraft
-docs and benchmark run on, and a small place to try the skills.
+docs and benchmark run on, and a small place to try the four main skills: cut a trailer of it, balance it with
+the bots, give it a chest and a currency, and test it with `wise qa`.
 
 ```bash
 npm install
@@ -18,5 +19,11 @@ What is wrong with it, on purpose:
 - there is no boss;
 - nothing is ready for a release: no version shown, no build check, no README for players.
 
-Those are the three benchmark tasks (`benchmarks/`). Keep the sim's public API (`createSim`, `step`, `tap`,
-`state`, `on`) when you change it: the scripted checks call it.
+The player-model bots of the game-balance skill run on it as it is:
+```bash
+node ../../skills/game-balance/scripts/bots.mjs src/sim.js --seeds 8
+```
+Every model, the passive one included, clears all 8 seeds with the walls at 100%: "too easy", measured.
+
+The first two problems are benchmark tasks (`benchmarks/`). Keep the sim's public API (`createSim`, `step`,
+`tap`, `state`, `on`) when you change it: the scripted checks and the bots call it.

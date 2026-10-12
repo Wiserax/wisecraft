@@ -4,7 +4,7 @@ Copyright (c) 2026 Alex Wiserax
 This project is licensed under the MIT License (see LICENSE).
 
 Its architecture (plugin layout, skills as the source of truth with per-agent copies, a Python CLI with one
-module per group, a knowledge base of field notes with a generated index) and parts of its tooling are adapted
+module per group, a knowledge base of field notes with an index) and parts of its tooling are adapted
 from Universal Modder, https://github.com/rehan-remade/universal-modder
 
     Universal Modder
@@ -17,14 +17,10 @@ Files ported or adapted from Universal Modder (each carries a notice at its top)
     hooks/add-to-path.sh, hooks/hooks.json   from hooks/
     wisecraft/cli.py                      from um/cli.py
     wisecraft/common.py                   from um/common.py
-    wisecraft/kb.py                       from um/kb.py
-    wisecraft/publish.py                  from um/publish.py
     wisecraft/video.py                    from um/video.py
-    wisecraft/scan.py                     from um/scan.py (the scanner's structure; the web facts are new)
     wisecraft/fonts/                      from um/fonts/ (unchanged)
     tests/test_wise.py, tests/test_web.py from tests/test_um.py (the ported tests and a helper)
     knowledge/TEMPLATE.md, knowledge/README.md   from knowledge/ (the field-note format)
-    skills/share-field-notes/SKILL.md     from skills/share-field-notes/SKILL.md
     AGENTS.md, CONTRIBUTING.md, SECURITY.md, .github/   adapted from the files of the same name
     plugin.json, .claude-plugin/, .codex-plugin/, .cursor-plugin/, .agents/plugins/, gemini-extension.json,
     opencode.json                         the manifest layout
