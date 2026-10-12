@@ -1,0 +1,33 @@
+{
+  "_about": "Vertical 30 s trailer for wise video compile. Replace paths, in-points, words and bpm; keys starting with _ and per-segment note keys are ignored by compile. Run scripts/snap_edl.py on it, then compile the .snapped.json copy. Hard cuts, no picture fade (the end card holds), clip audio off (frame-stepped takes are silent), the game's SFX on impacts, music levelled later with wise music-enhance --for trailer --fade-out 1.5.",
+  "size": [1080, 1920],
+  "fps": 60,
+  "bpm": 91.44,
+  "transition": {"type": "cut"},
+  "fade_out": 0,
+  "clip_volume": 0,
+  "theme": {"accent": "#45E3E0", "text": "#FFFFFF", "chip": "#0A0D12E0"},
+  "music": {"path": "music/track.mp3", "volume": 0.8, "start": 0.0, "fade_in": 0.05},
+  "sfx": [
+    {"path": "sfx/stomp.wav", "at": 1.0, "volume": 0.9},
+    {"path": "sfx/slam.wav", "at": 18.4, "volume": 0.9},
+    {"path": "sfx/collapse.wav", "at": 19.7, "volume": 1.0},
+    {"path": "sfx/celebration.wav", "at": 22.3, "volume": 0.8}
+  ],
+  "segments": [
+    {"note": "hook, 0-3 s: the most spectacular moment, words that work muted", "clip": "takes/01-hook.mp4", "in": 0.5, "beats": 4, "speed": 0.5, "fill": "crop", "hook": "8,000 ENEMIES.\nONE FORT."},
+    {"note": "the loop: what the player does", "clip": "takes/02-tap.mp4", "in": 0.2, "beats": 3, "fill": "crop", "hook": "TAP. UPGRADE."},
+    {"clip": "takes/03-payoff.mp4", "in": 0.0, "beats": 2, "fill": "crop"},
+    {"clip": "takes/04-crunch-close.mp4", "in": 0.1, "beats": 1, "fill": "crop"},
+    {"clip": "takes/05-crunch-wide.mp4", "in": 0.1, "beats": 1, "fill": "crop"},
+    {"note": "escalation, one idea per shot", "clip": "takes/06-giants.mp4", "in": 0.4, "beats": 4, "speed": 0.5, "fill": "crop", "hook": "GIANTS."},
+    {"clip": "takes/07-reveal.mp4", "in": 0.0, "beats": 4, "fill": "crop"},
+    {"clip": "takes/08-pierce.mp4", "in": 0.3, "beats": 4, "speed": 0.5, "fill": "crop"},
+    {"clip": "takes/09-blade.mp4", "in": 0.0, "beats": 2, "fill": "crop"},
+    {"clip": "takes/10-titan-approach.mp4", "in": 0.2, "beats": 4, "speed": 0.25, "fill": "crop", "hook": "A TITAN\nAPPROACHES"},
+    {"clip": "takes/11-slam.mp4", "in": 0.0, "beats": 2, "fill": "crop"},
+    {"note": "hero finale: close, slow, the longest shot", "clip": "takes/12-collapse.mp4", "in": 0.1, "beats": 6, "speed": 0.25, "fill": "crop"},
+    {"clip": "takes/13-clear.mp4", "in": 0.0, "beats": 4, "fill": "crop"},
+    {"note": "end card: held to the last frame", "card": {"title": "PLAY FREE", "sub": "in your browser", "logo": "art/logo.png", "bg": "#05070A"}, "beats": 6}
+  ]
+}

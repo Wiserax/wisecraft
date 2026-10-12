@@ -1,0 +1,78 @@
+period,currency,flow,source,amount,note
+D1,coins,faucet,battle rewards,1800,3 sessions; engaged player
+D1,coins,faucet,daily login,200,D7 is the weekly bonus
+D1,coins,faucet,chests,300,
+D1,coins,sink,tower upgrades,2100,falls once early towers hit max level
+D1,coins,sink,cosmetics,0,
+D1,gems,faucet,rank rewards,30,
+D1,gems,faucet,daily goals,20,
+D1,gems,faucet,chapter clear,0,
+D1,gems,faucet,weekend event,0,
+D1,gems,sink,vault pull,0,free first open (D1) and free daily opens cover the gaps; 60 a paid pull
+D1,gems,sink,revive,0,
+D2,coins,faucet,battle rewards,2600,3 sessions; engaged player
+D2,coins,faucet,daily login,250,D7 is the weekly bonus
+D2,coins,faucet,chests,400,
+D2,coins,sink,tower upgrades,2900,falls once early towers hit max level
+D2,coins,sink,cosmetics,0,
+D2,gems,faucet,rank rewards,20,
+D2,gems,faucet,daily goals,20,
+D2,gems,faucet,chapter clear,25,
+D2,gems,faucet,weekend event,0,
+D2,gems,sink,vault pull,60,60 a paid pull
+D2,gems,sink,revive,10,
+D3,coins,faucet,battle rewards,3400,3 sessions; engaged player
+D3,coins,faucet,daily login,300,D7 is the weekly bonus
+D3,coins,faucet,chests,500,
+D3,coins,sink,tower upgrades,3600,falls once early towers hit max level
+D3,coins,sink,cosmetics,50,
+D3,gems,faucet,rank rewards,20,
+D3,gems,faucet,daily goals,20,
+D3,gems,faucet,chapter clear,0,
+D3,gems,faucet,weekend event,0,
+D3,gems,sink,vault pull,0,free first open (D1) and free daily opens cover the gaps; 60 a paid pull
+D3,gems,sink,revive,10,
+D4,coins,faucet,battle rewards,4200,3 sessions; engaged player
+D4,coins,faucet,daily login,350,D7 is the weekly bonus
+D4,coins,faucet,chests,600,
+D4,coins,sink,tower upgrades,3900,falls once early towers hit max level
+D4,coins,sink,cosmetics,0,
+D4,gems,faucet,rank rewards,10,
+D4,gems,faucet,daily goals,20,
+D4,gems,faucet,chapter clear,25,
+D4,gems,faucet,weekend event,0,
+D4,gems,sink,vault pull,60,60 a paid pull
+D4,gems,sink,revive,10,
+D5,coins,faucet,battle rewards,5000,3 sessions; engaged player
+D5,coins,faucet,daily login,400,D7 is the weekly bonus
+D5,coins,faucet,chests,700,
+D5,coins,sink,tower upgrades,3600,falls once early towers hit max level
+D5,coins,sink,cosmetics,50,
+D5,gems,faucet,rank rewards,10,
+D5,gems,faucet,daily goals,20,
+D5,gems,faucet,chapter clear,0,
+D5,gems,faucet,weekend event,30,
+D5,gems,sink,vault pull,60,60 a paid pull
+D5,gems,sink,revive,10,
+D6,coins,faucet,battle rewards,5600,3 sessions; engaged player
+D6,coins,faucet,daily login,450,D7 is the weekly bonus
+D6,coins,faucet,chests,800,
+D6,coins,sink,tower upgrades,3300,falls once early towers hit max level
+D6,coins,sink,cosmetics,0,
+D6,gems,faucet,rank rewards,10,
+D6,gems,faucet,daily goals,20,
+D6,gems,faucet,chapter clear,25,
+D6,gems,faucet,weekend event,30,
+D6,gems,sink,vault pull,60,60 a paid pull
+D6,gems,sink,revive,10,
+D7,coins,faucet,battle rewards,6200,3 sessions; engaged player
+D7,coins,faucet,daily login,1000,D7 is the weekly bonus
+D7,coins,faucet,chests,900,
+D7,coins,sink,tower upgrades,3000,falls once early towers hit max level
+D7,coins,sink,cosmetics,50,
+D7,gems,faucet,rank rewards,10,
+D7,gems,faucet,daily goals,20,
+D7,gems,faucet,chapter clear,0,
+D7,gems,faucet,weekend event,30,
+D7,gems,sink,vault pull,60,60 a paid pull
+D7,gems,sink,revive,10,

@@ -96,4 +96,4 @@ output before and after). Decide the overall level on purpose.
 - **Trusting the master compressor.** If it never moves, it isn't protecting anything; put dynamics on the
   effects bus.
 - **Loading sound all at once.** Mix work is wasted if the first sound arrives 8 s after the first tap.
-  Stage the loading (the **game-performance** skill).
+  Stage the loading (the **game-qa** skill's load-and-boot reference).

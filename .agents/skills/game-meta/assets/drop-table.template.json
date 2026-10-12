@@ -1,0 +1,72 @@
+{
+  "_about": "A gacha / chest drop table. Copy it next to the game's data, edit the numbers, then run: python3 scripts/drop_table.py drop-table.json. Weights are integers; the probability of a tier is its weight over the sum. 'value' is what one drop is worth in value_unit (pick one unit for every row: the hard currency is the usual choice). Every number here is an example, not a recommendation.",
+  "name": "Vault chest (example)",
+  "price": 60,
+  "value_unit": "gems",
+  "tiers": [
+    {
+      "id": "common",
+      "weight": 7040,
+      "value": 15,
+      "items": [
+        {"id": "coins-500", "weight": 3},
+        {"id": "tower-shards-5", "weight": 2},
+        {"id": "boost-15min", "weight": 1}
+      ]
+    },
+    {
+      "id": "rare",
+      "weight": 2300,
+      "value": 45,
+      "items": [
+        {"id": "bolt-tower-skin", "weight": 1},
+        {"id": "tower-shards-25", "weight": 2}
+      ]
+    },
+    {
+      "id": "epic",
+      "weight": 600,
+      "value": 160,
+      "items": [
+        {"id": "frost-tower", "weight": 1},
+        {"id": "mortar-tower", "weight": 1}
+      ]
+    },
+    {
+      "id": "legendary",
+      "weight": 60,
+      "value": 1200,
+      "items": [
+        {"id": "titan-tower", "weight": 1},
+        {"id": "storm-tower", "weight": 1},
+        {"id": "dragon-tower", "weight": 1}
+      ]
+    }
+  ],
+  "pity": {
+    "tier": "legendary",
+    "soft_start": 60,
+    "soft_step": 0.06,
+    "hard": 75,
+    "_about": "Pulls are counted since the last drop of this tier. Before soft_start the rate is the base rate; from pull soft_start on it rises by soft_step per pull; pull 'hard' always gives the tier. The counter carries across sessions and banners of the same pool."
+  },
+  "featured": {
+    "tier": "legendary",
+    "item": "titan-tower",
+    "rate": 0.5,
+    "guarantee_after_loss": true,
+    "_about": "When the pity tier drops, it is the featured item with probability 'rate'. With guarantee_after_loss, the next drop of the tier after a miss is the featured item for sure (the 50/50)."
+  },
+  "duplicates": {
+    "currency": "shards",
+    "per_tier": {"common": 1, "rare": 5, "epic": 20, "legendary": 80},
+    "spark_cost": 400,
+    "_about": "A duplicate converts to shards; spark_cost shards buy the featured item outright (bad-luck protection for players who already own most of the pool)."
+  },
+  "disclosure": {
+    "_about": "What the store page shows. Base rates in percent (2 decimals) per tier, and the consolidated rate of the pity tier (pity included). The script checks these against the weights and the pity rules.",
+    "base_percent": {"common": 70.4, "rare": 23.0, "epic": 6.0, "legendary": 0.6},
+    "consolidated_percent": {"legendary": 1.88},
+    "text": "Legendary 0.6% per pull (1.88% including the guarantee). A legendary is guaranteed within 75 pulls. When a legendary drops, it is Titan Tower 50% of the time; if it is not, the next legendary is Titan Tower."
+  }
+}

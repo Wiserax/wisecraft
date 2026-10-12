@@ -34,7 +34,7 @@ Without `wise`: `scripts/render-board.mjs` does the same two steps
 
 ## Boards of real screenshots, with actions and arrows
 For anything that already runs, a mockup is the wrong tool. Take screenshots of the real build (`wise qa`
-writes them; the **browser-qa** skill) and lay them out as an interface map:
+writes them and a `board.png` of each run; the **game-qa** skill) and lay them out as an interface map:
 - one screen per frame, in the order a player meets them;
 - **mark the action** on each frame: a ring or a hand on the spot that was tapped;
 - **an arrow** from that spot to the screen it leads to;

@@ -1,0 +1,13 @@
+{
+  "_about": "One stage, ten waves. Every number is a starting point to change; curves.py prints what it implies.",
+  "waves": 10,
+  "wave_seconds": 18,
+  "enemy": { "hp": 3, "hp_growth": 1.12 },
+  "count": { "base": 14, "growth": 1.08, "sine": { "amp": 0.3 } },
+  "boss_waves": {
+    "5": { "count": 1, "hp_mul": 25, "gold": 20 },
+    "10": { "count": 1, "hp_mul": 60, "gold": 40 }
+  },
+  "player": { "dps": 3.0, "gold_per_kill": 1, "start_gold": 10 },
+  "upgrades": { "base_price": 10, "ratio": 1.4, "dps_gain": 1.22 }
+}

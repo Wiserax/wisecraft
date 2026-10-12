@@ -49,7 +49,7 @@ The five beats: **entrance → walk in → slam → death → drop.** A boss tha
 
 ## Audio rules
 - **The agent never plays audio aloud** (no `afplay`, no speakers). Headless Chromium `--mute-audio`; WebKit
-  gets a zero-gain destination init script (the template in the **browser-qa** skill). Judge by measurement:
+  gets a zero-gain destination init script (the harness in the **game-qa** skill). Judge by measurement:
   LUFS, true peak, spectra, onsets.
 - **Mix targets:**
   - Music about -20 LUFS short-term in battle.

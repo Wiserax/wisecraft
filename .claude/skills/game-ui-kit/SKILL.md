@@ -9,7 +9,7 @@ One idea per screen. The player holds a phone in one hand and may not read Engli
 something a real player tripped over.
 
 Baseline 390×844; the small-phone check is 320×568. Build every screen in English and Spanish and look at it
-in both sizes and in WebKit before calling it done (`wise qa`, the **browser-qa** skill). Show the result as a
+in both sizes and in WebKit before calling it done (`wise qa`, the **game-qa** skill). Show the result as a
 board (`wise board`, the **design-boards** skill).
 
 ## Hub
@@ -55,7 +55,7 @@ board (`wise board`, the **design-boards** skill).
 - **Lilita One** (display, buttons), **DM Sans** (body), **Silkscreen** (pixel log, tiny HUD labels). All
   three are under the SIL Open Font License. Load from Google Fonts or self-host the OFL files.
 - Treat fonts as optional at boot and time-box them: a slow font request must not hold the splash (the
-  **game-performance** skill).
+  **game-qa** skill's load-and-boot reference).
 
 ## One idea per screen
 Hubs get rails for the important features (events, daily login, pass, vault, race), but only one glowing
