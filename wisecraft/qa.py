@@ -149,7 +149,9 @@ def format_result(r: dict) -> str:
         lines.append(f"  step:         {s['selector']}  " + (f"tapped ({s['via']})" if s["found"] else "NOT FOUND"))
     t = r["taps"]
     lines.append(f"  persona:      {r.get('persona', 'casual')}")
-    lines.append(f"  taps:         {t['done']} of {t['planned']} over {t['seconds']} s in {t['area']['source']}, seed {t['seed']}")
+    buys = len(r.get("spends") or [])
+    lines.append(f"  taps:         {t['done']} of {t['planned'] - buys} over {t['seconds']} s in {t['area']['source']}, seed {t['seed']}"
+                 + (f" (and {buys} buys)" if buys else ""))
     if r.get("persona") == "spender":
         sp = r.get("spends") or []
         lines.append(f"  bought:       {len(sp) or 'nothing (no visible buy / upgrade / claim control)'}")

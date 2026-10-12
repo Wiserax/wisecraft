@@ -144,7 +144,7 @@ const game = await page.evaluate(() => {
   return {
     found: g != null,
     keys: g != null && (typeof g === "object" || typeof g === "function") ? Object.keys(g) : [],
-    hooks: Object.getOwnPropertyNames(window).filter((k) => k.startsWith("__") && !/^__(pw|playwright)/i.test(k)),
+    hooks: Object.getOwnPropertyNames(window).filter((k) => k.startsWith("__") && !/^__(pw|playwright|wise)/i.test(k)),
   };
 }).catch(() => ({ found: false, keys: [], hooks: [] }));
 
