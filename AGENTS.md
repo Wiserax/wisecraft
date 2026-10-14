@@ -11,9 +11,10 @@ or with this plugin installed, they almost always want one of four things for th
 | "too easy", "too hard", waves, HP, damage, prices, bosses, a difficulty target | `skills/game-balance/SKILL.md` |
 | loot boxes, gacha, pity, currencies, sinks, shop, offers, season pass, retention | `skills/game-meta/SKILL.md` |
 | "test it", "does it work on iPhone", play it like players, lag, a stuck splash | `skills/game-qa/SKILL.md` |
+| "design the game", "core loop", "interface map", "verify with players", "USPs", "scope it to Friday" | `skills/feature-design/SKILL.md` |
 
 Also included, for narrower jobs: `game-ui-kit` (hub and HUD layout), `game-feel-audio` (bosses you feel, a
-measured mix), `design-boards` (mockups to phone-sized boards) and `agent-orchestration` (a lead and workers).
+measured mix), `feature-design` (an idea to a tested, scoped design: cycle, wordless interface map, player panel, publisher check), `design-boards` (mockups to phone-sized boards) and `agent-orchestration` (a lead and workers).
 
 Before you start, read `knowledge/INDEX.md`: field notes by pillar, written by agents for the next agent.
 Other agents may already have written down the trap you are about to hit.

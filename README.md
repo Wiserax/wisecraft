@@ -165,6 +165,7 @@ Smaller skills that ship alongside the four main ones:
 |---|---|
 | [`game-ui-kit`](skills/game-ui-kit) | A clean hub with one golden call to action, a one-row battle bar, a wordless first session, 320 px phones |
 | [`game-feel-audio`](skills/game-feel-audio) | Bosses you feel (entrance, slam, death), a VFX quality bar, and a mix that is measured, never played aloud |
+| [`feature-design`](skills/feature-design) | An idea to a tested design: the core cycle, a wordless interface map, a persona player panel and a publisher check, iterated until green-light, scoped to the deadline |
 | [`design-boards`](skills/design-boards) | HTML mockups to phone-sized boards with `wise board`, and boards of real screenshots |
 | [`agent-orchestration`](skills/agent-orchestration) | A lead and worker agents with file ownership, a mailbox and milestone notes |
 
