@@ -50,3 +50,19 @@ only), wordless, web.
 - **Resume the same reviewers in round 2:** they check their own issues (FIXED / PARTLY / NOT) instead of
   starting over.
 - **Time:** two rounds took about 2 hours with 3 reviewer agents in parallel.
+
+## v4: after the producer said "too heavy and boring"
+- **The pivot:** the producer liked one portrait frame and a reference set (Roboquest pickups/compare, Shape of
+  Dreams shop, drops, Equip/Dismantle, "select a slot to replace"). The design restarted from that: farm easy
+  creeps for gold → a beast → its body drops 3 parts → choose one → Equip or Sell → replace a body slot. Short
+  text was allowed.
+- **The deliverable in 25 minutes:** 9 AI concept frames of the flow, 4 exact HTML UI specs, a family-tree
+  screen, a 16-part catalogue (4 families × 4 slots), and 2 panel rounds.
+  - **Scores:** casual 7 → 8, kid 7 → 8, hardcore D1 7 / D7 4 → 5, midcore 8 / 5 → 6.
+  - **Publisher:** green-light with changes → green-light.
+- **What the panel caught:**
+  - concept frames contradicting the spec (three coin icons, a bat wing labelled Snake Tail, "Dismantle"
+    that kids can't read);
+  - the first part arriving after 90 s of farming (fix: a mini-beast in wave 1);
+  - the compare hiding a stat you lose;
+  - the camp shop being off-hypothesis ("a bought part isn't what you killed"; moved to SHOULD).

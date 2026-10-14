@@ -17,12 +17,22 @@ deliver. Plan for **2 rounds**; a round takes about 30-60 minutes with agents.
   panel must judge the look you can actually build, not concept art.
 - The studio's test metrics, if known (the **game-meta** skill reads real data).
 
+## 0b. References from the producer
+When the producer pastes screenshots of other games ("like Roboquest", "close to Shape of Dreams"), save them
+first into `<design>/references/` with descriptive names (`roboquest-compare-stats.png`), then cite them on
+the board and in the reviewer prompts. Copy the **mechanic**, not the art style.
+
 ## 1. The cycle (the core loop as numbered steps)
 Write the run or session as **10-12 numbered steps**: screen · what the player does · what happens. Mark the
 **loop** explicitly (which steps repeat, and what interrupts them: a boss every N, a death). One step = one
 board screen. If a step has no clear player action, it's dead time: cut it or merge it.
 
-## 2. The wordless interface (when the game is wordless, or should be)
+## 2. The interface: wordless, or short text
+Ask which mode the game is in. **Wordless:** every number becomes an object (below). **Short text** (an
+action-RPG shop, loot): a name ≤ 2 words, ≤ 2 stat chips, 1 effect line ≤ 7 words, "hold for details";
+verbs a 9-year-old reads ("Sell", not "Dismantle"); a compare that shows every stat you lose.
+
+### Wordless mode
 Give every piece of information a signal in the world: a size, fill, count of objects, colour or motion.
 Use the catalogue in `references/wordless-ui.md` (proven signals and the ones that failed panel reviews).
 Put the table in DESIGN.md: information → signal.
@@ -31,6 +41,10 @@ Put the table in DESIGN.md: information → signal.
 - **DESIGN.md:** start from `assets/DESIGN.template.md`. Sections: the cycle, wordless signals, content for
   the deadline (MUST/SHOULD/LATER), the test (hypothesis, events, go/kill), the gates per day, and open
   choices with defaults.
+- **Two kinds of screens, used together:** AI concept frames of the whole flow (fast to make, and they sell
+  the feel: brief an image agent with the exact style reference and one frame per step), plus **exact HTML UI
+  specs** for the screens that carry rules (a shop card, a drop label, a compare/replace panel). The build
+  follows the HTML spec; concept frames drift (wrong wording, extra HUD).
 - **The board:** one `.screen` per step at 390×844 (or landscape), rendered with `wise board`
   (the **design-boards** skill). Use `assets/board-flow.html`: rows of screens with ➜ arrows, a dashed
   **loop row** saying what repeats, captions as "N · what happens" plus one line of why, and a red line for
@@ -56,6 +70,11 @@ limit (for example at most 4 workers at once).
   - replace abstract HUD signals with objects;
   - make ads the same size as the free choice;
   - remove stray words.
+
+### When the producer rejects a direction
+"Too heavy / boring" means you added systems, not fun. Go back to the one image or moment they liked, ask
+what the loop around it is, and restart the cycle from there (v3 → v4 in the worked example). Keep the panel:
+resume the same reviewers on the new direction.
 
 ## 6. Round 2 and stop
 Resume the **same** reviewers (they keep their context) with: "here is v2 and what changed; mark each of your
