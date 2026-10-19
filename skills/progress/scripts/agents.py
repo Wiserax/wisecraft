@@ -7,6 +7,7 @@ Usage:
 A session dir is ~/.claude/projects/<project>/<session-id> (it holds subagents/).
 A project dir is ~/.claude/projects/<project>; its most recently active session is used.
 Cost is the API list-price equivalent (a subscription pays a flat fee); edit PRICES if yours differ.
+`wise studio` imports this file (Tally, summarize_tool) for its live panel, so keep it standard-library only.
 """
 import json
 import sys
@@ -34,45 +35,87 @@ def ts(s):
     return datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
 
 
-def read_transcript(path, since=0):
-    seen, tokens, cost = set(), 0, 0.0
-    first = last = None
-    model, stop, last_tool = None, None, False
-    for line in path.open(errors="replace"):
-        try:
-            d = json.loads(line)
-        except ValueError:
-            continue
+def summarize_tool(name, inp):
+    """One short line for a tool call: what the agent is doing right now (a Bash call's description, a file name)."""
+    inp = inp if isinstance(inp, dict) else {}
+    pick = lambda *keys: next((str(inp[k]) for k in keys if inp.get(k)), "")
+    if name == "Bash":
+        lines = pick("command").strip().splitlines()
+        return pick("description") or (lines[0] if lines else "Bash")
+    if name in ("Read", "Write", "Edit", "NotebookEdit"):
+        f = pick("file_path", "notebook_path")
+        return f"{name} {f.rsplit('/', 1)[-1]}" if f else name
+    if name in ("Agent", "Task"):
+        return f"Agent: {pick('description')}".rstrip(": ")
+    if name in ("Grep", "Glob"):
+        return f"{name} {pick('pattern')}".strip()
+    if name in ("SendMessage", "SubagentHandback"):
+        return "Reporting" if name == "SubagentHandback" else "Message"
+    if name.startswith("mcp__"):
+        return name.split("__")[-1].replace("_", " ")
+    return pick("description") or name
+
+
+class Tally:
+    """Running totals of one transcript, fed one parsed JSON line at a time (so a reader can resume at an offset)."""
+
+    def __init__(self, since=0):
+        self.since, self.seen, self.tokens, self.cost = since, set(), 0, 0.0
+        self.first = self.last = None
+        self.model = self.stop = self.title = self.cwd = None
+        self.last_tool, self.doing = False, ""
+
+    def feed(self, d):
+        if not isinstance(d, dict):
+            return
+        if d.get("type") == "ai-title" and d.get("aiTitle"):
+            self.title = d["aiTitle"]
         if d.get("timestamp"):
             t = ts(d["timestamp"])
-            if t < since:
-                continue
-            first = first or t
-            last = t
-        elif first is None:
-            continue
+            if t < self.since:
+                return
+            self.first = self.first or t
+            self.last = t
+        elif self.first is None:
+            return
+        self.cwd = d.get("cwd") or self.cwd
         m = d.get("message")
         if d.get("type") != "assistant" or not isinstance(m, dict):
-            continue
+            return
         content = m.get("content") if isinstance(m.get("content"), list) else []
-        if any(c.get("type") == "tool_use" for c in content):
-            last_tool = True
+        for c in content:
+            if isinstance(c, dict) and c.get("type") == "tool_use":
+                self.last_tool = True
+                self.doing = summarize_tool(c.get("name") or "", c.get("input"))
         if m.get("stop_reason"):
-            stop = m["stop_reason"]
-            last_tool = stop == "tool_use"
+            self.stop = m["stop_reason"]
+            self.last_tool = self.stop == "tool_use"
         u, rid = m.get("usage"), d.get("requestId")
-        if not u or rid in seen:
-            continue
-        seen.add(rid)
-        model = m.get("model") or model
-        pin, pout, pread, pw5, pw1h = price_for(model)
+        if not u or rid in self.seen:
+            return
+        self.seen.add(rid)
+        self.model = m.get("model") or self.model
+        pin, pout, pread, pw5, pw1h = price_for(self.model)
         cc = u.get("cache_creation") or {}
         w1h = cc.get("ephemeral_1h_input_tokens", 0)
         w5 = u.get("cache_creation_input_tokens", 0) - w1h
         parts = (u.get("input_tokens", 0), u.get("output_tokens", 0), u.get("cache_read_input_tokens", 0), w5, w1h)
-        tokens += sum(parts)
-        cost += sum(n * p for n, p in zip(parts, (pin, pout, pread, pw5, pw1h))) / 1e6
-    return {"tokens": tokens, "cost": cost, "first": first, "last": last, "model": model, "stop": stop, "last_tool": last_tool}
+        self.tokens += sum(parts)
+        self.cost += sum(n * p for n, p in zip(parts, (pin, pout, pread, pw5, pw1h))) / 1e6
+
+    def result(self):
+        return {"tokens": self.tokens, "cost": self.cost, "first": self.first, "last": self.last, "model": self.model,
+                "stop": self.stop, "last_tool": self.last_tool, "doing": self.doing, "title": self.title, "cwd": self.cwd}
+
+
+def read_transcript(path, since=0):
+    tally = Tally(since)
+    for line in path.open(errors="replace"):
+        try:
+            tally.feed(json.loads(line))
+        except ValueError:
+            continue
+    return tally.result()
 
 
 def session_dirs(arg):
@@ -112,7 +155,7 @@ def main(argv):
                 state = "running" if fresh else "done" if r["stop"] == "end_turn" else "stopped"
                 rows.append({"session": sess.name[:8], "id": aid, "desc": desc, "state": state,
                              "minutes": round((r["last"] - r["first"]) / 60), "tokens": r["tokens"],
-                             "cost": round(r["cost"], 2), "model": r["model"]})
+                             "cost": round(r["cost"], 2), "model": r["model"], "doing": r["doing"]})
     if as_json:
         print(json.dumps(rows, indent=1))
         return

@@ -14,7 +14,7 @@ or with this plugin installed, they almost always want one of four things for th
 | "design the game", "core loop", "interface map", "verify with players", "USPs", "scope it to Friday" | `skills/feature-design/SKILL.md` |
 
 Also included, for narrower jobs: `game-ui-kit` (hub and HUD layout), `game-feel-audio` (bosses you feel, a
-measured mix), `feature-design` (an idea to a tested, scoped design: cycle, wordless interface map, player panel, publisher check), `design-boards` (mockups to phone-sized boards) and `agent-orchestration` (a lead and workers).
+measured mix), `feature-design` (an idea to a tested, scoped design: cycle, wordless interface map, player panel, publisher check), `design-boards` (mockups to phone-sized boards), `agent-orchestration` (a lead and workers), `progress` (a status board of every agent) and `studio` (a live side panel of the agents and a review feed of what they render).
 
 Before you start, read `knowledge/INDEX.md`: field notes by pillar, written by agents for the next agent.
 Other agents may already have written down the trap you are about to hit.
@@ -31,6 +31,8 @@ Other agents may already have written down the trap you are about to hit.
     - `music-enhance`: measures and fixes loudness and true peak of trailers, music, game sounds and voice;
       never played
     - `board`: HTML mockups → phone-sized PNG screens and one review board
+    - `studio`: a live side panel on 127.0.0.1: every agent at work and a feed of new screenshots, videos and
+      models with 👍 / 👎 reviews in `~/.config/wisecraft/reviews.jsonl` (`skills/studio/SKILL.md`)
   - `qa` and `board` drive Playwright through node: `npm i -D playwright && npx playwright install chromium webkit`
     in the game's folder. `video` and `music-enhance` need ffmpeg.
 - **Skill scripts** run without installs: `game-balance/scripts/bots.mjs` (node) and `curves.py`,

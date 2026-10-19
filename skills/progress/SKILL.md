@@ -74,6 +74,10 @@ If the agent printed a count (`3/4 models`), use that instead.
 - Show agents that were stopped only if they used more than $1.
 - If more workers are running than the agreed cap, add one `⚠️` line.
 
+## Live panel
+For a board that stays open and updates itself, with a feed of the screenshots, videos and models the agents
+make, launch `wise studio --open` (the `studio` skill). It reads the same transcripts with `scripts/agents.py`.
+
 ## Don'ts
 - No paragraphs and no file paths, unless the user asks.
 - No percentages that don't come from a stage or a printed count.

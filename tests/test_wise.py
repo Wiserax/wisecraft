@@ -76,7 +76,7 @@ def test_video_mux_is_not_ported(capsys):
 
 
 def test_help_lists_only_the_kept_commands(capsys):
-    assert cli.GROUPS == ["video", "qa", "music-enhance", "board"]
+    assert cli.GROUPS == ["video", "qa", "music-enhance", "board", "studio"]
     assert exit_code(["--help"]) == 0
     out = capsys.readouterr().out
     listed = re.findall(r"^    ([a-z][\w-]+)", out, re.M)

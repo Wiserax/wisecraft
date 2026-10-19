@@ -6,6 +6,7 @@ Subcommands (see `wise --help`):
   qa             virtual testers: a muted phone browser plays like a player; errors, overflow, frame time, screenshots
   music-enhance  measure and fix loudness of music, trailers, game sounds and voice (EBU R128), without playing them
   board          render HTML mockups to phone-sized PNG screens and one review board
+  studio         a live side panel: every agent at work, and a feed of their screenshots, videos and models to review
 """
 
 __version__ = "0.3.0"

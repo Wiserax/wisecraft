@@ -19,3 +19,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["wisecraft"]
+
+# `wise studio` reuses the progress skill's transcript parser; a wheel has no skills/, so it carries a copy
+[tool.hatch.build.targets.wheel.force-include]
+"skills/progress/scripts/agents.py" = "wisecraft/_progress_agents.py"

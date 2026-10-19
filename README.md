@@ -157,6 +157,7 @@ Every command has `--help` with examples. Nothing ever plays sound.
 | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/qa-dark.svg"><img src="docs/media/icons/qa-light.svg" width="32" height="32" alt=""></picture> | `wise qa` | Virtual testers: a muted phone-sized Chromium or WebKit plays like a player (`--persona casual\|tapper\|idler\|spender`); errors, overflow and frame time fail the run; screenshots and a board |
 | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/music-enhance-dark.svg"><img src="docs/media/icons/music-enhance-light.svg" width="32" height="32" alt=""></picture> | `wise music-enhance` | Measure and fix loudness (EBU R128) of a trailer, music, game sounds or voice: `--for trailer` levels to -14 LUFS under -1 dBTP and copies the picture untouched; `--check` only measures |
 | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/icons/board-dark.svg"><img src="docs/media/icons/board-light.svg" width="32" height="32" alt=""></picture> | `wise board` | HTML mockups to phone-sized PNG screens and one review board (for the design-boards extra) |
+| | `wise studio` | A live side panel (`--open` puts it in Orca's browser pane): every agent at work with its current action, time and ≈$, and a feed of new screenshots, videos and 3D models to 👍 / 👎, saved to `reviews.jsonl` for the agents |
 
 ## Also included
 Smaller skills that ship alongside the four main ones:
@@ -169,6 +170,7 @@ Smaller skills that ship alongside the four main ones:
 | [`design-boards`](skills/design-boards) | HTML mockups to phone-sized boards with `wise board`, and boards of real screenshots |
 | [`agent-orchestration`](skills/agent-orchestration) | A lead and worker agents with file ownership, a mailbox and milestone notes |
 | [`progress`](skills/progress) | `/progress`: every running agent on one board, grouped by account, with a stage bar, time, tokens and API-equivalent $ |
+| [`studio`](skills/studio) | `wise studio`: the live panel beside the work, agents and a review feed of everything they render |
 
 Field notes from real work live in [`knowledge/`](knowledge/INDEX.md), filed by the pillar they serve.
 
