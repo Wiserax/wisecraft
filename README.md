@@ -168,6 +168,7 @@ Smaller skills that ship alongside the four main ones:
 | [`feature-design`](skills/feature-design) | An idea to a tested design: the core cycle, a wordless interface map, a persona player panel and a publisher check, iterated until green-light, scoped to the deadline |
 | [`design-boards`](skills/design-boards) | HTML mockups to phone-sized boards with `wise board`, and boards of real screenshots |
 | [`agent-orchestration`](skills/agent-orchestration) | A lead and worker agents with file ownership, a mailbox and milestone notes |
+| [`progress`](skills/progress) | `/progress`: every running agent on one board, grouped by account, with a stage bar, time, tokens and API-equivalent $ |
 
 Field notes from real work live in [`knowledge/`](knowledge/INDEX.md), filed by the pillar they serve.
 
