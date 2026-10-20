@@ -18,3 +18,6 @@ shots/
 !bin/
 # local README previews
 _preview/
+# other artists' reference images: local only, never in the public repo
+knowledge/vfx-style/refs/
+vfx-refs/

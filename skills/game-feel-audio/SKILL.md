@@ -39,6 +39,8 @@ The five beats: **entrance → walk in → slam → death → drop.** A boss tha
   slow motion, no hit-stop.
 
 ## VFX quality bar
+New or reworked effects go through the **game-vfx** skill: references first, then the house hand-drawn
+2.5D style. The bar below is the minimum any effect must clear.
 - **Explosions:** an additive hot core + an eased shockwave + flame lobes + smoke + thrown chunks, in one
   draw. No flat polygon shapes. The producer's words on the flat version: "the effects are cheap".
 - **Lightning:** thick ribbons with a glow halo and a short afterimage.

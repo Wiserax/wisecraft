@@ -46,6 +46,11 @@ _Every note, by what it serves. Add a line for yours in the pull request that ad
 - [Measuring a web game's mix without playing a sound](techniques/measuring-a-web-game-s-mix-without-playing-a-sound.md) · audio, webaudio, audioworklet, lufs, bs.1770, stems, measurement, playwright, headless, loudness, calibration
 - [Lead and worker agents: milestone notes only, explicit file ownership, cherry-picked game commits](techniques/lead-and-worker-agents-milestone-notes-only-explicit-file-ow.md) · orchestration, multi-agent, lead-worker, mailbox, ownership, git, cherry-pick, worktree, heartbeat, process
 
+## Taste library
+
+- [The house VFX style: hand-drawn 2.5D, stylised hybrid CGI](vfx-style/README.md) · vfx, style, references, cel, 2.5d, hand-drawn (the images stay local)
+- [Gamer nicknames for bots](names/README.md) · names, bots, lobby, kill-feed, leaderboard, 363 nicknames in a text file
+
 ## Playbooks
 
 The workflows these notes feed live with the skills: [skills/](../skills/). The four main ones are

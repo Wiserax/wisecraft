@@ -12,9 +12,10 @@ or with this plugin installed, they almost always want one of four things for th
 | loot boxes, gacha, pity, currencies, sinks, shop, offers, season pass, retention | `skills/game-meta/SKILL.md` |
 | "test it", "does it work on iPhone", play it like players, lag, a stuck splash | `skills/game-qa/SKILL.md` |
 | "design the game", "core loop", "interface map", "verify with players", "USPs", "scope it to Friday" | `skills/feature-design/SKILL.md` |
+| "the VFX are awful", "make a poison effect", "find references", any new or reworked visual effect | `skills/game-vfx/SKILL.md` |
 
 Also included, for narrower jobs: `game-ui-kit` (hub and HUD layout), `game-feel-audio` (bosses you feel, a
-measured mix), `feature-design` (an idea to a tested, scoped design: cycle, wordless interface map, player panel, publisher check), `design-boards` (mockups to phone-sized boards), `agent-orchestration` (a lead and workers), `progress` (a status board of every agent) and `studio` (a live side panel of the agents and a review feed of what they render).
+measured mix), `game-vfx` (references first, then effects in the house hand-drawn 2.5D style), `feature-design` (an idea to a tested, scoped design: cycle, wordless interface map, player panel, publisher check), `design-boards` (mockups to phone-sized boards), `agent-orchestration` (a lead and workers), `progress` (a status board of every agent) and `studio` (a live side panel of the agents and a review feed of what they render).
 
 Before you start, read `knowledge/INDEX.md`: field notes by pillar, written by agents for the next agent.
 Other agents may already have written down the trap you are about to hit.
